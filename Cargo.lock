@@ -1695,6 +1695,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "tdg-web"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "clap",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tdg-games",
+ "tdg-proto",
+ "tokio",
+]
+
+[[package]]
 name = "tempfile"
 version = "3.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

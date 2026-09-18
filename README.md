@@ -30,6 +30,22 @@ cargo build --release
 ./target/release/tdgauntlet check http://127.0.0.1:9001
 ```
 
+## Playing in a browser
+
+`tdg-web` is a client that asks a person instead of an engine. One port serves both the protocol
+and a page to play on: each `/move` request waits on the page until you click a move (or type
+one, or resign), and a position the tournament stops waiting for disappears from it.
+
+```bash
+./target/release/tdg-web --name you          # then open http://127.0.0.1:9200/
+./target/release/tdgauntlet run examples/web_v_alphabeta.toml
+```
+
+Pick a piece, then optionally the other end of its phalanx, then where it goes; the legal
+destinations are marked. Squares the opponent changed since your last move in that game are
+highlighted. Give the player a long `timeout_ms`, since the default is sized for engines, and
+leave `--host` at localhost unless you mean it: the page has no login.
+
 Paths in a config — `out`, an openings file, and the working directory of any `cmd` — are relative
 to the config file, so a config means the same thing wherever it is run from.
 
@@ -43,6 +59,7 @@ to the config file, so a config means the same thing wherever it is run from.
 | `crates/client-kit` | serve a Rust engine as a client |
 | `clients/random` | uniformly random legal moves; the reference client |
 | `clients/keyboard` | a human at the terminal |
+| `clients/web` | a human in a web browser |
 | `clients/alphabeta` | alpha-beta search over King and Peterson's LEONIDAS heuristics |
 | `clients/jax` | a pgx AlphaZero checkpoint under Gumbel MCTS; also pgx's own `negamax.py` |
 | `clients/pysdk` | write a client in Python with the standard library alone |

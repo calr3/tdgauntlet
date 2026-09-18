@@ -1,0 +1,22 @@
+# You, in a browser, against alpha-beta: one minimatch from the start position.
+#
+# Start the web client yourself first, then open http://127.0.0.1:9200/ and run this:
+#   ./target/release/tdg-web --name you
+game = "epaminondas/1"
+seed = 1
+concurrency = 1
+out = "../results/web_v_alphabeta.json"
+
+[openings]
+kind = "start"
+
+[[player]]
+name = "you"
+url = "http://127.0.0.1:9200"
+timeout_ms = 3600000  # an hour a move; the default is sized for engines
+on_error = "forfeit"  # resigning on the page forfeits the game
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 4"
+budget_ms = 1000

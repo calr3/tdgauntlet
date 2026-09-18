@@ -1,0 +1,194 @@
+:root {
+  --bg: #f4f1ea;
+  --fg: #222;
+  --muted: #777;
+  --panel: #fff;
+  --line: #d8d2c4;
+  --light: #e9dcc0;
+  --dark: #d7c49e;
+  --home-white: #cfd8e6;
+  --home-black: #c9b8a8;
+  --accent: #2f6fd0;
+  --capture: #c83a2a;
+  --changed: rgba(255, 196, 0, 0.45);
+  --white-piece: #fbfbf8;
+  --black-piece: #262626;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1c1f;
+    --fg: #e6e6e6;
+    --muted: #999;
+    --panel: #26272b;
+    --line: #3a3b40;
+    --light: #9c8a6a;
+    --dark: #8a7757;
+    --home-white: #7d8aa0;
+    --home-black: #8c7462;
+    --accent: #6ea0ff;
+    --capture: #ff6b5b;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 15px/1.4 system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+header {
+  display: flex;
+  align-items: baseline;
+  gap: 1em;
+  padding: 0.6em 1.2em;
+  border-bottom: 1px solid var(--line);
+}
+
+h1 { font-size: 1.2em; margin: 0; }
+h2 { font-size: 1em; margin: 1em 0 0.4em; }
+
+.status { color: var(--muted); font-size: 0.9em; }
+.status.bad { color: var(--capture); }
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5em;
+  padding: 1em 1.2em;
+  align-items: flex-start;
+}
+
+#play { flex: 1 1 560px; max-width: 900px; }
+
+aside {
+  flex: 0 1 260px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 0.8em 0.8em;
+}
+
+#summary { min-height: 3em; margin-bottom: 0.6em; }
+#summary .turn { font-weight: 600; font-size: 1.1em; }
+#summary .detail { color: var(--muted); }
+#summary .clock { font-variant-numeric: tabular-nums; }
+
+.board {
+  display: grid;
+  grid-template-columns: 1.4em repeat(var(--cols), 1fr) 1.4em;
+  width: 100%;
+  /* Keep the whole board on screen above the controls. */
+  max-width: calc((100vh - 15em) * var(--cols) / var(--rows));
+  user-select: none;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 0.8em;
+}
+
+.sq {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--light);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.sq.dark { background: var(--dark); }
+.sq.home-0 { background: var(--home-white); }
+.sq.home-1 { background: var(--home-black); }
+.sq.changed { box-shadow: inset 0 0 0 100vmax var(--changed); }
+
+.piece {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px solid #0007;
+  box-shadow: 0 1px 2px #0006;
+}
+.piece.W { background: var(--white-piece); }
+.piece.B { background: var(--black-piece); border-color: #000; }
+
+.sq.selected .piece { outline: 3px solid var(--accent); outline-offset: 1px; }
+.sq.partner .piece { outline: 2px dashed var(--accent); outline-offset: 1px; }
+
+.sq.target::after {
+  content: "";
+  position: absolute;
+  inset: 38%;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.75;
+}
+.sq.target.capture::after {
+  inset: 6%;
+  background: none;
+  border: 3px solid var(--capture);
+  opacity: 1;
+}
+
+.waiting-board .sq { cursor: default; }
+.waiting-board { opacity: 0.75; }
+
+pre.text {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 0.8em;
+  overflow-x: auto;
+}
+
+#message { min-height: 1.6em; margin: 0.5em 0; }
+#message.bad { color: var(--capture); }
+
+#chooser { display: flex; gap: 0.5em; flex-wrap: wrap; margin-bottom: 0.6em; }
+#chooser[hidden] { display: none; }
+
+#entry { display: flex; gap: 0.5em; flex-wrap: wrap; }
+#entry input { flex: 1 1 12em; font: inherit; padding: 0.3em 0.5em; }
+
+button {
+  font: inherit;
+  padding: 0.3em 0.8em;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--fg);
+  cursor: pointer;
+}
+button:hover { border-color: var(--accent); }
+button.danger { color: var(--capture); }
+button:disabled { opacity: 0.5; cursor: default; }
+
+ul { list-style: none; margin: 0; padding: 0; }
+
+#queue li {
+  padding: 0.3em 0.4em;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#queue li.current { background: var(--bg); font-weight: 600; }
+#queue li .detail { color: var(--muted); font-weight: normal; }
+
+#moves {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5em, 1fr));
+  gap: 0.2em;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+#moves button {
+  padding: 0.1em 0.3em;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85em;
+}
+
+.empty { color: var(--muted); }

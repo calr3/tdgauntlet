@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tdgauntlet</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1 id="who">tdgauntlet</h1>
+  <span id="connection" class="status">connecting…</span>
+</header>
+<main>
+  <section id="play">
+    <div id="summary"></div>
+    <div id="board-wrap"></div>
+    <div id="message" role="status"></div>
+    <div id="chooser" hidden></div>
+    <form id="entry" autocomplete="off">
+      <input id="notation" placeholder="type a move, e.g. d1d2-d4" spellcheck="false">
+      <button type="submit">Play</button>
+      <button type="button" id="flip" title="Turn the board round">Flip</button>
+      <button type="button" id="resign" class="danger">Resign</button>
+    </form>
+  </section>
+  <aside>
+    <h2>Waiting <span id="count"></span></h2>
+    <ul id="queue"></ul>
+    <h2>Moves <span id="move-count"></span></h2>
+    <ul id="moves"></ul>
+  </aside>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
