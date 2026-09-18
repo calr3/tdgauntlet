@@ -1,0 +1,17 @@
+[package]
+name = "tdg-proto"
+description = "Wire types for the tdgauntlet client protocol"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+anyhow.workspace = true
+jsonschema = { version = "0.34", default-features = false }

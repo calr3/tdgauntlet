@@ -1,0 +1,30 @@
+# Two checkpoints from one training run against the Rust alpha-beta. Start the model clients
+# first, in the pgx environment (see clients/jax/README.md):
+#   python -m tdg_jax --port 9320 --sims 32 --checkpoint <run>/000120.ckpt
+#   python -m tdg_jax --port 9321 --sims 32 --checkpoint <run>/000040.ckpt
+game = "epaminondas/1"
+seed = 120
+concurrency = 16
+out = "../results/models_v_alphabeta.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 20
+
+[[player]]
+name = "m120"
+url = "http://127.0.0.1:9320"
+budget_sims = 32
+timeout_ms = 120000
+
+[[player]]
+name = "m040"
+url = "http://127.0.0.1:9321"
+budget_sims = 32
+timeout_ms = 120000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 1000

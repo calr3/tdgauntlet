@@ -1,0 +1,29 @@
+# One checkpoint at two search sizes against the Rust alpha-beta, to see how the model's result
+# scales with thinking time. Start the model clients first (see clients/jax/README.md).
+pairs = [["m120-s128", "alphabeta"], ["m120-s256", "alphabeta"]]
+game = "epaminondas/1"
+seed = 120
+concurrency = 16
+out = "../results/sims_v_alphabeta.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 20
+
+[[player]]
+name = "m120-s128"
+url = "http://127.0.0.1:9321"
+budget_sims = 128
+timeout_ms = 300000
+
+[[player]]
+name = "m120-s256"
+url = "http://127.0.0.1:9322"
+budget_sims = 256
+timeout_ms = 300000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 1000

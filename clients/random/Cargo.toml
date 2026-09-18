@@ -1,0 +1,21 @@
+[package]
+name = "tdg-random"
+description = "A tdgauntlet client that plays uniformly random legal moves"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "tdg-random"
+path = "src/main.rs"
+
+[dependencies]
+tdg-client-kit = { path = "../../crates/client-kit" }
+tdg-games = { path = "../../crates/games" }
+tdg-proto = { path = "../../crates/proto" }
+anyhow.workspace = true
+clap = { version = "4", features = ["derive"] }
+rand = "0.9"
+tokio = { version = "1", features = ["full"] }

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/epaminondas_1.state.schema.json",
+  "title": "epaminondas/1 state",
+  "type": "object",
+  "required": [
+    "board",
+    "to_move",
+    "moves",
+    "quiet_moves",
+    "last_capturer"
+  ],
+  "properties": {
+    "board": {
+      "type": "string",
+      "description": "168 chars of '.', 'W' or 'B', row-major from a1; row 0 is white's home rank.",
+      "pattern": "^[.WB]{168}$"
+    },
+    "to_move": {
+      "enum": [
+        0,
+        1
+      ]
+    },
+    "moves": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Completed moves, for reporting only."
+    },
+    "quiet_moves": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Moves since the last capture; the game is decided at 100."
+    },
+    "last_capturer": {
+      "enum": [
+        -1,
+        0,
+        1
+      ]
+    }
+  },
+  "description": "pgx Epaminondas env v6."
+}

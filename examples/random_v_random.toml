@@ -1,0 +1,21 @@
+# An example tournament: two copies of the random client, which the server starts itself.
+# Run with:  cargo run --release --bin tdgauntlet -- run examples/random_v_random.toml
+game = "epaminondas/1"
+seed = 77659
+concurrency = 16
+out = "../results/random_v_random.json"
+
+[openings]
+kind = "random"
+plies = 2       # moves of random play from the start; 0 is the start position itself
+count = 100
+
+[[player]]
+name = "random-a"
+cmd = "../target/release/tdg-random --port {port} --name random-a"
+budget_ms = 100
+
+[[player]]
+name = "random-b"
+cmd = "../target/release/tdg-random --port {port} --name random-b"
+budget_ms = 100

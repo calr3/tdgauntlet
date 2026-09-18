@@ -1,0 +1,29 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/proto",
+    "crates/games",
+    "crates/tourney",
+    "crates/client-kit",
+    "clients/random",
+    "clients/keyboard",
+    "clients/alphabeta",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/calr3/tdgauntlet"
+
+[workspace.dependencies]
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

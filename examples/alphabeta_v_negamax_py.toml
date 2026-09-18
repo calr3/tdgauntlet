@@ -1,0 +1,22 @@
+# Calibration: the Rust alpha-beta against pgx's negamax.py. Same evaluation (held equal by the
+# conformance eval vectors), same clock, so this measures the search alone. Run from the pgx env.
+game = "epaminondas/1"
+seed = 21
+concurrency = 4
+out = "../results/alphabeta_v_negamax_py.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 5
+
+[[player]]
+name = "tdg-alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 4 --hash-mb 128"
+budget_ms = 1500
+
+[[player]]
+name = "negamax.py"
+cmd = "env JAX_PLATFORMS=cpu PYTHONPATH=../clients/jax python3 -m tdg_jax.negamax --port {port}"
+budget_ms = 1500
+timeout_ms = 30000

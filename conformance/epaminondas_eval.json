@@ -1,0 +1,5862 @@
+{
+ "weights": {
+  "material": 30.0,
+  "crossing": 250.0,
+  "home_row_defense": 8.0,
+  "territory": 0.5,
+  "centrality": 4.0,
+  "mobility": 2.0
+ },
+ "cases": [
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.0,
+    "mobility": 0.0
+   },
+   "total": 0.0
+  },
+  {
+   "state": {
+    "board": "WW.W.WWW.WWWWWWWWWWW..WWWWWWW....WW............WW.................................................................B............BBB....B......B..BBBBBBBBBBBBBBB.BB.BBBBB",
+    "to_move": 0,
+    "moves": 10,
+    "quiet_moves": 10,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -3.0,
+    "centrality": 0.08809088656601904,
+    "mobility": 1.0089285714285712
+   },
+   "total": 0.8702206891212185
+  },
+  {
+   "state": {
+    "board": "W.WW.WWW.WWWWWWWWWWWWW.WWWW.W....WW.W...........W...........................................................B.....BBB....B.....BBBB.B.........B..BB.BBBBBBBB.B...B.BBBBB",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -9.0,
+    "centrality": -0.14427837181549297,
+    "mobility": -0.09821428571428559
+   },
+   "total": -5.273542058690543
+  },
+  {
+   "state": {
+    "board": "W.W..WWWWWWWWWW.W..WW..WWWW.WWW.WW..W...........W..............W..............W.............................B.....BBB..B..B....BBB..B.B.B.....B.B.B.BB.BBBBB..B..B.B.BBB",
+    "to_move": 0,
+    "moves": 30,
+    "quiet_moves": 30,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 6.0,
+    "territory": -12.0,
+    "centrality": -0.05030305641105759,
+    "mobility": -1.0803571428571432
+   },
+   "total": 39.63807348864149
+  },
+  {
+   "state": {
+    "board": ".WW..WWWWWWWW.W.W...W..WW.W.WWW.WW..W..WW....W..W..............W..............W.............................B.......BBBB..B....B.BB.B.B.B...BBB.B.B.BB.BBB.B.....B.B.BBB",
+    "to_move": 0,
+    "moves": 40,
+    "quiet_moves": 40,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 5.0,
+    "territory": -10.0,
+    "centrality": -0.08925113425918418,
+    "mobility": -1.0401785714285712
+   },
+   "total": 32.56263832010612
+  },
+  {
+   "state": {
+    "board": ".WW...WWWW.WW.W.W.W.W..WW.W.WWW.WW.WW...W....W..W.....W........W...........................W........B......BB.......B..B.BB....B.B..B.B.BB..BBB.B.B.BB.BBB.B.....B.B..BB",
+    "to_move": 0,
+    "moves": 50,
+    "quiet_moves": 50,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -7.0,
+    "centrality": 0.05692517543565501,
+    "mobility": 0.0
+   },
+   "total": 12.72770070174262
+  },
+  {
+   "state": {
+    "board": ".WW...WWW..WW.W.W.W.W..WW.WWWWW..W.WWW.......W.WW.....W..................................W.W........B......BB.......B.B..BB....B.B.B....BB..BBB.B.BBBB.BB..B.....B.BB.BB",
+    "to_move": 0,
+    "moves": 60,
+    "quiet_moves": 60,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -7.0,
+    "centrality": 0.10496882586687128,
+    "mobility": -0.9375
+   },
+   "total": 3.044875303467485
+  },
+  {
+   "state": {
+    "board": ".WW..W..WW.WW.W.W.W....WW..WWWW..W.WWW...W...W..WW....W.....W............................W.B........B.....BBB.......B.B..BBB...B.BB.B.......BBB.B...BB..B..B.....BBBB.BB",
+    "to_move": 0,
+    "moves": 70,
+    "quiet_moves": 8,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": -15.0,
+    "centrality": -0.3280473940769282,
+    "mobility": -1.0158730158730158
+   },
+   "total": -56.84393560805375
+  },
+  {
+   "state": {
+    "board": ".WW..W...W.WW.W.WWW..WW.W..WW....W.W.WW..W..WW...W...WW.....W................B...........WBB........B.......BBBB....B.B..B.B...B.BB.B..B....BB..B...BB..B........BB.B.BB",
+    "to_move": 0,
+    "moves": 80,
+    "quiet_moves": 18,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -15.0,
+    "centrality": -0.596319358205541,
+    "mobility": -1.0557208994708995
+   },
+   "total": -41.99671923176396
+  },
+  {
+   "state": {
+    "board": ".WWW.W...W.WW.W.WW...W.....WW....W.WWWW..W..WW...WW..WW.....WW..B............B.............B........B.......BBBB....B.B.BBBB...B.B.BB.......BB..B..BBB..B...........B.BB",
+    "to_move": 0,
+    "moves": 90,
+    "quiet_moves": 28,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -24.0,
+    "centrality": -0.631429213609155,
+    "mobility": -2.105324074074074
+   },
+   "total": -40.73636500258477
+  },
+  {
+   "state": {
+    "board": ".WWW.W.....WW.W...WWW..W...WW..WWWW......W..WW.W.WW..WW.....WW...............B.B...........B........B..B....BBBB....B.B.B.B.B..B...BB...B...BB..B....BBBB...........B.BB",
+    "to_move": 0,
+    "moves": 100,
+    "quiet_moves": 38,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -21.0,
+    "centrality": -0.3882936969275059,
+    "mobility": -1.1245039682539675
+   },
+   "total": -36.30218272421796
+  },
+  {
+   "state": {
+    "board": ".WWW.W.....WW.....WWW..W...WW......WWWW..WW.WW.W.WW...W...WW.......W...........B.......B..B..........B.B....BBBB......B.B.B.B..B.B.BB...B...BB..B....BBBB...........BB.B",
+    "to_move": 0,
+    "moves": 110,
+    "quiet_moves": 48,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -21.0,
+    "centrality": -0.3744956834401991,
+    "mobility": -0.02364417989418044
+   },
+   "total": -34.045271093549154
+  },
+  {
+   "state": {
+    "board": ".WWW.W.....WW......WW..W...WW..WW.W.WWW..W.WWW....W...W...WW...W...W...........B.......B..B......B...B.B...BBB.B......B.B...B..B.B.BB.B.B...BB..B..BBB.B.............B.B",
+    "to_move": 0,
+    "moves": 120,
+    "quiet_moves": 58,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -18.0,
+    "centrality": -0.5918279987442432,
+    "mobility": -0.08680555555555536
+   },
+   "total": -25.540923106088083
+  },
+  {
+   "state": {
+    "board": "WW.W.W.....WW......W...W...WW..WWWW.WWW..W.W..W...W...W...WWW.W....W...................B..B.B..B.B...B.B...B.B.B......B.B...B...BB.BB.B.....B.B.B..BBB.B..........B..B.B",
+    "to_move": 0,
+    "moves": 130,
+    "quiet_moves": 68,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -17.0,
+    "centrality": -0.5440846022046513,
+    "mobility": 0.9537037037037037
+   },
+   "total": -30.7689310014112
+  },
+  {
+   "state": {
+    "board": "WW.W.W.....WW.......W..W...WW..WWWW.WWWW.W.W.W.W..W.......WW..W....W............B......B..B.B.B..B.B.B.B.B.....B..B...B.....B...B..BB.B....BB.B....BBB.B..........B..B.B",
+    "to_move": 0,
+    "moves": 140,
+    "quiet_moves": 78,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -14.0,
+    "centrality": -0.4917032593944217,
+    "mobility": -2.105489417989418
+   },
+   "total": -35.17779187355652
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.0,
+    "mobility": 0.0
+   },
+   "total": 0.0
+  },
+  {
+   "state": {
+    "board": "WWW.WWWWWWWW..WWW.W..WWWWWWW...W......WW.....W.....WW....................................................................B.....BB...B...B....BBBBBB.BBB.BB.BBBBBBBBBBB.B",
+    "to_move": 0,
+    "moves": 10,
+    "quiet_moves": 10,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -3.0,
+    "territory": 0.0,
+    "centrality": -0.028696270870072205,
+    "mobility": 1.026785714285714
+   },
+   "total": -22.06121365490886
+  },
+  {
+   "state": {
+    "board": "WWW.WWWW.WWW..WWW.WWW.WW.WWW...W...W..WW.....W......W.............W...................................B.......B...........BB........B...B...BBBBBBB.B.B.BB.BBBBBBB.BBB.B",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -3.0,
+    "territory": 3.0,
+    "centrality": 0.05048838993495064,
+    "mobility": 0.026785714285714413
+   },
+   "total": -22.24447501168877
+  },
+  {
+   "state": {
+    "board": "WWW.WWWW.WWW...WWW.W..WW.WWW.W.W.W.W..W.W....W......W.............W...................................B.......B.......B...BB......B.BB..B...B.BBBB.BB.B.BB.BB..BBB.BBB.B",
+    "to_move": 0,
+    "moves": 30,
+    "quiet_moves": 30,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 0.0,
+    "centrality": -0.25472389116788907,
+    "mobility": -1.0223214285714288
+   },
+   "total": 4.936461578185586
+  },
+  {
+   "state": {
+    "board": "WWW.WWWW.WWW...W.WWW..WW.WWW.....W.W..W.W...WW...................WW....W...............B......................B.......B...BB.B..B.B.BB.B....B..BBB.BB...BB.BB..BBB.BBB.B",
+    "to_move": 0,
+    "moves": 40,
+    "quiet_moves": 40,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 3.0,
+    "centrality": -0.11286699215559892,
+    "mobility": -1.0178571428571432
+   },
+   "total": 7.012817745663318
+  },
+  {
+   "state": {
+    "board": "WWW.WWWW.WW....W.WWW.WWW.WWW.....W....W......W........W....W.....WWW...W........B......B.......B............B........B.B...B....B.B.BB.B..B.B..BBB.BB...B..BB..BB..BBB.B",
+    "to_move": 0,
+    "moves": 50,
+    "quiet_moves": 50,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -3.0,
+    "centrality": -0.3235973204309772,
+    "mobility": -0.05357142857142838
+   },
+   "total": 5.098467861133234
+  },
+  {
+   "state": {
+    "board": "WW...WWW.WW....W..W..WWW.WWWW..W.WW..........W...W..WWW....W.....W.W...W........B....B.B.......B....B.B..B..B......B..BB...B....B....B.B..B.B.BBB...B...B...B..B...BBB.B",
+    "to_move": 0,
+    "moves": 60,
+    "quiet_moves": 60,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -6.0,
+    "centrality": -0.3544253915060187,
+    "mobility": -1.0982142857142856
+   },
+   "total": -6.614130137452646
+  },
+  {
+   "state": {
+    "board": "WW...WW..WW....W..W.WWWWW.WWW..W.WW....W.....W......WWW....W....WW.....W....B....B.....B.B....B...BB..B..B..B.........BB...B.........B.B..B.B.BBB...B...B...B..B...BBB.B",
+    "to_move": 0,
+    "moves": 70,
+    "quiet_moves": 70,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 0.0,
+    "centrality": -0.5144032974464414,
+    "mobility": -0.125
+   },
+   "total": -10.307613189785766
+  },
+  {
+   "state": {
+    "board": "WW...WW..W......W.WWWWW.WWWWW..W..W.W..W.....W...WW.W.W....W....W......W..B.B...B.......BB........BB..BB.B.B..........BBB..B............B.B.B.BBB.......B...B..B...BBB.B",
+    "to_move": 0,
+    "moves": 80,
+    "quiet_moves": 80,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 3.0,
+    "centrality": -0.605469990224214,
+    "mobility": 0.8883928571428568
+   },
+   "total": -7.1450942466111425
+  },
+  {
+   "state": {
+    "board": ".W...WW..W....WW...WWWW.WWWWW.WW..W.W..W.........WW.W.W....WW...W......W..B.B...B.......BB....B...BB..BB...B.B....B...B.B.......B..B....B.B.B..B...B....B......B...BBB.B",
+    "to_move": 0,
+    "moves": 90,
+    "quiet_moves": 90,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 2.0,
+    "centrality": -0.5959736957101294,
+    "mobility": -0.125
+   },
+   "total": -9.633894782840517
+  },
+  {
+   "state": {
+    "board": ".W...WW..W....W.WWWW..W.WWWWW.WW..W.W..W....W.......W.W.....W.B.W......W.....W..B...B....B.W..B....B...B.B.B.B....B.B....B......B.BB....B.B.B..BB..B....B......B...BBB.B",
+    "to_move": 0,
+    "moves": 100,
+    "quiet_moves": 100,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 2.0,
+    "centrality": -0.3458302549852439,
+    "mobility": -0.08482142857142883
+   },
+   "total": -8.552963877083833
+  },
+  {
+   "state": {
+    "board": "WWW.W.WWWWWWWWWWW.W.WWWWWWWW.....W...........W.W..................B.............B......W......B.......................................B.....BBBBBBBBB...BBBBBBBBBBBB.BBB",
+    "to_move": 1,
+    "moves": 9,
+    "quiet_moves": 9,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -3.0,
+    "centrality": 0.033596450267980416,
+    "mobility": -0.017857142857142794
+   },
+   "total": 14.598671515357637
+  },
+  {
+   "state": {
+    "board": "WWW.W.W.WW.W..WWW.W.WW.W.W.W.....W....WW.....W.W...................W............................W....BB...............................B.....BBBBBBB.B...BBBBBBBBBB.B.BBB",
+    "to_move": 1,
+    "moves": 19,
+    "quiet_moves": 3,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 5.0,
+    "territory": -6.0,
+    "centrality": -0.2925897705696112,
+    "mobility": -1.185625
+   },
+   "total": 63.458390917721545
+  },
+  {
+   "state": {
+    "board": "WWW.W.W.WW.W...WW...WW.W.W.W.W..........WW...W.WW..............W...W..................................B......W........................B.....BBBBBBB.B...BBBBBBBBBB.B.BBB",
+    "to_move": 1,
+    "moves": 29,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 5.0,
+    "territory": -14.0,
+    "centrality": -0.5463026066568553,
+    "mobility": -1.234375
+   },
+   "total": 28.34603957337258
+  },
+  {
+   "state": {
+    "board": "WWW.W.W.WW.W...WW...WW.W.W...W..........W....W.WW......W........W..W.W....................B........................B.............B....B..B..BBB.BBB.B...BBBBB.BBBB.B.BB.",
+    "to_move": 1,
+    "moves": 39,
+    "quiet_moves": 3,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 2.0,
+    "centrality": -0.21974492689656522,
+    "mobility": -0.12635869565217384
+   },
+   "total": 37.86830290110939
+  },
+  {
+   "state": {
+    "board": "WWW.W.W.WW.....WW...WW.WWW...W..........W....W.WW.............B.W..W...............................................B.............B....B...BBBBB.BBB.B...B.BBB.BBBB.B..BW",
+    "to_move": 1,
+    "moves": 49,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": -1.0,
+    "home_row_defense": 1.0,
+    "territory": 1.0,
+    "centrality": -0.25651470527263687,
+    "mobility": -0.10943675889328075
+   },
+   "total": -212.7449323388771
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWW.WW.W.WWW.WWWWW..W..W.W................................................................................B..............B....B..BBBBBB..BBBBBBBBBBB.BBBBBBBB",
+    "to_move": 0,
+    "moves": 8,
+    "quiet_moves": 8,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 6.0,
+    "territory": -3.0,
+    "centrality": 0.04349457480690777,
+    "mobility": 0.008928571428571619
+   },
+   "total": 46.69183544208477
+  },
+  {
+   "state": {
+    "board": "WW.WWWW.WWWWWW.WW.W.WW..WWW.W..W..WWW....W........W.............W.......................................B..B..............B.....B...B.....B.BBB.BB..BBB..BBBBBB.BBBBBBBB",
+    "to_move": 0,
+    "moves": 18,
+    "quiet_moves": 18,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 3.0,
+    "centrality": 0.13469868676651675,
+    "mobility": 1.0133928571428577
+   },
+   "total": -11.934419538648218
+  },
+  {
+   "state": {
+    "board": "WW..WWWWWWWW...WW...WW..WWWWW..W.WW.W...W.......WWW.............W........................B..................B.............B.....B...B.....B.BBBB.BB.BBB..BBBBBB.B.BBBBBB",
+    "to_move": 0,
+    "moves": 28,
+    "quiet_moves": 28,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 8.0,
+    "centrality": 0.5087641252667092,
+    "mobility": 1.0758928571428568
+   },
+   "total": 24.18684221535255
+  },
+  {
+   "state": {
+    "board": "WW..WWWWW..W...WW...WWWWWW..W..W.WW.W...W.......WWW..W............W............W.........B..................B.............B..B..B..B.....BB.BBBB.BB.BBB..BBBBBB.B.BBBB..",
+    "to_move": 0,
+    "moves": 38,
+    "quiet_moves": 38,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 12.0,
+    "centrality": 0.6852708496188606,
+    "mobility": 1.0758928571428568
+   },
+   "total": 10.892869112761156
+  },
+  {
+   "state": {
+    "board": "WW..WWWWW..W...WW....WW.WW..W..W.WW..W..W.........W...........WW...........W..W..........BB.W........B.B.W..B......BB.W...B..B...B...B...BB.BB.B.B...BB..BB.B.B.B.BBBB..",
+    "to_move": 0,
+    "moves": 48,
+    "quiet_moves": 48,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 6.0,
+    "centrality": 0.5876708689107977,
+    "mobility": -0.9687499999999996
+   },
+   "total": 11.41318347564319
+  },
+  {
+   "state": {
+    "board": "WWWWWWW........WW....WW.WW..W..W.WW...WWW..................B..WWW........BW...W........B.BB.W........B.B.W..B.......B.W...B..B...........BB..B...BB..BB..BBBB.BB..BBBB..",
+    "to_move": 0,
+    "moves": 58,
+    "quiet_moves": 58,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": 9.0,
+    "centrality": 0.41448089769297525,
+    "mobility": 3.0669642857142856
+   },
+   "total": 36.29185216220047
+  },
+  {
+   "state": {
+    "board": "W.....WWWWW...W.W....WW.WW..WW.W.W....WWW........W..........B.WWW.......B.W.B..........B..B.WW.......B.B.W..B.B.....B.W...B..............BB..B...BBBB....BBBB.BB..BBBB..",
+    "to_move": 0,
+    "moves": 68,
+    "quiet_moves": 68,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 6.0,
+    "centrality": 0.3589715053278155,
+    "mobility": 1.0
+   },
+   "total": 14.435886021311262
+  },
+  {
+   "state": {
+    "board": "W.....WWWWW....WW....W..WW..WW.W.W....WWW.....B..W............WW..W.....B.W.BW.........BB.B.WW.......B...W....B.......W..BB........B.....BB..B...BBB.....BBBB.BB.BBBBB..",
+    "to_move": 0,
+    "moves": 78,
+    "quiet_moves": 78,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 12.0,
+    "centrality": 0.5367077138430529,
+    "mobility": 2.008928571428571
+   },
+   "total": 12.164687998229354
+  },
+  {
+   "state": {
+    "board": "W.....W...WWWW.WW....W..WW..WW.WWW....WWW....WBW.W..............W.W.......W.B........B.BB.BW.W.......B........B.......W.BBB........B.....BB..B...BBB......BBB.BBBBBB..B.",
+    "to_move": 0,
+    "moves": 88,
+    "quiet_moves": 88,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 7.0,
+    "centrality": -0.0978851919926278,
+    "mobility": 0.03571428571428559
+   },
+   "total": -12.82011219654194
+  },
+  {
+   "state": {
+    "board": "W.....W...WWWW.WW....W...WW.WW.W.WW...WWW....WBW...........W..W.W.W.........B........B.BB.BW.........B....W...B.......W.BBB.......B.......B.BB...BBB..B....BB.BBBBBB..B.",
+    "to_move": 0,
+    "moves": 98,
+    "quiet_moves": 98,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 5.0,
+    "centrality": -0.11993407616517082,
+    "mobility": 0.008928571428571619
+   },
+   "total": -13.961879161803541
+  },
+  {
+   "state": {
+    "board": "WWWWWWWW.W.WWWWWWWWWWW...WWW.......W................WW............W.............W...............................................BB.B........B.BBBBBBBBBBBBBBB.B.BBBBBBBB",
+    "to_move": 1,
+    "moves": 7,
+    "quiet_moves": 7,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": -0.09344116294239413,
+    "mobility": -0.05803571428571441
+   },
+   "total": -0.48983608034100534
+  },
+  {
+   "state": {
+    "board": "WWWWW.WW.W.WWWWWWWWWW....WWW....W.WW................WW............W.............W................................BBB.............B.BB....B..B...BBBBBB.BBBBBB.B.BB.BBBBB",
+    "to_move": 1,
+    "moves": 17,
+    "quiet_moves": 17,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": -0.020273853824151367,
+    "mobility": -1.0089285714285716
+   },
+   "total": -2.0989525581537487
+  },
+  {
+   "state": {
+    "board": "WWWWW.WW.W.WWWWWWWW......WWW....WW...............WWW..W..........WW.............W.........B.............B........BBB..B....B.....B...B...B..B...BBBBB..BBBBBB.B..B.BB.BB",
+    "to_move": 1,
+    "moves": 27,
+    "quiet_moves": 27,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 6.0,
+    "centrality": 0.2502046253664387,
+    "mobility": -0.9598214285714288
+   },
+   "total": -13.918824355677103
+  },
+  {
+   "state": {
+    "board": "WWWWW.WW.W.WWWWWWW.......W.W....W...W....W...W.W..WW..W..........WW.............W......B..B..........B..BB...B...BB..................B...B..B...BBBBBBB..BBBB.B..B.BB.BB",
+    "to_move": 1,
+    "moves": 37,
+    "quiet_moves": 37,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 9.0,
+    "centrality": 0.4536779563798703,
+    "mobility": -0.9419642857142856
+   },
+   "total": -11.56921674590909
+  },
+  {
+   "state": {
+    "board": "WWW.W.WW.W.WWWWW...W.W...W.W.W......W....WW..W.W..WW..W...W......W..............W......B..B..........BB..B...B...BB..BBB.............B...B..B...B.B.BB..BBBBB....B.BB.BB",
+    "to_move": 1,
+    "moves": 47,
+    "quiet_moves": 47,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 12.0,
+    "centrality": 0.6452198755592429,
+    "mobility": -0.9196428571428577
+   },
+   "total": 6.741593787951256
+  },
+  {
+   "state": {
+    "board": "WWW.W.WW.W.WWWWW.....W...W.W.W....W.......W..W.W...W...W..W.....W..W..........W........B..B.B..W.....BBB.B.B.BW..B...BB...B.....B....B......B...B.B.BB.B.BBBB....B.BB...",
+    "to_move": 1,
+    "moves": 57,
+    "quiet_moves": 57,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 20.0,
+    "centrality": 1.0611455563422219,
+    "mobility": 0.12053571428571397
+   },
+   "total": 14.485653653940314
+  },
+  {
+   "state": {
+    "board": "WWW...WW...WWWWW...W.WW..W.W.W....W.......W..WW....W...W..W...W....W.....BB...WBB.........B....W......BB...B.BW..B...B.B..B.....B....B......B...B.B.BB.B.BBBB....B.BB...",
+    "to_move": 1,
+    "moves": 67,
+    "quiet_moves": 67,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 14.0,
+    "centrality": 0.91183392225365,
+    "mobility": 0.11160714285714324
+   },
+   "total": 10.870549974728887
+  },
+  {
+   "state": {
+    "board": "WWW...WW...WWWWW...W..W..W.W.W....WW......W..W.....W...W..W.W.W.B..W.....BB...WBB.........B.....WW.....B.....B...B.....B..B.....B...BB.B....B...BB.BBB.B.BBBB....B..B...",
+    "to_move": 1,
+    "moves": 77,
+    "quiet_moves": 77,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 20.0,
+    "centrality": 0.9221058527316783,
+    "mobility": 1.0758928571428568
+   },
+   "total": 15.840209125212427
+  },
+  {
+   "state": {
+    "board": ".WW...WW....WWW.W..W..W.WW.W.W.W..WW......W.WW.....W...W....W.W.B..W.....BB...W.B.........B...B.WW.....BB....B..BB........B...B.B...BB.B.....B.BB..BBB.B.B.B.....B..B...",
+    "to_move": 1,
+    "moves": 87,
+    "quiet_moves": 87,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 17.0,
+    "centrality": 0.7717590107750514,
+    "mobility": 0.06696428571428559
+   },
+   "total": 3.7209646145287767
+  },
+  {
+   "state": {
+    "board": ".WW....W....WW..W.WW..W.W..WWW.W..WW..W.....WW.....W...WW...W.W.BB.W.....BB...W...........BB..B.WW......B....B..BB........B...B.B...BB.B..B..B..BB.BBB...B.B.....B..B...",
+    "to_move": 1,
+    "moves": 97,
+    "quiet_moves": 97,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 14.0,
+    "centrality": 0.780000691285629,
+    "mobility": 0.04464285714285676
+   },
+   "total": 2.2092884794282295
+  },
+  {
+   "state": {
+    "board": "W.WWWWWWW.WWWWWW..WWWWWW.WWW...........W.....WW.......W....W.................................................B.......................B....B.BBBBBBBB.BBB.BBBBBBBBBBBBB.B",
+    "to_move": 0,
+    "moves": 6,
+    "quiet_moves": 6,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -5.0,
+    "territory": 3.0,
+    "centrality": 0.12030914904100243,
+    "mobility": 0.053571428571428825
+   },
+   "total": -37.91162054669313
+  },
+  {
+   "state": {
+    "board": "..WWWWWW..W.WWWW..WWWWW...WWW.........W......WW.......W....W.......W..........................................B............B.........BB..BB.BBBBBBBB.BB...BBBBBB...BBB.B",
+    "to_move": 0,
+    "moves": 16,
+    "quiet_moves": 0,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -9.0,
+    "centrality": 0.1352976840997977,
+    "mobility": 0.05134615384615371
+   },
+   "total": -33.856116955908504
+  },
+  {
+   "state": {
+    "board": "..WWW.WW..W.WWWW..WWWWW.B..WW.........W......W.......BW......W..............W...........W......B.....................................BB.B.B.BBBBBBBB..B...BBBBBB...BBB.B",
+    "to_move": 0,
+    "moves": 26,
+    "quiet_moves": 4,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": -3.0,
+    "territory": -22.0,
+    "centrality": 0.417340738396474,
+    "mobility": -0.9483695652173916
+   },
+   "total": -125.22737617684888
+  },
+  {
+   "state": {
+    "board": "..WWW.WW....WWWW......WW.WWWW................W........W......W..............W...W.......W.....W.............B............B...........B....B.BBBBBBB.......BBBBBB...BBB.B",
+    "to_move": 0,
+    "moves": 36,
+    "quiet_moves": 0,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": -3.0,
+    "territory": 13.0,
+    "centrality": 0.5185534110502568,
+    "mobility": -4.883116883116884
+   },
+   "total": 4.807979877967259
+  },
+  {
+   "state": {
+    "board": "..WWW.WWW...WWWW......W..WWW..............W..W.......BW......W..............W....B.....................W..................BB...............BBBBBBB........BBBBB....BBB.B",
+    "to_move": 0,
+    "moves": 46,
+    "quiet_moves": 2,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 2.0,
+    "centrality": 0.5761224062162835,
+    "mobility": -2.9437500000000005
+   },
+   "total": -18.58301037513487
+  },
+  {
+   "state": {
+    "board": "..WWW.WWW...W.WW.........WWW.......W...W..W..W........W......W....B...................................B.............B.....BB...............BBBBB.B............BBBB.BBB.B",
+    "to_move": 0,
+    "moves": 56,
+    "quiet_moves": 2,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -6.0,
+    "centrality": -0.28595455542819614,
+    "mobility": -1.0109649122807016
+   },
+   "total": -44.16574804627419
+  },
+  {
+   "state": {
+    "board": "..WWW.WWW...W.WW......W..W.W.....B........W..W......W.W.....B....W.......................................W................BB...............BBBBB.B...B........BBBB.B.B.B",
+    "to_move": 0,
+    "moves": 66,
+    "quiet_moves": 7,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -1.0,
+    "centrality": 0.03621843231229782,
+    "mobility": -1.0069444444444446
+   },
+   "total": -10.369015159639698
+  },
+  {
+   "state": {
+    "board": "...WW.WWW...W...W.....W..W.W....W.........W..W.W....W.W..........W......................................W.....B...........B.............B..BBBBB.B............BBBB.B.B.B",
+    "to_move": 0,
+    "moves": 76,
+    "quiet_moves": 1,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 21.0,
+    "centrality": 0.8414960046425701,
+    "mobility": -0.921875
+   },
+   "total": 64.02223401857029
+  },
+  {
+   "state": {
+    "board": "...WW.W.WW..W...W.....W..W.W....W.W.......W..W........W..........W...............B...........WB.............B........B.............B.......BBBBB..............B.BB.B.B.B",
+    "to_move": 0,
+    "moves": 86,
+    "quiet_moves": 4,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 10.0,
+    "centrality": 0.2324302354786525,
+    "mobility": -1.9990808823529411
+   },
+   "total": 31.931559177208726
+  },
+  {
+   "state": {
+    "board": "...WW.W.WW..W...W.....W..W.W....W......W..W..W.W.................WB...........................B.......B.....B......................B..W....BBBBB..B......B....B.B...BB..",
+    "to_move": 0,
+    "moves": 96,
+    "quiet_moves": 14,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 5.0,
+    "centrality": 0.09953796228836786,
+    "mobility": -0.014705882352941124
+   },
+   "total": 32.86874008444759
+  },
+  {
+   "state": {
+    "board": "...WW.W.WW......W.....W.W..W..........W...W..W.....W..........W..W...........W...B.....................B....B......................B.......BBB.....BBB...B....B.B...BB..",
+    "to_move": 0,
+    "moves": 106,
+    "quiet_moves": 3,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 8.0,
+    "centrality": 0.6431902617203225,
+    "mobility": -1.0260416666666665
+   },
+   "total": 34.520677713547954
+  },
+  {
+   "state": {
+    "board": "...WW...WW......W..W..W....W..............W..W.....WW.........W..WW...................................B...W.B......................B.......BBB.....BBB...B....B.B...BB..",
+    "to_move": 0,
+    "moves": 116,
+    "quiet_moves": 1,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 19.0,
+    "centrality": 0.8964997677267554,
+    "mobility": -0.9564732142857144
+   },
+   "total": 71.17305264233559
+  },
+  {
+   "state": {
+    "board": "...WW...WW......W..W..W....W..............W..W......W.........W...............................B......B.............................B..BW...BBB......BW...B....B.....BB..",
+    "to_move": 0,
+    "moves": 126,
+    "quiet_moves": 1,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 16.0,
+    "centrality": 0.47322788257918447,
+    "mobility": 0.011904761904762307
+   },
+   "total": 69.91672105412626
+  },
+  {
+   "state": {
+    "board": "WWW.WWWWWWWWWWWWW.WWWWWWWWWW...W.............W..............................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 1,
+    "moves": 1,
+    "quiet_moves": 1,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 4.0,
+    "territory": -3.0,
+    "centrality": -0.10604176531682885,
+    "mobility": -1.0535714285714284
+   },
+   "total": 27.968690081589827
+  },
+  {
+   "state": {
+    "board": "WWW.WWWWWW.WW.W...WWWWWWW.W...WW........W....W.........W....W........W.............W.................................B..........B.B...BB....BBB.BBBBB.BBBB.B.BBBBB.BBBBB",
+    "to_move": 1,
+    "moves": 11,
+    "quiet_moves": 11,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 6.0,
+    "centrality": 0.024671444168506973,
+    "mobility": -0.05357142857142838
+   },
+   "total": -5.008457080468829
+  },
+  {
+   "state": {
+    "board": "WWW..WWWWW.WW.W.WWW.WW....W...W...WW....W.....W..W.....W..W.W........W.............W.................................B.....BB...B.B...BB.B..B.BBBBBBBB...B.B.BBBBB.B.BBB",
+    "to_move": 1,
+    "moves": 21,
+    "quiet_moves": 21,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 6.0,
+    "centrality": 0.003036138527668264,
+    "mobility": -1.0446428571428577
+   },
+   "total": 0.9228588398249578
+  },
+  {
+   "state": {
+    "board": "WWW..WW.WW.WW.W.W.W.WW.W..W...WW.WWW....W........W....WW..W.W......................W.........................B.......B....BBB...BBB..BB..B..BBB.BB.B.B...B.BBBBB...B.BBB",
+    "to_move": 1,
+    "moves": 31,
+    "quiet_moves": 31,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 3.0,
+    "centrality": -0.10078431002931243,
+    "mobility": -1.0267857142857144
+   },
+   "total": 15.043291331311321
+  },
+  {
+   "state": {
+    "board": "WWW.WW..WW.WW.W...W..W.W..W..WWW.WWW....W.....W.......WW..W....W.........W.......B.W...........B.............B..B.B..B....B.B...BBB..BB.....B.B.BB..BB...B.BBBB....B.BBB",
+    "to_move": 1,
+    "moves": 41,
+    "quiet_moves": 41,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 3.0,
+    "centrality": -0.04341293587776551,
+    "mobility": 0.008928571428571175
+   },
+   "total": 9.34420539934608
+  },
+  {
+   "state": {
+    "board": "WWW.WW..WW.W..W...W..W.W..WWW.WW...WWW..W....W.........W..W....W.....W...W.......B.W...........B.............B..B.B....BB..BB...BBB..B.B....B.BBB....B...B.BBBB....B.BBB",
+    "to_move": 1,
+    "moves": 51,
+    "quiet_moves": 51,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 9.0,
+    "centrality": 0.06543751995714508,
+    "mobility": 0.9955357142857144
+   },
+   "total": 14.75282150840001
+  },
+  {
+   "state": {
+    "board": "WWW.W..W.W.W..W...WW.W.W..WWW.W....WWW..W......W.......W..WW...W.....W...W.......B.W...........B...........B....B.BB...B.BBBB...B.B....B.B..B.BBB...B....B.BBBB......BBB",
+    "to_move": 1,
+    "moves": 61,
+    "quiet_moves": 61,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 9.0,
+    "centrality": 0.0001760299371653673,
+    "mobility": 0.9642857142857144
+   },
+   "total": 14.42927554832009
+  },
+  {
+   "state": {
+    "board": "WWW.W..W.W..W.W...WW.W.W...WW.W....WWW..W....W.W......WW.............W..WW...W...B.W...........B...........B....B.B..BBB.BBBB...B.B..B.B.B..BBBB.......B.B.BB.B.......BB",
+    "to_move": 1,
+    "moves": 71,
+    "quiet_moves": 71,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 15.0,
+    "centrality": 0.1558068601316167,
+    "mobility": 0.9776785714285712
+   },
+   "total": 2.078584583383609
+  },
+  {
+   "state": {
+    "board": "WWW.W..W.W..W.W...WW.W.W...WW.W..WW..W..W......W......WW...W.....B...W...W.W.WB..B.W......BB...B........B..B...BB.B....B..BB....B.....BB.B..BBB....B...B.B.B..B.......BB",
+    "to_move": 1,
+    "moves": 81,
+    "quiet_moves": 81,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 15.0,
+    "centrality": 0.50394055013422,
+    "mobility": 1.1116071428571432
+   },
+   "total": 3.7389764862511665
+  },
+  {
+   "state": {
+    "board": "WWW.W..W.W..W.W...WW.W.W...WW.W..WW..W.W.W.....W...........W.B...B..WW...W.WBWB..B.W......B....B...........B...BB.B.....B.BB....B......B.B..BBB..B...B.B.B.B........B.BB",
+    "to_move": 1,
+    "moves": 91,
+    "quiet_moves": 91,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 15.0,
+    "centrality": 0.37250364617935006,
+    "mobility": 0.07142857142857162
+   },
+   "total": 1.1328717275745435
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.0,
+    "mobility": 0.0
+   },
+   "total": 0.0
+  },
+  {
+   "state": {
+    "board": "WWW.W.WWWW.WWWWWW.W..WWW.WWW..W...W...W........W....W........W.............W..........................................B.B............BB.....BBBBBB..BBB.BBBBBBB.BBBBBBBB",
+    "to_move": 0,
+    "moves": 10,
+    "quiet_moves": 10,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -4.0,
+    "territory": 6.0,
+    "centrality": 0.21410970930940287,
+    "mobility": 0.09375
+   },
+   "total": -27.95606116276239
+  },
+  {
+   "state": {
+    "board": ".WW.W.WWWW.WWWW.W.W..WW..WWW..W...W....W.....W.W.....W......WW......W......W............................B........B.....BB.......B...B.B.....BBB.BB..BBB.BBBBBB..BBB.BBBB",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 5.0,
+    "centrality": 0.2781511913778969,
+    "mobility": -0.9196428571428568
+   },
+   "total": 1.773319051225874
+  },
+  {
+   "state": {
+    "board": ".WW.W.WWWW.WWWW...W.....WWW..WW.....W...W....W.W.....W......WW......W....W.W..........W...................B......B......B.......B..BB.B.B...BBB.BBB.BB..BBBBBB..BB..BBBB",
+    "to_move": 0,
+    "moves": 30,
+    "quiet_moves": 30,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 5.0,
+    "centrality": 0.35104492009251853,
+    "mobility": -0.8973214285714288
+   },
+   "total": 2.1095368232272165
+  },
+  {
+   "state": {
+    "board": ".WW.W.WWWW.WWWW.........WW.W..W.W.W.W...W...WW.W.....W......W.......W....W...............W.............W.BB......B....B.B.B.....B..BB.B.B...BB.BBBB..B..BBBBB...B...BBBB",
+    "to_move": 0,
+    "moves": 40,
+    "quiet_moves": 40,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -4.0,
+    "centrality": 0.11512589856902178,
+    "mobility": -0.9330357142857144
+   },
+   "total": -3.4055678342953417
+  },
+  {
+   "state": {
+    "board": ".WW.W.WWWW.W.W..........W..WW.W.W.W..WW.W...WW.W...W.W..............W....WWW...........................W.B.B.....B.B.BB.B.B.....B..B..B.B...BB.BBBB..B.BBB.BB...B...B.BB",
+    "to_move": 0,
+    "moves": 50,
+    "quiet_moves": 50,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -9.0,
+    "centrality": 0.16051946659214877,
+    "mobility": 0.09821428571428603
+   },
+   "total": 12.338506437797168
+  },
+  {
+   "state": {
+    "board": ".WW.W.WWWW.W.W..........W..WW.W.W.W..W.WW....W.W............W.....W.W....WWW.....W.........B...........WB..B.....B.B.BBBB.B....BB..B..B.B...BB.B.BB.B..BBB..B...B.....BB",
+    "to_move": 0,
+    "moves": 60,
+    "quiet_moves": 60,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -15.0,
+    "centrality": -0.13393740431845558,
+    "mobility": 0.049107142857142794
+   },
+   "total": 8.062464668440462
+  },
+  {
+   "state": {
+    "board": "..W.W.WWWW.W.W.W........W..W..WW...W.W.WW.W..W.W...........W.....BW.W....WWW..B..W.....................W...B....B..B.BBBB.B....BBB.B....B...BB.B.BB.BB.BBB......B.....BB",
+    "to_move": 0,
+    "moves": 70,
+    "quiet_moves": 70,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -12.0,
+    "centrality": -0.0673858884388423,
+    "mobility": 0.04910714285714324
+   },
+   "total": 9.828670731958917
+  },
+  {
+   "state": {
+    "board": "..W.W.WWWW.W.W.W......W.WW.W..WW.....W.W.....W.W....B....W.W.....BW.W....WW.............W.......W..B...W...B.B..BB.B.BBBB.B.....BB.B......B.B..B.BB.BB.B.B......B.....BB",
+    "to_move": 0,
+    "moves": 80,
+    "quiet_moves": 80,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -9.0,
+    "centrality": -0.12843090732498386,
+    "mobility": 1.0089285714285712
+   },
+   "total": 13.004133513557207
+  },
+  {
+   "state": {
+    "board": "..W.W.WWWW.W.W.W...W..W.WW.W..W.W....W.........W....B.W..WWW.....B..W.....W......W......W.......W..BB..W.....B..BBBB.BBBB.B......B.B......B.B....BBB.BBB.B......B.....BB",
+    "to_move": 0,
+    "moves": 90,
+    "quiet_moves": 90,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -9.0,
+    "centrality": -0.16424694007716312,
+    "mobility": 0.0
+   },
+   "total": 10.843012239691348
+  },
+  {
+   "state": {
+    "board": "....W.WWWW.W.W.WW..W..W..WBW..W.W....W..W.W....W..W...B...WW........W...B........W.....WW.......W..BB..W.....B..BB.B.BBBB.B......B.BB.....B.B....BB..BBB.B......B.....BB",
+    "to_move": 0,
+    "moves": 100,
+    "quiet_moves": 100,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -9.0,
+    "centrality": 0.018599246051426377,
+    "mobility": -0.995535714285714
+   },
+   "total": 9.583325555634278
+  },
+  {
+   "state": {
+    "board": "W.WWWWWWWWWWWWWW.WWW..WWWWWW...W..............WW........B.............B...............W.......................................B..............BBBBBBBBBBBBB.B.BBBBBBBBBBB",
+    "to_move": 1,
+    "moves": 9,
+    "quiet_moves": 9,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -1.0,
+    "centrality": -0.15409979654860262,
+    "mobility": -1.0401785714285716
+   },
+   "total": -11.196756329051553
+  },
+  {
+   "state": {
+    "board": "..WWW.W.WWWWWW.W.W.W.WWWWWWWW...............W.WW......................W.W.....B.......W..............W..................BB....B..............BBBBBBBB..BBB.B.BBBBBB.BBBB",
+    "to_move": 1,
+    "moves": 19,
+    "quiet_moves": 6,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -16.0,
+    "centrality": 0.006599780028717639,
+    "mobility": -0.07726648351648358
+   },
+   "total": -68.12813384691809
+  },
+  {
+   "state": {
+    "board": "..WWW...WW.WWW.W.W.W..W.WW.WW...........W...W.WW...W..................W....W............W...........WW.............B....BB....B..B...........BB...BBBB.BBB.B..B.BBB.BBBB",
+    "to_move": 1,
+    "moves": 29,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -24.0,
+    "centrality": -0.3833821191692346,
+    "mobility": -0.12959866220735794
+   },
+   "total": -95.79272580109165
+  },
+  {
+   "state": {
+    "board": ".WWWW...WW.WWW...W.W..W.WW.WW...........W...W.WW...W..................W.................................B..........B..B.BB.....BB...B........B......BB.BBB.W..B..BB.BBBB",
+    "to_move": 1,
+    "moves": 39,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": -1.0,
+    "home_row_defense": 0.0,
+    "territory": -1.0,
+    "centrality": 0.60072681850479,
+    "mobility": 0.02820910973084878
+   },
+   "total": -308.0406745065191
+  },
+  {
+   "state": {
+    "board": ".WWWW...W..WWW...W.W....WW.WW......W....W...W.WWW..W..........B.........................................B..........B....B.....W.B.......B.B..B......BB.BBB.B..B..BB..BBB",
+    "to_move": 1,
+    "moves": 49,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -7.0,
+    "centrality": 0.16646976070167518,
+    "mobility": -0.005113636363636154
+   },
+   "total": -70.84434822992058
+  },
+  {
+   "state": {
+    "board": ".WWWW...W..WWW...W.W....WW.WW..W........W...W..WW..W.......................W..............B....B.B.................B....B..B...BB.........B..B......B..BBB....B..B...BBB",
+    "to_move": 1,
+    "moves": 59,
+    "quiet_moves": 5,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -7.0,
+    "centrality": -0.056907411777159744,
+    "mobility": 0.016917293233082997
+   },
+   "total": -71.69379506064247
+  },
+  {
+   "state": {
+    "board": ".W.WW...W..WWW.....W....WW.WW...W.......W.....WW...W.....W...B......................W..........B.B....B.................B..B...B..........B.........B..BBB....B..B...BBB",
+    "to_move": 1,
+    "moves": 69,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -7.0,
+    "centrality": 0.24911387086815395,
+    "mobility": 1.0038699690402475
+   },
+   "total": -60.49580457844689
+  },
+  {
+   "state": {
+    "board": "..WW....W..WWW....B.....WW.WW...WB......W....W.W...W.....W..............................B......B.BW.....................B......B....................B..BB.....B..B...BBB",
+    "to_move": 1,
+    "moves": 79,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -7.0,
+    "centrality": 0.4413951258859701,
+    "mobility": 1.0612745098039218
+   },
+   "total": -59.611870476848274
+  },
+  {
+   "state": {
+    "board": "WWWWW.WWWWWWWWWWWWWWWWWWWWWW.......W.......................................................................................B.....B.......B..BBBBBBBBBBBBBBBBBBB.BBB.B.BB",
+    "to_move": 1,
+    "moves": 7,
+    "quiet_moves": 7,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -3.0,
+    "territory": 6.0,
+    "centrality": 0.03160544393610554,
+    "mobility": 0.07142857142857117
+   },
+   "total": -20.730721081398436
+  },
+  {
+   "state": {
+    "board": "WWWWW...WWWWWWWWW.WWW.WWWWWW..W.....WW..........W..W.......................................................................B.......B...BBB..BBBBBBBBBBB.BBBBB.BBB.B.B.BB",
+    "to_move": 1,
+    "moves": 17,
+    "quiet_moves": 17,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -3.0,
+    "territory": 3.0,
+    "centrality": 0.020227693561817084,
+    "mobility": -0.9910714285714284
+   },
+   "total": -24.40123208289559
+  },
+  {
+   "state": {
+    "board": "WWWWW...WWWWWWW.W.WWW.WWW..W.WW.....WW..W..........W..W.......W..........................................................B..B.......B..BB...BBBBBBBBB.B.BBBBB.BB.BBBB.BB",
+    "to_move": 1,
+    "moves": 27,
+    "quiet_moves": 27,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 0.0,
+    "centrality": -0.04458639678767806,
+    "mobility": -1.0580357142857149
+   },
+   "total": -18.294417015722143
+  },
+  {
+   "state": {
+    "board": "WWWWWWWW...WWWW.WW.WW..WW....WW......W..W.........WW.WW.......W.W...........................................B...............B.......B.BBBB..BBBBBBBB..B..B.BBBBB..BBBBBB",
+    "to_move": 1,
+    "moves": 37,
+    "quiet_moves": 37,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": -1.0,
+    "centrality": -0.2143798503862575,
+    "mobility": -1.0982142857142856
+   },
+   "total": -19.553947972973603
+  },
+  {
+   "state": {
+    "board": "WWW.WWWW....WWW.WW.W...W.....W.W.W......W.........WW.WW.....W.WWW...........W............W...................B.....B.....B........B.B.BBBB..BBBBBBBB..B..B.B.B.B..BBBBBB",
+    "to_move": 1,
+    "moves": 47,
+    "quiet_moves": 47,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -1.0,
+    "centrality": -0.6500105855816187,
+    "mobility": -1.1026785714285716
+   },
+   "total": 10.694600514816383
+  },
+  {
+   "state": {
+    "board": "WWWW.WW.W...WWW..W.W...W.....W...W......W.....W...WW.WW.....WW.WW...........W............W...............W...B....B....B..........B.BBBBBB..BBBBB..B..B..B.B.BB.B.BBBBBB",
+    "to_move": 1,
+    "moves": 57,
+    "quiet_moves": 57,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -4.0,
+    "centrality": -0.8282019326718855,
+    "mobility": -0.1517857142857144
+   },
+   "total": 10.38362084074103
+  },
+  {
+   "state": {
+    "board": "WWWW.WW.W...WWW..W.W...W.....W...W......W.....W...WWWWW.....W..WW.W...................................W.W.....B...B.B..B...........BBBBBBB..BBBB...B..B.BB.B.BB.B.BBB.BB",
+    "to_move": 1,
+    "moves": 67,
+    "quiet_moves": 67,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -1.0,
+    "centrality": -0.5509499402092963,
+    "mobility": 1.8973214285714284
+   },
+   "total": -6.9091569036943286
+  },
+  {
+   "state": {
+    "board": "WWWW.WW.W...WWW..W.W...W.........W......W...W.W..WW.WWW.....W..W................W...............W.....W..W....B...B.B..B..B.B..B..BB.BBB....BBBB...B.BB.BB.B..B.B.BB..BB",
+    "to_move": 1,
+    "moves": 77,
+    "quiet_moves": 77,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 5.0,
+    "centrality": -0.490760882538126,
+    "mobility": -0.09821428571428559
+   },
+   "total": -15.659472101581075
+  },
+  {
+   "state": {
+    "board": "WWWW.WW.W...WWW..W.W...W.......W.W............W...W.WWWW....W.................WWW.....................W..W....BB..B.B..B..B.B..B..BB.BBB....BBBB...B.BB..B.B..B.B.BB..BB",
+    "to_move": 1,
+    "moves": 87,
+    "quiet_moves": 5,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 13.0,
+    "centrality": -0.4792684406470382,
+    "mobility": -0.05158730158730185
+   },
+   "total": 18.479751634237243
+  },
+  {
+   "state": {
+    "board": "WWWW..W.W..W.WW..W.WW..........W.W..W.........W...W.WWWW....W.................W.W...........W.............B...BB.....W.BB.B.B..B.BBB.BB.....BBBBB..B.B...B.B...BB.BB..BB",
+    "to_move": 1,
+    "moves": 97,
+    "quiet_moves": 7,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 18.0,
+    "centrality": -0.36229619891494647,
+    "mobility": -0.08482142857142883
+   },
+   "total": 51.38117234719735
+  },
+  {
+   "state": {
+    "board": "WWWW..W.W....WW..W..W.....W....WWW..W..W......W...W..WWW...W..................W.W............W............BB..BB.BB..W.BB......B.BBB.BB...B...BB.B.B.B...B.B...BB.BB..BB",
+    "to_move": 1,
+    "moves": 107,
+    "quiet_moves": 17,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 18.0,
+    "centrality": -0.07050594286706602,
+    "mobility": -0.04842032967032983
+   },
+   "total": 52.62113556919108
+  },
+  {
+   "state": {
+    "board": "WWWW..W.W....WW..W..W.....W.WW......W......W..W...W..WWW...W.......W..........W.W............W........W...BB..BBBBBB...BB..B.....B.B.BB...B...BB.B.B.BB....B...BB.B...BB",
+    "to_move": 1,
+    "moves": 117,
+    "quiet_moves": 27,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 24.0,
+    "centrality": 0.25222000919754084,
+    "mobility": 0.018887362637362237
+   },
+   "total": 57.04665476206488
+  },
+  {
+   "state": {
+    "board": "W.WW..W.W....W...W..W.....W.WW......W......W......W..WWWWW.WW......W..........W.W..........B..........W....BW.B.BBBB...BB..BB....B.B..BBB.....BB...B.BBB...B...BB.B...BB",
+    "to_move": 1,
+    "moves": 127,
+    "quiet_moves": 37,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 24.0,
+    "centrality": 0.1931944188643815,
+    "mobility": -0.03434065934065966
+   },
+   "total": 72.7040963567762
+  },
+  {
+   "state": {
+    "board": "W.WW....W....W...W..W.....W.WW......W......W.W..W.W.WWW.WW..W......W..........W.W..........B..........W..B.BW...B.BBB...B..BBB..B..B..BBB.....BB...B.B.B...B...BB.B.B.BB",
+    "to_move": 1,
+    "moves": 137,
+    "quiet_moves": 47,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 12.0,
+    "centrality": 0.018303425130001827,
+    "mobility": -0.07657967032967017
+   },
+   "total": 65.92005435986066
+  },
+  {
+   "state": {
+    "board": "W.W.....W....W..WW..W.....W.WW......W......WW...W.W.WWW..WW.W......W..........W..W.........B..........W..B.BW.B.B.BBB...BB..BB..B..BBBB.B.....BB....BB.B...B...BB.....BB",
+    "to_move": 1,
+    "moves": 147,
+    "quiet_moves": 57,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 12.0,
+    "centrality": 0.192705256684655,
+    "mobility": -0.06387362637362637
+   },
+   "total": 74.64307377399136
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWW.WWWWW.W.WWWW.WWW...WW......W.W..........................................................................................B.B.B...BBBBBB.BBBBBBBBBBBBB.BBBBB.B",
+    "to_move": 1,
+    "moves": 7,
+    "quiet_moves": 7,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -5.0,
+    "territory": 6.0,
+    "centrality": 0.16493116278440922,
+    "mobility": -0.004464285714285587
+   },
+   "total": -36.34920392029093
+  },
+  {
+   "state": {
+    "board": "WWWWWW..WWW..WWW.WW.WWWW.W.W...W.W..W..WWW.....W......W..............................................................B.B..........B.BBB.B...B.BBB.BB.BBBBBBB.BBB..BBBB.B",
+    "to_move": 1,
+    "moves": 17,
+    "quiet_moves": 17,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 3.0,
+    "centrality": 0.29316924044425186,
+    "mobility": 1.0000000000000004
+   },
+   "total": -11.327323038222993
+  },
+  {
+   "state": {
+    "board": ".W.WWW..WWW..W.W.WW.WWW..W.WW...WW.....WWWW.W....W....W.W.....W...............B............B............B.....B.......BB...B..B......BB....BB.BBB..B..BB.B.B.BBB..BBBB.B",
+    "to_move": 1,
+    "moves": 27,
+    "quiet_moves": 27,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 0.0,
+    "centrality": 0.4080072026750816,
+    "mobility": 0.0
+   },
+   "total": 9.632028810700326
+  },
+  {
+   "state": {
+    "board": ".W.WWW..W.W..W.W.W...WW.WW.WW...WW...W.WWWW.W.W..W......W.....W......W........B...................B.....B......BB.....BB...B.........BB...BB..BBB..B.BB..B.B.BBB..BBBB.B",
+    "to_move": 1,
+    "moves": 37,
+    "quiet_moves": 37,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -3.0,
+    "centrality": 0.2129010249372385,
+    "mobility": 0.9508928571428568
+   },
+   "total": 9.253389814034668
+  },
+  {
+   "state": {
+    "board": ".W.WWW....W..W.W.W...WWW.W.WW...WWW..W..WWW.W.W......W..W.......WW...W........B.....B....B..............B...B..BB.....B..B.B.........B....BB....BBB..BB..B.B.BBB..BBBB.B",
+    "to_move": 1,
+    "moves": 47,
+    "quiet_moves": 47,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -6.0,
+    "centrality": 0.30363562094068275,
+    "mobility": -0.05803571428571441
+   },
+   "total": 6.098471055191302
+  },
+  {
+   "state": {
+    "board": ".W.WW.....W..W.W.WW..WWW.W.WW.......WW..WWW.W.....W.WW..W...WB..WW...W........B.....B....BB................BB..BB...................BB...BBB....BB...BB..B.B.BBB..BBBB.B",
+    "to_move": 1,
+    "moves": 57,
+    "quiet_moves": 57,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -9.0,
+    "centrality": 0.32392840868196515,
+    "mobility": 0.004464285714285587
+   },
+   "total": 12.804642206156432
+  },
+  {
+   "state": {
+    "board": ".W..W.....W..W.WW..W.WWW.W.WW.....W.WW..WWW.W.W...W.WW..W.......WW........B...B...W.B.....B.............B..B...BB..........B......B..B...BBB....B.B..BB..B.B.BBB..BBBB.B",
+    "to_move": 1,
+    "moves": 67,
+    "quiet_moves": 67,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -15.0,
+    "centrality": 0.12496057023589113,
+    "mobility": -0.026785714285714413
+   },
+   "total": 16.946270852372137
+  },
+  {
+   "state": {
+    "board": ".W..W..........WW..W.WW.WW..W.....W..WW.WWW.W.W..WW.WW.WW........W...WB...B...B...WW......B...........BB...B...BB...B......B......BB.B....BB.........BB.BB.B.B.B..BBBB.B",
+    "to_move": 1,
+    "moves": 77,
+    "quiet_moves": 77,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -14.0,
+    "centrality": 0.226755064921619,
+    "mobility": -1.0133928571428568
+   },
+   "total": 15.880234545400763
+  },
+  {
+   "state": {
+    "board": ".W..W.........WW...W.WW.WW..W..W..W..WW.WW..W.W...W.WW..W......W.W..WW....B...B...WWB...B.B...........B....B...B....B......B..B...BB.B..BB.B.........BB.BB.B.B.B..B.BB.B",
+    "to_move": 1,
+    "moves": 87,
+    "quiet_moves": 87,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -14.0,
+    "centrality": 0.16815836860319777,
+    "mobility": -0.026785714285714413
+   },
+   "total": 1.6190620458413623
+  },
+  {
+   "state": {
+    "board": ".W..W.........WW...W.WW.WW..W..W.....W..WW..W.W...W.WWW.W.....WW.W..WW.....B..B...WWB...B.B..B......B.B........B...BB.....BB..B....B.B..BB.B.........BB.BB.B.B....B.BB..",
+    "to_move": 1,
+    "moves": 97,
+    "quiet_moves": 97,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -6.0,
+    "centrality": 0.3696836809127113,
+    "mobility": 0.03571428571428559
+   },
+   "total": 6.550163295079416
+  },
+  {
+   "state": {
+    "board": "WWWWW.W.WWWWWWWWWWWWW.WWWWWW.................................................W.............WB............W.............B............B.......BBBBB.BBBBBBBBBBBB.BBB.BBBBB",
+    "to_move": 0,
+    "moves": 6,
+    "quiet_moves": 6,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 0.0,
+    "centrality": 0.14058084646316082,
+    "mobility": 0.008928571428571175
+   },
+   "total": 8.580180528709786
+  },
+  {
+   "state": {
+    "board": "WWWWW.W.W.WWWWWW.WWWW.WWWWWW...W...W..........................................W...........B.B...........B..............BB...B..B......B...B.BB.BB..BB.BB.BBBBB.B.B.B.B.B",
+    "to_move": 0,
+    "moves": 16,
+    "quiet_moves": 2,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -14.0,
+    "centrality": -0.5653659650598097,
+    "mobility": -0.14921652421652398
+   },
+   "total": -31.559896908672286
+  },
+  {
+   "state": {
+    "board": "WWWWW.W.W..WWWWW.WWWW...WWWW...W...WW..............B.......................W............W...............B.B............BB...B..B......B...B.BB.BB..B..BB.BBBBB.B.B.B.B.B",
+    "to_move": 0,
+    "moves": 26,
+    "quiet_moves": 2,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -11.0,
+    "centrality": -0.2472906849871359,
+    "mobility": -0.09442307692307672
+   },
+   "total": -28.678008893794697
+  },
+  {
+   "state": {
+    "board": "WWWWW.W.W..W..WW.WWWW...W.WW...W...WW.WW...........W..B.................................W...............B...........W...B...B..B......B...B.BB.BB..B..BB.BBBBB.B.B.B.B.B",
+    "to_move": 0,
+    "moves": 36,
+    "quiet_moves": 3,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 13.0,
+    "centrality": 0.39993507006824736,
+    "mobility": -0.009999999999999787
+   },
+   "total": 46.079740280272986
+  },
+  {
+   "state": {
+    "board": "WWWWW.W.W..W..WW.WWWW.....WW...W...WW.................W.........W....W....B..W........................B.B.B.........B.......B..B......B...B.BB.....B..BB.BBB.B.B.B.B.B.B",
+    "to_move": 0,
+    "moves": 46,
+    "quiet_moves": 4,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -1.0,
+    "centrality": -0.06384368206534052,
+    "mobility": 0.9239130434782612
+   },
+   "total": 25.09245135869516
+  },
+  {
+   "state": {
+    "board": "WWW.W.W.W..W..WW..WWW.....WW.......WW........W........W.........W....W....B............WB..W....B....B..B.....B...B......B............B......B.....B..BB.BBB.B.B.B.B.B.B",
+    "to_move": 0,
+    "moves": 56,
+    "quiet_moves": 4,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -1.0,
+    "centrality": -0.064951066011246,
+    "mobility": -0.06818181818181834
+   },
+   "total": 7.103832099591379
+  },
+  {
+   "state": {
+    "board": "WWW.....W..W..WW....WB....WW....W..W.........WW..B....W.....W.B.W....W.....B....................B...W...B.....B.......................B......B.....B...B.BBB.B.B.B.B...B",
+    "to_move": 0,
+    "moves": 66,
+    "quiet_moves": 1,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 2.0,
+    "centrality": -0.3987651324935566,
+    "mobility": -0.06578947368421018
+   },
+   "total": 7.273360522657353
+  },
+  {
+   "state": {
+    "board": "WWW.....W..W..WW....W.B...WW....W..W..................W..............W....WB.W..........B.......B.......B.....B.................B......B.....B.....B...B.B.B.B.B.B.B...B",
+    "to_move": 0,
+    "moves": 76,
+    "quiet_moves": 2,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -19.0,
+    "centrality": -0.48459327526682827,
+    "mobility": 0.8637152777777777
+   },
+   "total": -53.710942545511756
+  },
+  {
+   "state": {
+    "board": "WWW.....W.BW..WW....W.....WW....W..W..................W..............W.....B..W.........B.......B...W...B.....B.................B......B.....B..B..B...B.B.B...B.B.B...B",
+    "to_move": 0,
+    "moves": 86,
+    "quiet_moves": 12,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": -1.0,
+    "home_row_defense": 2.0,
+    "territory": -19.0,
+    "centrality": -0.6538728613727791,
+    "mobility": 0.8732638888888888
+   },
+   "total": -304.36896366771333
+  },
+  {
+   "state": {
+    "board": "WWWWWW.WWWWW.WWWWWW.WWWWW..W...W........W....W........WW...............................................................BB...........BB......BBBBBB.BBBBBBBBBBB..BBBB.BBB",
+    "to_move": 0,
+    "moves": 8,
+    "quiet_moves": 8,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -6.0,
+    "centrality": -0.26837512066235103,
+    "mobility": -0.01339285714285765
+   },
+   "total": 11.89971380306488
+  },
+  {
+   "state": {
+    "board": "WWW.WWWWWWWW.WWW..WWW.WWW..W...W....W...W....W....W...WW.............................................B...............B..B..B.........BB.B...BBBBBB..B.BBBBBBBB.B.B.B.BBB",
+    "to_move": 0,
+    "moves": 18,
+    "quiet_moves": 18,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 4.0,
+    "territory": -9.0,
+    "centrality": -0.07309464164642065,
+    "mobility": 0.9598214285714288
+   },
+   "total": 29.127264290557175
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWW..WWW...WW.WWW..W...W....W...W....W........WW.W.W........................................................BB..B..B.........BB.B.B.BBB.BBBBB.BBBBBBB..B.B.B.BB.",
+    "to_move": 0,
+    "moves": 28,
+    "quiet_moves": 28,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 8.0,
+    "territory": -17.0,
+    "centrality": -0.29776884454852226,
+    "mobility": -1.03125
+   },
+   "total": 52.246424621805915
+  },
+  {
+   "state": {
+    "board": "W.WWWWWW.WWW.W.WWW.WW.WWWW.W...W....W...W....W........W..W.W................................................B.B.....BB.BB.....B.......B.B.B.B.B.BBB.BBBBB.BBB..B.B.B.BB.",
+    "to_move": 0,
+    "moves": 38,
+    "quiet_moves": 38,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -8.0,
+    "centrality": -0.3270818889387508,
+    "mobility": 1.9419642857142856
+   },
+   "total": 22.57560101567357
+  },
+  {
+   "state": {
+    "board": "W..WW.W..WWW.W.WWW.W..WWWW.WW...W..WW...W....W........W..W.W............W............W......................B.......BB.BBB..B.B..B....B..BB.B.B.BBB..BBBB.BBB....BBB.B..",
+    "to_move": 0,
+    "moves": 48,
+    "quiet_moves": 48,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -5.0,
+    "centrality": -0.3416062626733165,
+    "mobility": -1.0044642857142856
+   },
+   "total": -5.875353622121837
+  },
+  {
+   "state": {
+    "board": "W..WW.W..WWW.W.WWWWW..W..W.WW......WWW..W..........W..W..W.W...........WWW.....................B...B........BB....B..BB.BB.BB.B......BB..BB.B.B..BB..B..B.BBB....BBB....",
+    "to_move": 0,
+    "moves": 58,
+    "quiet_moves": 58,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -8.0,
+    "centrality": -0.3798258206659755,
+    "mobility": -1.0312500000000004
+   },
+   "total": -7.581803282663903
+  },
+  {
+   "state": {
+    "board": "W..WW.W..WWW.W...WWWWWW..W.WW......WWW..W....W.....W.....W..W........W..W.............W........B...B.........BBB.....BB.BB.B..BB.....BB..BB.B.B..BB..B..B.BBB....BBB....",
+    "to_move": 0,
+    "moves": 68,
+    "quiet_moves": 68,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -8.0,
+    "centrality": -0.06550229141468922,
+    "mobility": -1.0446428571428568
+   },
+   "total": -6.35129487994447
+  },
+  {
+   "state": {
+    "board": "W..WW.W..WWW.W.W.WWW.WW....WW.W...WWWWW.W................W........WB.W...........B...WW........B..B...........BB.....BB.BB......BB...BB..B.BB.B..BB.BB..B.BBB....BB.....",
+    "to_move": 0,
+    "moves": 78,
+    "quiet_moves": 78,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -8.0,
+    "centrality": -0.3436307348199943,
+    "mobility": -1.0803571428571432
+   },
+   "total": -7.535237224994264
+  },
+  {
+   "state": {
+    "board": "W..WW.W..WWW.W.W...WWWW....WW.W...W.WWW.W.W.....WW...W...............W...........BB..WW.B......B..B.B..B......BB..B..B..BB......BB...BB..B.BB....B..BB..B.BB.....BB.....",
+    "to_move": 0,
+    "moves": 88,
+    "quiet_moves": 88,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -14.0,
+    "centrality": -0.45262732018693175,
+    "mobility": -0.09821428571428559
+   },
+   "total": -1.0069378521762982
+  },
+  {
+   "state": {
+    "board": "W..W.....WWW.W.W..WWWWWW...WW.W...W.W...W.W.....WWW..W.......W.......W...........BB..WW.B...B..B..B.B.......B.....B..B..BB.....BB..B.BB..B.BB....B..BB..B.BB.....BB.....",
+    "to_move": 0,
+    "moves": 98,
+    "quiet_moves": 98,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -11.0,
+    "centrality": -0.38991215815210367,
+    "mobility": -0.06696428571428559
+   },
+   "total": 0.8064227959630141
+  },
+  {
+   "state": {
+    "board": "WWWW.WWWW.W.WWWWWWW.WWWWWWWW.....W.W.....W.......W...................................................................B.B...........B.B..B...BBBBB.B.BBB.BBBBBBB.B.BBBBBB",
+    "to_move": 1,
+    "moves": 7,
+    "quiet_moves": 7,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 0.0,
+    "centrality": 0.08725064903052271,
+    "mobility": -0.9687499999999996
+   },
+   "total": 14.41150259612209
+  },
+  {
+   "state": {
+    "board": "WWWW..W.W.W.WWWWWW..WW.WWWW........W.....W.....W.W.....W.....W.....W.......W......W.....................B...........BB............BBBB..B...BB..B.B.BBB.BBBB.BB.B.BBBBBB",
+    "to_move": 1,
+    "moves": 17,
+    "quiet_moves": 17,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -3.0,
+    "centrality": 0.07964958473025252,
+    "mobility": 0.9553571428571423
+   },
+   "total": 16.729312624635295
+  },
+  {
+   "state": {
+    "board": "WWW...W.W.W.WW.WW...WW.WWWW..W.W...W.....W..W..W..W....W.....W.....W.......W......W.....................B..B........BB..........B.BBBBB.B...B..BB.B.BBB.BBBB.B..B..B.BBB",
+    "to_move": 1,
+    "moves": 27,
+    "quiet_moves": 27,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.22607024263862918,
+    "mobility": 0.9464285714285716
+   },
+   "total": 2.79713811341166
+  },
+  {
+   "state": {
+    "board": "WWW...W.W.W.W..WW...WW..WW...W..W..WW..W.W..W.W...W.W..W......W....W.......W......W.....B.............B.B..B...B...BBB......B...BBBB..B.....B.....B.BB..BBBB.B..B..B.BBB",
+    "to_move": 1,
+    "moves": 37,
+    "quiet_moves": 37,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -8.0,
+    "centrality": -0.0019830343715154797,
+    "mobility": -0.06696428571428603
+   },
+   "total": -4.141860708914634
+  },
+  {
+   "state": {
+    "board": "WWW...W.W.W....WW...WW..WW....W.W..W..WWW...W.W....WW..W......W.W..W.......W......W.....B............BB.B..B...B.....BBB.........BBB..BB...BB.....B.BB..BBBB.B..B....BBB",
+    "to_move": 1,
+    "moves": 47,
+    "quiet_moves": 47,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -14.0,
+    "centrality": -0.021494833366080712,
+    "mobility": -1.0580357142857144
+   },
+   "total": -9.202050762035752
+  },
+  {
+   "state": {
+    "board": "WWW...W.W.W....WW....W..WW...WW.WWWWWW..W..........WW..W......W.W..........W......W.....B........W......B..B...B..B.....BB.......BBB..BB...BB...B.BBBB..BBBB.B..B....BBB",
+    "to_move": 1,
+    "moves": 57,
+    "quiet_moves": 57,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -11.0,
+    "centrality": -0.2590192182184685,
+    "mobility": -0.05803571428571441
+   },
+   "total": -6.652148301445303
+  },
+  {
+   "state": {
+    "board": "WW....W.W.W....W.....W...WW..WW.WWWW.WW.W...WW.....WW..W......W.W..W.......W.....................W....B.BB.B...B..BB..B.BB....B.B.....BB...B......BBBB..BBBB.B..B....BBB",
+    "to_move": 1,
+    "moves": 67,
+    "quiet_moves": 67,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -14.0,
+    "centrality": -0.18837720915039569,
+    "mobility": -0.07589285714285765
+   },
+   "total": 0.09470544911270196
+  },
+  {
+   "state": {
+    "board": "WW....W.W.W....WW....W....W..WW..WWW.WW.W....W.W...WW..W......W.WW.........WB...W........BB......W......BB.B...B..B....BBB....B.B......B...B..B.BBBB....BBB..B..B....BBB",
+    "to_move": 1,
+    "moves": 77,
+    "quiet_moves": 77,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -11.0,
+    "centrality": -0.02346728378245455,
+    "mobility": -0.04910714285714235
+   },
+   "total": 2.307916579155897
+  },
+  {
+   "state": {
+    "board": "WW....W...W....WW........WW..WW..W.W.WW.W....W.W...WW.......W.WWW........WBWB.........W..BB......W..B...BB.BW..B..B...B.BB....B....B...B.B.B.BB..BBB.....B......B....BBB",
+    "to_move": 1,
+    "moves": 87,
+    "quiet_moves": 87,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -9.0,
+    "centrality": 0.14200696987301065,
+    "mobility": -0.040178571428571175
+   },
+   "total": 3.9876707366349002
+  },
+  {
+   "state": {
+    "board": "WW....W...W....WW.......WW..WWW..W.W.WW.W......W...WW.........WWWB........BWB..B......WW.BB..B...W.WB....B..W..B..B...B.B....BB....BBB...BBB.BB..BB.............B....BB.",
+    "to_move": 1,
+    "moves": 97,
+    "quiet_moves": 97,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -1.0,
+    "centrality": 0.4696363770560934,
+    "mobility": 0.013392857142857206
+   },
+   "total": 1.405331222510088
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWW.WWWWWWWWWWW..WWWW............................................................W............W............B............BBB..........BB.BBBBBBBBBBBBB..B.BBBBBBBB",
+    "to_move": 0,
+    "moves": 6,
+    "quiet_moves": 0,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -14.0,
+    "centrality": 0.017278689631397448,
+    "mobility": -1.0120701058201056
+   },
+   "total": -22.955025453114622
+  },
+  {
+   "state": {
+    "board": ".WWWW.WWWW.WWW.WWWWW....WWWW.....................BB.....W.....BW......W....B............BB......................................................BBBBBBBBBB.B..B.BBBBBBBB",
+    "to_move": 0,
+    "moves": 16,
+    "quiet_moves": 0,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": -4.0,
+    "territory": -33.0,
+    "centrality": -1.0845208328341611,
+    "mobility": -0.07044314381270933
+   },
+   "total": -142.97896961896205
+  },
+  {
+   "state": {
+    "board": ".WWW..WWWW..WW.....WWWW.WW........W..W..................W.............W.....W............W...............................................B......BBBBBBBBBB.B..B.BBBBB.BB",
+    "to_move": 0,
+    "moves": 26,
+    "quiet_moves": 1,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 5.0,
+    "centrality": 0.60383351928155,
+    "mobility": 0.14404761904761898
+   },
+   "total": 27.203429315221438
+  },
+  {
+   "state": {
+    "board": ".WWW..WWWW..WW.....WW.W.WW...........W....W....W........W...W..................................B....B........B.....B......................B.....B.BBBBB..B.B..B..BBBB.BB",
+    "to_move": 0,
+    "moves": 36,
+    "quiet_moves": 2,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -14.0,
+    "centrality": 0.014750494972187944,
+    "mobility": 1.006907894736842
+   },
+   "total": -34.92718223063757
+  },
+  {
+   "state": {
+    "board": ".WWW..WWW...WW.....WW...WW.........W.W....W.....W....B.............B.....W.......B....W..............W......B......B..............B..B..........BBBBB......B..B..BBBB.BB",
+    "to_move": 0,
+    "moves": 46,
+    "quiet_moves": 12,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -11.0,
+    "centrality": -0.1287528916594356,
+    "mobility": -1.9575657894736844
+   },
+   "total": -47.930143145585106
+  },
+  {
+   "state": {
+    "board": ".WW......WWWWW..W..WW...W.B........W......W.....W..................................................W........B...W.WB..............B.............BBBBB......B..BB.BBBB.BB",
+    "to_move": 0,
+    "moves": 56,
+    "quiet_moves": 3,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -8.0,
+    "centrality": -0.34997377149215936,
+    "mobility": 0.04983660130718981
+   },
+   "total": -27.300221883354258
+  },
+  {
+   "state": {
+    "board": ".WW.......WWWW..W..WW...W..........W...WB.W.....W..................................................W...............B.....B.......W.B..............BBBBB....B..BB..BBB.BB",
+    "to_move": 0,
+    "moves": 66,
+    "quiet_moves": 0,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -5.0,
+    "centrality": -0.27202957133726,
+    "mobility": -0.9352022058823533
+   },
+   "total": -27.458522697113747
+  },
+  {
+   "state": {
+    "board": ".WW.......WWWW..W..W.......B.....W.W..WW..W.....W..................................................................B.....B....W................BBBB.B......B.BBB.BB.B.BB",
+    "to_move": 0,
+    "moves": 76,
+    "quiet_moves": 6,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -10.0,
+    "centrality": -0.13095099446402259,
+    "mobility": 1.1348039215686274
+   },
+   "total": -55.25419613471884
+  },
+  {
+   "state": {
+    "board": ".WW.......WWWW..W.....W.................WWW....WW............W..........................................B..........B.....B......B..B...........B.BB.BB.....B...B.BB...BB",
+    "to_move": 0,
+    "moves": 86,
+    "quiet_moves": 2,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -22.0,
+    "centrality": -0.7268053313239191,
+    "mobility": 0.9620535714285712
+   },
+   "total": -55.98311418243854
+  },
+  {
+   "state": {
+    "board": ".WW......W.WWW..W.....W..........W......WWW...............................BB.............B.........W...............B.....B......B..............B..B...BBB..B...B.BB...B.",
+    "to_move": 0,
+    "moves": 96,
+    "quiet_moves": 0,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -35.0,
+    "centrality": -1.5299346898146666,
+    "mobility": -1.1412259615384617
+   },
+   "total": -107.90219068233559
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.0,
+    "mobility": 0.0
+   },
+   "total": 0.0
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWW.WWWWWWWWWWWWWWW.W...........W.W..........................................................................B.............B...B.B...BBBBBB.BBBBBBBBBBBBB..BB.BBB",
+    "to_move": 0,
+    "moves": 10,
+    "quiet_moves": 10,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 4.0,
+    "territory": -9.0,
+    "centrality": -0.17698844569287697,
+    "mobility": -1.058035714285714
+   },
+   "total": 24.675974788657065
+  },
+  {
+   "state": {
+    "board": "W.WWWW.WW.WWWWW.WWW.WWW.WW.W.W....W...WW.W.W.........W..............................................................B....B.........B..B...BBBBBBBB.BBBBB.BBBBBBB..BB..BB",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": -3.0,
+    "centrality": -0.12668935648447288,
+    "mobility": 1.0267857142857149
+   },
+   "total": -15.953185997366461
+  },
+  {
+   "state": {
+    "board": "W.W.W.WWW.W.WWW.WW..WW..WWW..W...WW..WWWWW.W....W....W................................B..............B......B............B......B...B......BB.BBBB.BBBBB.BBBBB.B..BBB.BB",
+    "to_move": 0,
+    "moves": 30,
+    "quiet_moves": 30,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 6.0,
+    "centrality": 0.03035617533018975,
+    "mobility": 1.0446428571428572
+   },
+   "total": -2.7892895843935266
+  },
+  {
+   "state": {
+    "board": "W.W.W.WWW.W.WWW.WW..W...W..W.W....WW...WWW.W...WW..WWW..........W.................B...B........B......B...........B.............B....BB....BB..BBB.BB.BB.BBBBB.B..BBB.BB",
+    "to_move": 0,
+    "moves": 40,
+    "quiet_moves": 40,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 3.0,
+    "centrality": 0.2446608933671186,
+    "mobility": 1.0580357142857144
+   },
+   "total": -3.4052849979600968
+  },
+  {
+   "state": {
+    "board": "W.W.W.W.WW..WWW.WW..W.W.W..W.W....WW...WWW.W...W.WW..W........W.W....B.............B..B..........B....B.....B.....B..BB..B......B.B...B.....B...BB.BB.BB..BB.B.B..BBB.B.",
+    "to_move": 0,
+    "moves": 50,
+    "quiet_moves": 50,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 1.0,
+    "centrality": -0.0689136543686093,
+    "mobility": 0.0
+   },
+   "total": -7.775654617474437
+  },
+  {
+   "state": {
+    "board": "W..WW.W.WW..WWW.WW.WW...W.W..W...WW....WWW..W...WWW..W........W.W....B.B...........B.............B....B.....B.....B..BB..B......B.B.B.B.B...B..BBB..B.BB..BB...B..BB..B.",
+    "to_move": 0,
+    "moves": 60,
+    "quiet_moves": 60,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -2.0,
+    "centrality": -0.06931143062095657,
+    "mobility": 0.9508928571428568
+   },
+   "total": 0.6245399918018872
+  },
+  {
+   "state": {
+    "board": "W...W.W.WW.WWWW..WWWWW....W..W...WW..W.WW...W..W.WW..W........W.W....B.B..........BB...........B..BB..B..........B...BB..B........B.B.B.B...B.B..B..B.BB..BB...B..BB..B.",
+    "to_move": 0,
+    "moves": 70,
+    "quiet_moves": 70,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 1.0,
+    "centrality": 0.1921376168287834,
+    "mobility": 0.9285714285714288
+   },
+   "total": 11.125693324457991
+  },
+  {
+   "state": {
+    "board": "W...W.W.W..WW.W..WWWWW.....W.W...WW..W.WW...W..W.WW.WW......W.W.W...B..B..........BB...........B..B...B..........B...BBB.B........B.B.B.B...BBB.....B.BB..B.....B.BB..B.",
+    "to_move": 0,
+    "moves": 80,
+    "quiet_moves": 9,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 8.0,
+    "centrality": 0.2683208203101053,
+    "mobility": 0.9556878306878307
+   },
+   "total": 36.98465894261608
+  },
+  {
+   "state": {
+    "board": "W...W.W....WW...W.WWW......WWW...W...W.W....W.WW.WW.WW.W......W.W....B.B.W........B...W........B.BBW..B..........B...BBB.B.........BB.B.B...BBB.....B.BB..B.....B.BB..B.",
+    "to_move": 0,
+    "moves": 90,
+    "quiet_moves": 19,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 11.0,
+    "centrality": 0.24294519961482663,
+    "mobility": -0.9940476190476186
+   },
+   "total": 34.483685560364066
+  },
+  {
+   "state": {
+    "board": "W...W.W....WW...W.WWW......WW.W..W...W.W.W..W.WW.WW.WW...............B.B.W........B...W.....W..B.BBW..B...W..........BBBBB......B..B....B...BBB..B....BB..B.....BBBB..B.",
+    "to_move": 0,
+    "moves": 100,
+    "quiet_moves": 29,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 14.0,
+    "centrality": 0.28516403134064827,
+    "mobility": -1.979993386243386
+   },
+   "total": 18.18066935287582
+  },
+  {
+   "state": {
+    "board": "W...WWW....WW...W.WWW.....W.W.W........W.W..W.WW....WW......W.WW.....B.B....W.....B...W.....W..B.BBW..B...W.......BBBBB..B..........B...B...B..BBBB...BB..B......BBB..B.",
+    "to_move": 0,
+    "moves": 110,
+    "quiet_moves": 39,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 11.0,
+    "centrality": 0.4021717729268621,
+    "mobility": 0.04265873015873023
+   },
+   "total": 37.194004552024914
+  },
+  {
+   "state": {
+    "board": "W...WWW....WWW..WWWW......W.W.W.....W....W..W...W...WW......W.WW.....B.B...W......BB..W.....W..B..BW..B...W......BBBB.B.............B.B.B...B..BB.B...BB..B...B..BBB..B.",
+    "to_move": 0,
+    "moves": 120,
+    "quiet_moves": 49,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 9.0,
+    "centrality": 0.40585147782667974,
+    "mobility": 1.0246362433862437
+   },
+   "total": 38.172678398079206
+  },
+  {
+   "state": {
+    "board": "W...WWW....WWW..WWWW......W.W.W.....W....W..W.......WW......W.WW.....B.B...W.WW...B..BW.........B..W..B...W.B....BBBB.B.............B.B.B......BB.B...BB..BB..BBBB....B.",
+    "to_move": 0,
+    "moves": 130,
+    "quiet_moves": 59,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 3.0,
+    "centrality": 0.3416204184766869,
+    "mobility": 0.0016534391534390736
+   },
+   "total": 24.869788552213627
+  },
+  {
+   "state": {
+    "board": "W...WWW.....WW...WWW....W.W.W.WW......W..W..W......W.W......W.WW.....B.B....WWW...B..BW.........B..W......B.B....BBBB.B..B......B.B.B.B......B.B..B...B...BB..BBB.....B.",
+    "to_move": 0,
+    "moves": 140,
+    "quiet_moves": 0,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -5.0,
+    "centrality": 0.27960025906752595,
+    "mobility": 0.04166666666666696
+   },
+   "total": -1.2982656303965623
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.0,
+    "mobility": 0.0
+   },
+   "total": 0.0
+  },
+  {
+   "state": {
+    "board": "WWW.WWW.WWWWWWWW.WWWWWWWWW.W...W...WW....W...................................................................B.....B....................B...BBBBBBBBBBBBBB.BBBBBBBB..BBB",
+    "to_move": 0,
+    "moves": 10,
+    "quiet_moves": 10,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": -8.0,
+    "centrality": -0.0444461533542686,
+    "mobility": -0.008928571428571619
+   },
+   "total": -20.195641756274217
+  },
+  {
+   "state": {
+    "board": ".WW.W.W.WWW.WW...W.WWWWWWW.WW.WW.W.WW..W.WW....W...............................................................B...B.........B..........B.B.BBBBBBBBBB.BBB.BBBBBBBB..BB.",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -5.0,
+    "territory": 1.0,
+    "centrality": 0.3200277498606221,
+    "mobility": 0.09375
+   },
+   "total": -38.032389000557515
+  },
+  {
+   "state": {
+    "board": ".WW.W.W..WW.WWW.WW.WWWW..W.WW.W..W.WW.WW.W.....W.WW............................................................B..BB.......B.B.BB.......B...BBB.BBBBBBBBBB...BBBBBB...B.",
+    "to_move": 0,
+    "moves": 30,
+    "quiet_moves": 30,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -4.0,
+    "territory": -5.0,
+    "centrality": 0.2409129228833633,
+    "mobility": 0.04017857142857162
+   },
+   "total": -33.4559911656094
+  },
+  {
+   "state": {
+    "board": ".WW.W.W..WW.WWW.WW.W.WW..W.WW..W.W.WW..W.W.....W.W...............W..............W..............W....B.......B..B..B..........B.BB.....B..B.BBBB.BBBBBBBBB....BBBBB....B.",
+    "to_move": 0,
+    "moves": 40,
+    "quiet_moves": 40,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -3.0,
+    "territory": -8.0,
+    "centrality": 0.22671738799245578,
+    "mobility": -0.9508928571428577
+   },
+   "total": -28.994916162315892
+  },
+  {
+   "state": {
+    "board": ".WW.W.W..WW.WW..WWWW.WW..W..WW...W.WW..WW......W.W.....W.........W..............W..B...........W.B..B.......B.....B.B.....B....BB.B...B.BB.BBBBB.BBB.B..B....B.BBB....B.",
+    "to_move": 0,
+    "moves": 50,
+    "quiet_moves": 50,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -5.0,
+    "centrality": 0.12626749451326003,
+    "mobility": -0.9866071428571428
+   },
+   "total": -11.968144307661245
+  },
+  {
+   "state": {
+    "board": ".WW.W.W..WW.WW..WWW..WW.....WW...W..W..WW......W.W...W.W......W..W..............W..B...B.......W.B..B.B.....B.W...B.B.....B....B.BB.B.B.BB.BBBB..B.B.B..B......BBB....B.",
+    "to_move": 0,
+    "moves": 60,
+    "quiet_moves": 60,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -8.0,
+    "centrality": -0.0629924196609517,
+    "mobility": 1.0178571428571432
+   },
+   "total": -10.21625539292952
+  },
+  {
+   "state": {
+    "board": ".WW.W.W..WW.WW..WWW..WW...W.WW...W..W..W......W......W.W....W.W..W..............W..B...B.......W.B..B.B.....B.....BBB.....B.W..B.BB.B.B..BB.BBBB...B.B..BB.....B.B....B.",
+    "to_move": 0,
+    "moves": 70,
+    "quiet_moves": 70,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -11.0,
+    "centrality": -0.066032508576642,
+    "mobility": 0.03125
+   },
+   "total": 2.298369965693432
+  },
+  {
+   "state": {
+    "board": ".WW.W.W..WW..W..WW....W..WW.WW.W.W............W....W...W...BW.W...WW.............W.B...........W.B..B.B.....B.W...BBB..B..B.WW.B.BB...B..BB.B...BBBB.B..BB.....B.B....B.",
+    "to_move": 0,
+    "moves": 80,
+    "quiet_moves": 80,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -11.0,
+    "centrality": -0.3338167648852375,
+    "mobility": 1.0357142857142856
+   },
+   "total": 3.2361615118876212
+  },
+  {
+   "state": {
+    "board": ".W..W.W..WW..W.W.W....W..WW.W.W.WW........W...W.W..W...W...BW.....WW......B......W.B.....B.....W.B..B...B...B.W...B.B.....B.WW.BBBB......BB.BB..B...BBB.BB.....B.B....B.",
+    "to_move": 0,
+    "moves": 90,
+    "quiet_moves": 90,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -11.0,
+    "centrality": -0.2806466605713611,
+    "mobility": -0.9955357142857144
+   },
+   "total": -0.6136580708568733
+  },
+  {
+   "state": {
+    "board": ".W..W....W...W.WW...W.WW.WW.W.W.WW............W.W..W...WW..BW.....WW............WW.B...B.B.......B..B.......B.W...B.B.B.....WWBB.BB....BBBB.BB..B...BBB.BB.....B......B.",
+    "to_move": 0,
+    "moves": 100,
+    "quiet_moves": 100,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -5.0,
+    "centrality": -0.06451063989645078,
+    "mobility": -0.9642857142857144
+   },
+   "total": -4.686613988157232
+  },
+  {
+   "state": {
+    "board": "W.WWW.WWWWWWWWWW.W.WWWWWWWWW................W.W..........W.....................................BB................W........B.................BBBBBBBB.B.BBBBBBBBBB.BBBBBB",
+    "to_move": 1,
+    "moves": 9,
+    "quiet_moves": 9,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -3.0,
+    "centrality": -0.10534429706580983,
+    "mobility": -0.053571428571428825
+   },
+   "total": -10.028520045406097
+  },
+  {
+   "state": {
+    "board": "W.WWW.WWWW.WWWWW.WWWWWWWW.W.............W...W..........W..W..........B....W....................BB................B........B..B.B............B.BBBBBB.B.BB.B.BBBBB.BBB.B.",
+    "to_move": 1,
+    "moves": 19,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 2.0,
+    "centrality": -0.03247456643336477,
+    "mobility": -0.9629629629629628
+   },
+   "total": 6.944175808340615
+  },
+  {
+   "state": {
+    "board": "W.WWW.WWWW.WWWWW..WWWWWWWW..................W.........WW...............W..W..................BW.B................B........B..B.B............B.BBBBBB.B.BB.B.BBBBB.BBB.B.",
+    "to_move": 1,
+    "moves": 29,
+    "quiet_moves": 8,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -3.0,
+    "centrality": -0.029288936612019256,
+    "mobility": 0.0023148148148148806
+   },
+   "total": -23.612526116818447
+  },
+  {
+   "state": {
+    "board": "W.WW..WWWW.WWWWW..W.W.WWW.W.......W.W......W.....W....WW...............W..W.....................B..........W.....B........B..B.B............B.BBBBBB.B.BB.BB.BBBB.BBB.B.",
+    "to_move": 1,
+    "moves": 39,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -14.0,
+    "centrality": -0.35555609806070354,
+    "mobility": -1.0899999999999999
+   },
+   "total": -70.60222439224282
+  },
+  {
+   "state": {
+    "board": "W.WW...WWW.WWWWW..W...WWW.W..W......W...........WW..WW........W...........W.W........B.............B....................B.B..B.......B......B.BBBB.B.B.BB.BB.BB.B.BBB.B.",
+    "to_move": 1,
+    "moves": 49,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -9.0,
+    "centrality": -0.5167885130275724,
+    "mobility": -2.0199999999999996
+   },
+   "total": -40.60715405211029
+  },
+  {
+   "state": {
+    "board": "W.WW...WWW.WWWWW..W...W.W.W..W..................W...WW.................WWW........................B...................B.B.B..B.B...B.B.......B...B.B.B.BB.BW..B.B.BBB.B.",
+    "to_move": 1,
+    "moves": 59,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": -1.0,
+    "home_row_defense": 0.0,
+    "territory": -8.0,
+    "centrality": 0.46715802446575694,
+    "mobility": -0.9404761904761907
+   },
+   "total": -314.01232028308937
+  },
+  {
+   "state": {
+    "board": "W.WW...WW..WW.WW..W...WW.....W..................W....W..................WW...............B........B.....W............W..BB...B....WB.........B.W.B.B.B.BB.BB..B.B.BBB.B.",
+    "to_move": 1,
+    "moves": 69,
+    "quiet_moves": 4,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -14.0,
+    "centrality": -0.23847886544590846,
+    "mobility": -2.108333333333333
+   },
+   "total": -34.1705821284503
+  },
+  {
+   "state": {
+    "board": "W.WW...WW..WW.WW..W...WW....W...................W...W.....................WW......................B....BW............B..BB...B......B........B..W....B.BB.BB..BB...BB.B.",
+    "to_move": 1,
+    "moves": 79,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -8.0,
+    "centrality": -0.2670337438532284,
+    "mobility": -1.010964912280702
+   },
+   "total": -37.09006479997432
+  },
+  {
+   "state": {
+    "board": "W.WW..WWW...W.WW..W...WW....W...................W...W..................................B..........B...BB................BB...B.........B.....B.......B.BB.BB.BB.....B.B.",
+    "to_move": 1,
+    "moves": 89,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 3.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 27.0,
+    "centrality": 0.4057565883342251,
+    "mobility": 0.09027777777777768
+   },
+   "total": 97.30358190889245
+  },
+  {
+   "state": {
+    "board": "..WW..WWW...W..W..W...WW............................W..........W.............B........................BB.......B........BB....W........B....WB.......B.BB.WB.BB.....B.B.",
+    "to_move": 1,
+    "moves": 99,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": -1.0,
+    "home_row_defense": -1.0,
+    "territory": 19.0,
+    "centrality": 0.7782185577428002,
+    "mobility": 0.1015625
+   },
+   "total": -215.18400076902878
+  },
+  {
+   "state": {
+    "board": "WW..WW.WWWWWW.WWW.WWWWWWWWWWW..W..W....W.....W.........................................................B........B.....B...B....B.....B...B..BB.BBBBB.BBB.BBBB.B.BBB.BBB.",
+    "to_move": 0,
+    "moves": 8,
+    "quiet_moves": 8,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": 0.0,
+    "centrality": -0.2072911554788197,
+    "mobility": -0.06696428571428559
+   },
+   "total": 23.036906806656148
+  },
+  {
+   "state": {
+    "board": "WW.W.W.WWWW.W.WWW.WWWWWW.WWWW.W...W..W.......W........W..............W...B..............B..............B....B...B.........B......B.......B..BB.BBBBB.B.B.BBBB.B.BBB.BBB.",
+    "to_move": 0,
+    "moves": 18,
+    "quiet_moves": 18,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 0.0,
+    "centrality": -0.3214583977884695,
+    "mobility": 0.9375
+   },
+   "total": 8.589166408846122
+  },
+  {
+   "state": {
+    "board": "WW.W.W..WWW.W..WWWWWWWW..WWWW..W..W..WW.....W........WW..............W...B..............B...............B...B...B.........B......B..B....B..BBBBBB...B.BBBBBB.B.BBB.B.B.",
+    "to_move": 0,
+    "moves": 28,
+    "quiet_moves": 28,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 3.0,
+    "centrality": -0.21480998455884404,
+    "mobility": -0.02232142857142838
+   },
+   "total": 0.5961172046217671
+  },
+  {
+   "state": {
+    "board": "WWW.WW..WWW.W...WWWWWWW..WWWW...W.W.WW...............WW..W...........W...B..............B.B............BB...B...B...B..B..B.....B...B....B..BB.BB...BB.BBBB...B.BB..B..B",
+    "to_move": 0,
+    "moves": 38,
+    "quiet_moves": 38,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -7.0,
+    "centrality": -0.7445659060897256,
+    "mobility": -1.1160714285714288
+   },
+   "total": -0.7104064815017601
+  },
+  {
+   "state": {
+    "board": "W.W.WW..WWW.W....WWWWWW...WWB..WW.W.WW.....B.........WW..WB........W......B.W....W.........BB................B..B...B.....B.....B...B....B..BB.BBB..BB.BBBB.....BB..B..B",
+    "to_move": 0,
+    "moves": 48,
+    "quiet_moves": 8,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -6.0,
+    "centrality": 0.10680206870219155,
+    "mobility": -0.07126322751322745
+   },
+   "total": -24.71531818021769
+  },
+  {
+   "state": {
+    "board": "W.W.W....WW.W....WWW..W...WWB..WW..WWW.....B...W.....WW..WB.WW.....W.....WB.W....W.........BB.B.................B...B.....B.....B.B.B....BB.B..BB..B.B.BBBB.B...BB.....B",
+    "to_move": 0,
+    "moves": 58,
+    "quiet_moves": 18,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.3723617262072265,
+    "mobility": 1.0018187830687832
+   },
+   "total": -26.506915529033527
+  },
+  {
+   "state": {
+    "board": "W.W.W....WW.W.....W.W.....WWB.WWW...WWW....BB..W..W..WW..W..W.W....W.....WB.W...BW.........BB...................B...B.B...BB......B......BB.B..BB..B.B.BB.B.B.B.BB.....B",
+    "to_move": 0,
+    "moves": 68,
+    "quiet_moves": 28,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.308579345731272,
+    "mobility": 1.066468253968254
+   },
+   "total": -26.632746109138402
+  },
+  {
+   "state": {
+    "board": "W.W.W....W.WW.....W.W.....WWB.WWW....WW....BB..W.....WW..W..W.W.W........WB.W.W.BW.........BB..W................B...B.B...BB....B.B.....BBB.B...B..B..BB..B.B.BB..B....B",
+    "to_move": 0,
+    "moves": 78,
+    "quiet_moves": 38,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.3621683254020063,
+    "mobility": 0.043485449735449766
+   },
+   "total": -28.464355798921076
+  },
+  {
+   "state": {
+    "board": "W.W.W.....WWW.....W.W.....WWB.WW.....WW....BB........WW..W..W.W.W..W.....WB.W.BWWW.........B.B............W.....B...BBB...B.....B.B......B..B...BB....BB..B.B.BB......BB",
+    "to_move": 0,
+    "moves": 88,
+    "quiet_moves": 5,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 16.0,
+    "centrality": 0.2878416766678873,
+    "mobility": 0.058582621082621245
+   },
+   "total": 47.268531948836795
+  },
+  {
+   "state": {
+    "board": "W.W.W.W...WWW.....W.......WWB.WW.......WW..BB........WW..W..W.W....W.....WB.W.WWW.......B..B.BW.......B....W....B....BB...B.....BB.......B..B...B.B...BB..B.B.B.......BB",
+    "to_move": 0,
+    "moves": 98,
+    "quiet_moves": 9,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 18.0,
+    "centrality": 0.17995133165258004,
+    "mobility": 1.962037037037037
+   },
+   "total": 81.6438794006844
+  },
+  {
+   "state": {
+    "board": "W.WWW.W...WWW.............WWB.WW.......WW..BB.......W....W..W......W.W..W.BWW.WWW.......B..B.BW.......BB...W....B.....B.........BB.....B.B..B.....B...BB..B.B.BB.....B.B",
+    "to_move": 0,
+    "moves": 108,
+    "quiet_moves": 19,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 15.0,
+    "centrality": 0.06394502863455731,
+    "mobility": -0.05185185185185226
+   },
+   "total": 75.65207641083452
+  },
+  {
+   "state": {
+    "board": "W.WWW.W...WW...............WBBW.............B.W.....W....W..W...W..WWW..WBBWW.WWW.W........B.B..W.....BBB.....W.B.......W..B....BB.....B....B.....B...BB..B.B.BB.....B.B",
+    "to_move": 0,
+    "moves": 118,
+    "quiet_moves": 29,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 18.0,
+    "centrality": 0.3388914514044581,
+    "mobility": 1.018703703703704
+   },
+   "total": 80.39297321302524
+  },
+  {
+   "state": {
+    "board": "W.WWW.WW..WW..........W....WBBWB.....W........W..........W..W...W...WW..WBB.WWWW...W.......B..W.......BBB...B.W.B.......W..B....B.B....B....B.....B...BB..B.B.BB.....B.B",
+    "to_move": 0,
+    "moves": 128,
+    "quiet_moves": 39,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 12.0,
+    "centrality": 0.35082376474464816,
+    "mobility": 0.00870370370370388
+   },
+   "total": 75.42070246638599
+  },
+  {
+   "state": {
+    "board": "W.WWWW.W..WW...............W..WB...........B..W.....W....B..W...W.WWWW.WWB..WWW....W.....B.B..W.......BBB...B..WB.......W..B....B......B....B...B.....BB..B.B.BB.B...B.B",
+    "to_move": 0,
+    "moves": 138,
+    "quiet_moves": 49,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 9.0,
+    "centrality": 0.2168551860111707,
+    "mobility": -0.0190740740740738
+   },
+   "total": 81.32927259589653
+  },
+  {
+   "state": {
+    "board": "W..WWW.WWW.....W...........W..WB......W....B..W....WW.W..B..W.....W.WW.WWB..W.W....W.....B.B..W.......BBB...B..WB..B....W...B.....B....B....B...B.....BB..B.B.B..B...B.B",
+    "to_move": 0,
+    "moves": 148,
+    "quiet_moves": 59,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 9.0,
+    "centrality": -0.04721896230023681,
+    "mobility": -0.024444444444444713
+   },
+   "total": 80.26223526191018
+  },
+  {
+   "state": {
+    "board": "W.W.WWWWWWWWWWWWW.WWWWWWWWWW.W.W.............W.............................................................................BB.B.........BBB.BBBBBBBBB.B..BBB.BBBBB.BBB.B",
+    "to_move": 0,
+    "moves": 8,
+    "quiet_moves": 8,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 5.0,
+    "territory": 0.0,
+    "centrality": 0.02736499928072078,
+    "mobility": -0.053571428571428825
+   },
+   "total": 40.00231713998002
+  },
+  {
+   "state": {
+    "board": "W.W.WWWWWWWWWWWWWWWWWWWW.WWW...............W.W.............W..................................................BBB...........B.B........B..B.BBBBBBBBB.B.BB.B.BBBBB.BB..B",
+    "to_move": 0,
+    "moves": 18,
+    "quiet_moves": 18,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 5.0,
+    "territory": -2.0,
+    "centrality": 0.06106047843047957,
+    "mobility": -2.0624999999999996
+   },
+   "total": 35.11924191372192
+  },
+  {
+   "state": {
+    "board": "W.W..WWWWWWWWWW..WWWWWWW..WW.WWW..W.....W....W.............W..................................................BBB.....B.....B.B...B..B..B.B.BBBBB.B.BB..BB.B.BBBBB..B..B",
+    "to_move": 0,
+    "moves": 28,
+    "quiet_moves": 28,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 4.0,
+    "territory": -2.0,
+    "centrality": 0.05612608401987362,
+    "mobility": -0.06696428571428559
+   },
+   "total": 31.09057576465092
+  },
+  {
+   "state": {
+    "board": "W.W..WW.WW.WWWW..W.W.WWW..WW.WWWWWW...W......WW.....W......W..................................................BBB...B.B.....B.B...B..B..B.B.BBBB..B.BB.B.B.B.BBBBB..B..B",
+    "to_move": 0,
+    "moves": 38,
+    "quiet_moves": 38,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": 4.0,
+    "centrality": 0.23421338504452205,
+    "mobility": 1.0089285714285712
+   },
+   "total": -11.04528931696477
+  },
+  {
+   "state": {
+    "board": "W.W..W..WW.WW.W..W...WWW..WW.WW.W.W...WW....WWWW..........WW.......W...W................B.....B.......B....B..BBB.....B.B...B.BBB.........B.BB.B....BBBB.B.B.B..BB..B..B",
+    "to_move": 0,
+    "moves": 48,
+    "quiet_moves": 48,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 6.0,
+    "centrality": 0.12215273288437256,
+    "mobility": 0.0
+   },
+   "total": 3.4886109315374902
+  },
+  {
+   "state": {
+    "board": "W.W.....WW.WW.W.WW..WWWW..WW.W.WW.....WW....WWWW.W........W........W...W..B......B............B.......B.......BBBB....B.B......BB.........BBBB.B..BB..BB.B.B.B..BB..B..B",
+    "to_move": 0,
+    "moves": 58,
+    "quiet_moves": 58,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 9.0,
+    "centrality": 0.16253252160021692,
+    "mobility": 1.9910714285714288
+   },
+   "total": 9.132272943543725
+  },
+  {
+   "state": {
+    "board": "W.W.....WW.WW.W.WW..WWWW..WW...WW....WW...WWW..WWW........W........W..W...B......B..........B.........B.B.....BBBB......B......BBB.........BBB....BB..BBBB.B.B..BB..B..B",
+    "to_move": 0,
+    "moves": 68,
+    "quiet_moves": 68,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 3.0,
+    "centrality": 0.023857585695181704,
+    "mobility": -1.0267857142857144
+   },
+   "total": -0.458141085790702
+  },
+  {
+   "state": {
+    "board": "W.W.....WW..W.W.WW..W.WW..WW...W..W..W...WWWW..WW...W.....W...W....W..W...B..W...B........B.B.....B...B.......BB........B......BBB........BBBBB..BBB..B.BB.B.B...B..B..B",
+    "to_move": 0,
+    "moves": 78,
+    "quiet_moves": 78,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 0.0,
+    "centrality": 0.18307598545462778,
+    "mobility": -0.026785714285714413
+   },
+   "total": 8.678732513247082
+  },
+  {
+   "state": {
+    "board": "W.W......W..W.W.WWW.W.WW..WW.W....W..WW..WW....WW.........W...W.......W..WB..W...BW.......B.B....WB...B......BB.........B.......BBBB......BBB.B.B.BB...BBB.B.B...B..B..B",
+    "to_move": 0,
+    "moves": 88,
+    "quiet_moves": 88,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -3.0,
+    "centrality": -0.09142620975167937,
+    "mobility": -1.03125
+   },
+   "total": -3.9282048390067175
+  },
+  {
+   "state": {
+    "board": "W.W......W..W.W..WW.W.WW..WW.WW...W..WW...WW...WW.....W............B..W..WB.WW....W.......B.B....WB...B......BB.......B.B.......BBBB......BBB.B.B.BB..BBBB.B.....B.....B",
+    "to_move": 0,
+    "moves": 98,
+    "quiet_moves": 98,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -6.0,
+    "centrality": -0.19829749568288602,
+    "mobility": -1.0133928571428568
+   },
+   "total": -5.819975697017258
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWW..WWWWWWWWWWWWW.W............W.............W.........W.............................................B...........B.BB.........B....BBBBBBBB.BB..BBBBBBBB.BB.BBB",
+    "to_move": 1,
+    "moves": 7,
+    "quiet_moves": 7,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -4.0,
+    "territory": -3.0,
+    "centrality": -0.15579011223100903,
+    "mobility": 1.0357142857142856
+   },
+   "total": -32.05173187749547
+  },
+  {
+   "state": {
+    "board": "W.WWWWW.WWW..WWWWW.W.WWWWW.W............W.....W.W.....W........W.............WW....B...........B.............B..............BB..............BBBBBBBB.BB..BBB.BB.BBBBBBBB",
+    "to_move": 1,
+    "moves": 17,
+    "quiet_moves": 17,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -12.0,
+    "centrality": -0.7223984922022124,
+    "mobility": -1.09375
+   },
+   "total": 12.92290603119115
+  },
+  {
+   "state": {
+    "board": "W.WWWWW.WWW..WWWWW.W.WWWWW.W..................W.W.....W.....................W..BW.............B..W...........................B............B..BBBBBBBBBB...BB.BB.BBBBBBBB",
+    "to_move": 1,
+    "moves": 27,
+    "quiet_moves": 4,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -8.0,
+    "centrality": -0.2042093639885758,
+    "mobility": 0.9350071225071224
+   },
+   "total": -8.946823210940059
+  },
+  {
+   "state": {
+    "board": "W.WWWWW.WW...WWWWW.W.WW.WW.W........W.........W.WW..B.W.....................W....................W....................B....W.B.......B....B..BBBBBBB.BB...B.BBB.BBB.BBBB",
+    "to_move": 1,
+    "moves": 37,
+    "quiet_moves": 8,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -16.0,
+    "centrality": -0.29313569259792516,
+    "mobility": -0.09111111111111114
+   },
+   "total": -77.35476499261392
+  },
+  {
+   "state": {
+    "board": "W.WWWWW.WW...W.WWW.W..WWWW.WW.......W.........W.WW....W...........................B...........................B......WB......B.......B....B..BBBBBBB..B...B.BBB.BB..BBBB",
+    "to_move": 1,
+    "moves": 47,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -8.0,
+    "centrality": -0.3010166956573537,
+    "mobility": -0.03270833333333334
+   },
+   "total": -43.269483449296075
+  },
+  {
+   "state": {
+    "board": "W.WWWWW.WW...W.W.W.W..W..W.WWW.......W........W.W.....W.....................W...BB......B......B......B..............BB..............B....B..BB..BBB..B...B..B..BB..BBBB",
+    "to_move": 1,
+    "moves": 57,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 17.0,
+    "centrality": 0.45669361112758367,
+    "mobility": 1.091897233201581
+   },
+   "total": 34.5105689109135
+  },
+  {
+   "state": {
+    "board": "W.WW.WW.WW...W.W.WWW..W..W.WWW.......W........W.......W...........B.......W.....B........BB....B......B...............B..............B....B..BB.B.BB..B...B..B..BB..BBBB",
+    "to_move": 1,
+    "moves": 67,
+    "quiet_moves": 5,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 22.0,
+    "centrality": 0.8077569172512185,
+    "mobility": 1.0854037267080745
+   },
+   "total": 92.40183512242102
+  },
+  {
+   "state": {
+    "board": "W.WW.WW.WW...W.W.WW......W.WWW...WW....B..............W...................W.......W......BB....B.W....B...............B..............B....B.BBB.B.BB..B......B..BB..BBBB",
+    "to_move": 1,
+    "moves": 77,
+    "quiet_moves": 8,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 19.0,
+    "centrality": 0.7730005735473773,
+    "mobility": 0.06764069264069272
+   },
+   "total": 58.7272836794709
+  },
+  {
+   "state": {
+    "board": "..WW.WW.WW...W.W.WW...B..W.WWWW..WW...................W.................................WBB....W.W....B...............BB.............B....B.BBB..BBB..B......B..B...BBBB",
+    "to_move": 1,
+    "moves": 87,
+    "quiet_moves": 6,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 9.0,
+    "centrality": 0.7608504307384836,
+    "mobility": 0.053571428571428825
+   },
+   "total": 23.650544580096792
+  },
+  {
+   "state": {
+    "board": ".WW...WWWW...W.W.W.......W.WWWW...W.............WB....W........W.............B..........BB.......W....B........W......B.....................BBB..BB...BB.....B..B...BBBB",
+    "to_move": 1,
+    "moves": 97,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 4.0,
+    "centrality": 0.8553359336538566,
+    "mobility": 0.05427631578947345
+   },
+   "total": -24.47010363380563
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWW..WWWWWWWWWWWWWWWWW.........WW...................................................................................B............B....BBBBBBBB.BBBBBBBBBBBB.BBBBBB",
+    "to_move": 1,
+    "moves": 3,
+    "quiet_moves": 3,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": -3.0,
+    "centrality": -0.058787269941757536,
+    "mobility": -0.008928571428571619
+   },
+   "total": -17.753006222624172
+  },
+  {
+   "state": {
+    "board": "W.WWWWW.WWW..WWWWWWW.WWWW.WW.W...WW..WW.W.................................................................B.........B....BB....B.B....BBB....B.BBBBB..B.BBB.BBBBB.BB.B.B",
+    "to_move": 1,
+    "moves": 13,
+    "quiet_moves": 13,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 3.0,
+    "centrality": 0.3806249796459662,
+    "mobility": 1.0982142857142856
+   },
+   "total": 5.218928490012436
+  },
+  {
+   "state": {
+    "board": "WW..WWW.WWWW.WWW.W.WW.WWW.WW.W...WW...W.W......WW..............W...........BB............................BB.........B....B.....B.B....B.BB...B..BBBBB...BBB.BBBBB.BB...B",
+    "to_move": 1,
+    "moves": 23,
+    "quiet_moves": 23,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 6.0,
+    "centrality": 0.5695140742947391,
+    "mobility": 1.1116071428571432
+   },
+   "total": 15.501270582893243
+  },
+  {
+   "state": {
+    "board": "WWWWW...W.WW.WWW.W.WW.WWWW.W.W...WW....WW......WW..............W.....W.....BB.............................B......B..B.B..B..B....B..B.B.B....B..B.BBB...BBB.BBBBB.BB...B",
+    "to_move": 1,
+    "moves": 33,
+    "quiet_moves": 33,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 6.0,
+    "centrality": 0.6915351356861468,
+    "mobility": 0.10267857142857162
+   },
+   "total": 5.97149768560173
+  },
+  {
+   "state": {
+    "board": ".WWW....W.WW.WWW.W.WW.WW.WWW.WW..WW....WW.....WWW.....W........W...........BB.......B..............B...B..B.B....BB...B.....B......BB.B......B.....BB..BBBB.BBB.B.BB...B",
+    "to_move": 1,
+    "moves": 43,
+    "quiet_moves": 43,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -5.0,
+    "centrality": 0.48919021871911283,
+    "mobility": 0.10267857142857117
+   },
+   "total": -0.3378819822664063
+  },
+  {
+   "state": {
+    "board": ".WWW..W.W..W.WWWW....WWW.WWW.WW..WW....WWW....WWW.....W......B.W............B.......B..............B...B..B.B....BB...B..B..B..B....B.B...........B.BBB..BB.BBB.B.BB...B",
+    "to_move": 1,
+    "moves": 53,
+    "quiet_moves": 53,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -2.0,
+    "centrality": 0.6765639692548646,
+    "mobility": 0.09375
+   },
+   "total": 1.8937558770194585
+  },
+  {
+   "state": {
+    "board": ".WWW..W.W..WW.W.W....WWW..WWW.W.WW.....WWW...WWWW....WW......B.W............B.......B........B.....B...BB.........B...B..B.BB.BB......B............BBBB..BB.BBB.B.BB...B",
+    "to_move": 1,
+    "moves": 63,
+    "quiet_moves": 63,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -4.0,
+    "centrality": 0.5235778741078017,
+    "mobility": 0.04910714285714235
+   },
+   "total": 0.19252578214549132
+  },
+  {
+   "state": {
+    "board": ".W..W.W..W.WW.W..W...WWW..WWW.WWWW.....WWW...WWWW..WW........B.W............B.......B........B.....B...B..........B...B....BB.BB....B.B............BBBB..BBBB.B.BBBB...B",
+    "to_move": 1,
+    "moves": 73,
+    "quiet_moves": 73,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -10.0,
+    "centrality": 0.1125114248237784,
+    "mobility": 0.01339285714285765
+   },
+   "total": 11.476831413580829
+  },
+  {
+   "state": {
+    "board": ".W..W.W..W.WWWW..WW..WWW..WWW.WW........WW....WWWW.WW........BWW............B.......B........B.....B...B.B...B....B..B.....B..BB......B..B.........B.BB..BBBB.B.BBBB...B",
+    "to_move": 1,
+    "moves": 83,
+    "quiet_moves": 83,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -5.0,
+    "centrality": 0.1700522334448804,
+    "mobility": -0.9196428571428572
+   },
+   "total": 4.340923219493807
+  },
+  {
+   "state": {
+    "board": ".W..W.W..W.WWWW...W..WW....WW.WW......W..W.W..W.WWW.W.W......BWW.W..W.......B.......B....B...B.........B.....B....B.....B..B..BB.B....B..B....B....B.BB..BBB..B.BBBB...B",
+    "to_move": 1,
+    "moves": 93,
+    "quiet_moves": 93,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -2.0,
+    "centrality": 0.1390838989522063,
+    "mobility": 0.0
+   },
+   "total": 7.556335595808825
+  },
+  {
+   "state": {
+    "board": "WWWWW.WWWWWWWWWWWWWWWWWWWWWW.......W................................................................................................B.......BBBBBBBBBBBBBBBBBBBBBB.BBBBB",
+    "to_move": 0,
+    "moves": 2,
+    "quiet_moves": 2,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.0,
+    "mobility": 0.0
+   },
+   "total": 0.0
+  },
+  {
+   "state": {
+    "board": "WWW.W.W.WWWWWWWW.WWWW.WWWW.W..W..........WW......W.............W.............W......................................B.......B..B.B.BB.....B.BBBBBB.BBBBB.BB.B.B.BB.BBB.B",
+    "to_move": 0,
+    "moves": 12,
+    "quiet_moves": 12,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -12.0,
+    "centrality": 0.023314524846681728,
+    "mobility": -0.03125
+   },
+   "total": 18.030758099386727
+  },
+  {
+   "state": {
+    "board": "WWW.W.W.WWWWW.W..WWWWW.WWW....W..........WW......W.....WW......W.....W.......W................................B.....B..B.......B.B.B..B...B.BBBBBBBB.BBB.BB.B.B.B..BBB.B",
+    "to_move": 0,
+    "moves": 22,
+    "quiet_moves": 22,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -16.0,
+    "centrality": 0.029721680787470284,
+    "mobility": -1.03125
+   },
+   "total": 6.056386723149881
+  },
+  {
+   "state": {
+    "board": "WWW.W.W.WWWWW.W..WWWWW.W.WW..WW..........W.......WW......W...................W.....W.....B.......W.B....B.....B..B..B..B...B.....B.B.B....B...BBBBBB..BB..B.B.B.B..BBB.B",
+    "to_move": 0,
+    "moves": 32,
+    "quiet_moves": 32,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -16.0,
+    "centrality": -0.5250221754900384,
+    "mobility": -1.0758928571428572
+   },
+   "total": 3.748125583754132
+  },
+  {
+   "state": {
+    "board": "WWW.W.W..WWWW.W...WWWW...WW..W......WW...W.W.........W..WW.....W..........B..W.....W....BB.......W.B..BBB.....B..B..B..BB..B.....B.B.B........B..B.B..BB.BB.....B..BBB.B",
+    "to_move": 0,
+    "moves": 42,
+    "quiet_moves": 42,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -19.0,
+    "centrality": -1.022214511600998,
+    "mobility": -0.08482142857142838
+   },
+   "total": -5.758500903546849
+  },
+  {
+   "state": {
+    "board": ".WW.W.W..WWWW.WW..W.WWW..WW..WW.......WW.W.WB...W....W..W..B..............B..W.....W....B........W.B.BB.......B..B..B..BB..B....BB.B.B...........B.B.BBB.BB........BBB.B",
+    "to_move": 0,
+    "moves": 52,
+    "quiet_moves": 52,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -17.0,
+    "centrality": -0.8671983517269712,
+    "mobility": 0.8526785714285716
+   },
+   "total": -2.2634362640507417
+  },
+  {
+   "state": {
+    "board": ".W..W.W..WWWW..WWWWWWW...WW....WW.....WW.W.WB...W.......W..BB.......W.....B..W.....W....B........W.B.BB.......B..B........BB.B..BB.B.BB..BB......B.B.BB..BB..........B.B",
+    "to_move": 0,
+    "moves": 62,
+    "quiet_moves": 62,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -14.0,
+    "centrality": -0.5940950895760082,
+    "mobility": -1.1875
+   },
+   "total": 12.248619641695967
+  },
+  {
+   "state": {
+    "board": ".W..W.W...W.W.W.WW.WWW...WW....WWW....WW.W.WB....W....W.W..BB.B.....WW....BB.W.....W.............W.B..B.......B..B........BB.B..BB.....BB.BB..BBB....BB..BB..........B.B",
+    "to_move": 0,
+    "moves": 72,
+    "quiet_moves": 72,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -11.0,
+    "centrality": -0.39753666989501735,
+    "mobility": -0.0803571428571428
+   },
+   "total": -7.250860965294355
+  },
+  {
+   "state": {
+    "board": ".W..W.W...W.W.W.WW.WW....WW........WWWWW.W.WBB...W...WW.W..BB.B.....WW....B..W.....W.............WB.B.......B.B..B........BB.B..BB.....BB.BB..BBB....B...BB..........B.B",
+    "to_move": 0,
+    "moves": 82,
+    "quiet_moves": 82,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -8.0,
+    "centrality": -0.23971453628005168,
+    "mobility": 0.9241071428571423
+   },
+   "total": -3.110643859405922
+  },
+  {
+   "state": {
+    "board": ".W..W.W...W.W.W.WW..WW...WW..W.....WWWWW.W..BB...W...WW....BB.B.....WW.W........B.WW.....BW....B..B.B.......B.B..B...........B..BB.....BB.BB..B..BB..B...BB..........B.B",
+    "to_move": 0,
+    "moves": 92,
+    "quiet_moves": 92,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -2.0,
+    "centrality": -0.3128926566206376,
+    "mobility": 2.8928571428571432
+   },
+   "total": 3.534143659231736
+  },
+  {
+   "state": {
+    "board": "WW.WWWWWWWWWWWWWWWWWWWWWWWWW....W...........................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 1,
+    "moves": 1,
+    "quiet_moves": 1,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -3.0,
+    "centrality": -0.10018473458052313,
+    "mobility": -1.0357142857142856
+   },
+   "total": 20.027832490249338
+  },
+  {
+   "state": {
+    "board": "WW.W.WWWWWWWWWWWWW.WWWWW.WWW...........W......W...........B............................B..............W..................B..........B..B....BBBBBBB.B.BBBBBBBBBB.B..BBBB",
+    "to_move": 1,
+    "moves": 11,
+    "quiet_moves": 5,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": -3.0,
+    "territory": 11.0,
+    "centrality": 0.05624600560038129,
+    "mobility": 0.037533068783068835
+   },
+   "total": 11.800050159967663
+  },
+  {
+   "state": {
+    "board": "W..W.WWW.WWWWWW.WW.WWWWW.WWW.W....W....W......W..........W...............B..............................B.............B..B.............B....BBBBBB..B.BBBBBBBBBB.B..BBBB",
+    "to_move": 1,
+    "moves": 21,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 5.0,
+    "centrality": 0.09050050629390327,
+    "mobility": -0.019230769230769162
+   },
+   "total": 40.82354048671407
+  },
+  {
+   "state": {
+    "board": "W..W.WW..WWWWW..WW.W.WWW.WWW...........W....W.W..........W.W..............................B.............WB...............B..................BBBBBB..B..BBBBBBBBB.B..B.BB",
+    "to_move": 1,
+    "moves": 31,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -14.0,
+    "centrality": -0.1938162575224558,
+    "mobility": -1.1200181159420293
+   },
+   "total": -32.01530126197388
+  },
+  {
+   "state": {
+    "board": "W..W.WW..W.WWW..WW.W.WWW..WW............W...W.W.....W.B..W................W..B...........................................B..................BBBB.B..B..BBBBBB.BB.B..B.BB",
+    "to_move": 1,
+    "moves": 41,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -14.0,
+    "centrality": -0.3763708456606123,
+    "mobility": -0.10606060606060597
+   },
+   "total": -38.717604594763664
+  },
+  {
+   "state": {
+    "board": "W..W..W....WW...WW...W.W..W......W.W....WW..W.WWW...W....W...........W...................B.............B.................B..................BBBB....B..BBBBBB.B..B..B.BB",
+    "to_move": 1,
+    "moves": 51,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -27.0,
+    "centrality": -0.6808984438090739,
+    "mobility": 0.7979323308270678
+   },
+   "total": -66.62772911358216
+  },
+  {
+   "state": {
+    "board": "W..W..W....WW...WW...W.W..W......W......WW..W...W...W....W...........W......W............B.W..........B..................B...........B......B.BB.......BBB.BB.B...B.B.BB",
+    "to_move": 1,
+    "moves": 61,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -30.0,
+    "centrality": -0.6316917319295321,
+    "mobility": -0.14485294117647074
+   },
+   "total": -107.81647281007108
+  },
+  {
+   "state": {
+    "board": "W.....W....W....W..W.W.W..WW...W........WW..WW..W...W....W...........W......B.........................................W..B...........B......B.BB.......BBB.BB.B...B.B.BB",
+    "to_move": 1,
+    "moves": 71,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -33.0,
+    "centrality": -0.5280796347138201,
+    "mobility": 0.8515625
+   },
+   "total": -98.90919353885528
+  },
+  {
+   "state": {
+    "board": "W..........W....W..W.W.W..WW...W....W...WW..WW..W...W....W...........W................................................W..B...........B......B.BB......BBB..BB.B...B.B.BB",
+    "to_move": 1,
+    "moves": 81,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -4.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -41.0,
+    "centrality": -0.8348856834741687,
+    "mobility": 0.8403508771929826
+   },
+   "total": -134.1588409795107
+  },
+  {
+   "state": {
+    "board": "W..........W....W..W..WW..W....W....W...WW...W..W...W..W.W...........W..W................................BB.......................B..B......B.B.....BBB....B..B...B.B.BB",
+    "to_move": 1,
+    "moves": 91,
+    "quiet_moves": 7,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -30.0,
+    "centrality": 0.051131897411421434,
+    "mobility": -0.07361111111111107
+   },
+   "total": -96.94269463257653
+  },
+  {
+   "state": {
+    "board": "W..........W....W..W..WW..W....W....W...WW...W.B....W....W...................B........W..........W...........................W.......B......B.B.B...BBB....B..B...B.B.BB",
+    "to_move": 1,
+    "moves": 101,
+    "quiet_moves": 5,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -22.0,
+    "centrality": 0.1724976241188001,
+    "mobility": 0.9078431372549023
+   },
+   "total": -60.494323229014995
+  },
+  {
+   "state": {
+    "board": "W...W......W....W.W..WW...W.........W...WW...W...B..W....W............................W..........W...................................B......B.B.B...BBB.WB.B..B...B.B..B",
+    "to_move": 1,
+    "moves": 111,
+    "quiet_moves": 4,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -30.0,
+    "centrality": -0.10245173398080354,
+    "mobility": 0.8739495798319328
+   },
+   "total": -103.66190777625935
+  },
+  {
+   "state": {
+    "board": "W..WW.W....W....W....W....W.........W.WW.....W......W....W............................W.........W.......................B................B..B.B.B...B..BBB.B..B...B.B...",
+    "to_move": 1,
+    "moves": 121,
+    "quiet_moves": 4,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -25.0,
+    "centrality": -0.5115360133736946,
+    "mobility": -1.0853365384615383
+   },
+   "total": -114.71681713041785
+  },
+  {
+   "state": {
+    "board": "W..WW......W....W......W..W............W.....W.....WW....W........W..............W............................B....W...B....................B.B.B...B...BB.B..B...B.B...",
+    "to_move": 1,
+    "moves": 131,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -28.0,
+    "centrality": -0.590175323295135,
+    "mobility": -1.0833333333333335
+   },
+   "total": -116.52736795984721
+  },
+  {
+   "state": {
+    "board": "W.W.W......W....W......W..W............W.....W...........W......................WW.......B....W..W...............................B..........B.B.B...B...BB....B...B.B...",
+    "to_move": 1,
+    "moves": 141,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -3.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -22.0,
+    "centrality": -0.014474128071335635,
+    "mobility": -0.039772727272727515
+   },
+   "total": -101.13744196683079
+  },
+  {
+   "state": {
+    "board": ".WWWWWWWWWWWWW.WWWWWWWWWWWWWW.............W.................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 1,
+    "moves": 1,
+    "quiet_moves": 1,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -2.0,
+    "centrality": -0.07406363088126344,
+    "mobility": -0.03125
+   },
+   "total": 6.641245476474946
+  },
+  {
+   "state": {
+    "board": ".W.W.W.WWWWWWW..WWWWWWW.WWWWW.W...W.W.W...W.W........................................................................B.............B...B....BBBBB..BBBBBBBBBBBB.BBBBBBBB",
+    "to_move": 1,
+    "moves": 11,
+    "quiet_moves": 11,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -8.0,
+    "centrality": -0.21104105214324864,
+    "mobility": -0.1071428571428572
+   },
+   "total": 2.941550077141291
+  },
+  {
+   "state": {
+    "board": ".W...W.WWW.WWW..WWW.WW.WW.W.WWW.W.W.W.W.W.W.W.....W....W......................................................B......B.....B...B........B...B.BBB.BBB.BBBBBBBBB.BBBB.BBB",
+    "to_move": 1,
+    "moves": 21,
+    "quiet_moves": 21,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -11.0,
+    "centrality": -0.36785437879383664,
+    "mobility": -0.1383928571428572
+   },
+   "total": 8.751796770538938
+  },
+  {
+   "state": {
+    "board": "W....W.WW..WWW..WWW.WW....W.WWW.W.W..W.W..W.W....WW.W..W......W...W...........................................B......B....BB...B.B......BB..BBBBB.BBB.B.BBB.B.B.BBBB..BB",
+    "to_move": 1,
+    "moves": 31,
+    "quiet_moves": 31,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -3.0,
+    "centrality": -0.49211311755648435,
+    "mobility": -1.0982142857142856
+   },
+   "total": 2.3351189583454914
+  },
+  {
+   "state": {
+    "board": "W....W.WWWW..W..WWW.WW....W..WWWW.W.W..W..W.W.....WWWW.W......W...............................................B.......B...BB...B.B.B.B...B...BBBBBBB..BBBBBBB.B..BB...BB",
+    "to_move": 1,
+    "moves": 41,
+    "quiet_moves": 41,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 0.0,
+    "centrality": -0.47867442671298654,
+    "mobility": -1.0401785714285712
+   },
+   "total": -11.995054849709089
+  },
+  {
+   "state": {
+    "board": "W.....WWW.WWW..W.WW.WW....W..WWWW.W.W..W..W.W.....WWWW.W......W...............................................B.........BB.B...BB.BB.B.......BBB.BBB..BBBBBBBBB..BB...BB",
+    "to_move": 1,
+    "moves": 51,
+    "quiet_moves": 51,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -5.0,
+    "centrality": -0.4583411689879826,
+    "mobility": -1.0803571428571432
+   },
+   "total": 9.505921038333783
+  },
+  {
+   "state": {
+    "board": "W....WWWW..WWW.W.W..WW....W..WW.W.W.W.....WWW.....WWWW.W......W....W..........................................B.....BBB.BB.....BB.B..B...B...BBB...B..BBBBBBBBB..BB.BB..",
+    "to_move": 1,
+    "moves": 61,
+    "quiet_moves": 61,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 2.0,
+    "centrality": -0.14135503212559097,
+    "mobility": -0.053571428571428825
+   },
+   "total": 8.327437014354778
+  },
+  {
+   "state": {
+    "board": "W....WWWW..WWW.W..W.WW...W...WW...W.W.....WWW......WW.WWW.....W..W.W....................B.............B.......B......BB.BB.....BB...B....B...BBB.B..B.BB.BBBBB...BB.BBB.",
+    "to_move": 1,
+    "moves": 71,
+    "quiet_moves": 71,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 5.0,
+    "centrality": 0.028294793162489285,
+    "mobility": -1.0446428571428568
+   },
+   "total": 0.5238934583642436
+  },
+  {
+   "state": {
+    "board": "W.W.WW.WW..WWW.WW.W.WW.......W....W..WW...WW.......WW.WWW.....W..W.W....................B.............B.......B.....B.B.BB.....BB..BB....BB..BBB.B..BB.B..BB.B...BB.BBB.",
+    "to_move": 1,
+    "moves": 81,
+    "quiet_moves": 81,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 14.0,
+    "centrality": 0.27248956185677553,
+    "mobility": 0.02678571428571397
+   },
+   "total": 8.14352967599853
+  },
+  {
+   "state": {
+    "board": "W.W.WW.WWW..WW.WW.W.WW.WW....W....W..WW...W.........WWWWW.W...W......................B..B......B...B.........BB..B.BB.BBBB.B....B..BB....B....BB....BB....B..B...BB.B.B.",
+    "to_move": 1,
+    "moves": 91,
+    "quiet_moves": 91,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 20.0,
+    "centrality": 0.7352248599173343,
+    "mobility": -0.8660714285714288
+   },
+   "total": 3.2087565825264797
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.0,
+    "mobility": 0.0
+   },
+   "total": 0.0
+  },
+  {
+   "state": {
+    "board": ".WWWWWWWW.WWWWW.WWW.W..W.WWW..W..W.W.W.W.....W........W..........................................................B...........B.BB.B..B....B.B.BB.BB.BBB.BB..BBBBBBBB.BBB",
+    "to_move": 0,
+    "moves": 10,
+    "quiet_moves": 10,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.05759830822926393,
+    "mobility": 0.02678571428571397
+   },
+   "total": 0.28396466148848365
+  },
+  {
+   "state": {
+    "board": ".WWWWWWWW.WWWWW.WWW.W.WW..WW.....W....WWW.............W...................................W..............W.B....BB......B..B.B..B.B..B.....BB.BB.B..B.BBB...BBB.BBBB.BBB",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 4.0,
+    "territory": 0.0,
+    "centrality": 0.09584599726356924,
+    "mobility": 0.96875
+   },
+   "total": 34.32088398905428
+  },
+  {
+   "state": {
+    "board": ".W.WWWWWW..WWWW.WWW.W.WW.W.W....WW.....W.............WW.............W.B....W......W.B.....W................B.............BBB.B..BB...B...B.BB.BB.B..B.BB....BBB.BBBB.BB.",
+    "to_move": 0,
+    "moves": 30,
+    "quiet_moves": 30,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 4.0,
+    "centrality": 0.1260841460517268,
+    "mobility": -0.01339285714285765
+   },
+   "total": 18.477550869921192
+  },
+  {
+   "state": {
+    "board": "...WWWWW...WWWW...W.WWWW.W.W...WWW....WW......WW.....WW...............B....W......W.B......W.................B....B.....BB.B.B..BB...BBB.B.BB...BB....BB....BBB.BB.B.BB.",
+    "to_move": 0,
+    "moves": 40,
+    "quiet_moves": 40,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 7.0,
+    "centrality": 0.3655259693885444,
+    "mobility": 1.0
+   },
+   "total": 22.962103877554178
+  },
+  {
+   "state": {
+    "board": "...WWWW.....WWW...WWW.WW..WW...WWW...WW.W.....WW.....WWW..............B....W......W.B......W...B.............B....B.....BBB..B..BB...BBB...BB...BB..BBB..B..BBB.BB...B..",
+    "to_move": 0,
+    "moves": 50,
+    "quiet_moves": 50,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 7.0,
+    "centrality": 0.1934068862995435,
+    "mobility": 0.9821428571428577
+   },
+   "total": 14.23791325948389
+  },
+  {
+   "state": {
+    "board": "...WWWW.....WWW.WW..W.WW..WW.....W...WW.W...W..W.....WWW....W.........B....W....B...B....W.W.....W...........B....B.B...BBB..B..BBB..BBB...BB..B.B.BBB.B.B..B...BB......",
+    "to_move": 0,
+    "moves": 60,
+    "quiet_moves": 60,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -5.0,
+    "centrality": -0.0604073465748014,
+    "mobility": 0.008928571428572063
+   },
+   "total": 13.276227756557939
+  },
+  {
+   "state": {
+    "board": "...WWWW.....WWW..W..W.WW..WW..W.W....WW.W...W.W......WWW....W......B..B....W..W.....B....W.....B.W...B............BB.B.BBB...B..B.B..BBB...BB....B.BBB.B.B..B...BB......",
+    "to_move": 0,
+    "moves": 70,
+    "quiet_moves": 70,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -5.0,
+    "centrality": -0.2477434095127018,
+    "mobility": 0.013392857142856762
+   },
+   "total": 12.535812076234906
+  },
+  {
+   "state": {
+    "board": "...W.W.......WW..WWWW.WW..WW..W.W....WW.W..W.W.......WWW....W..B...BW.B....W.BW.....BB...W.B...B.W.B.B...B.........B.B...B...B..B.....BB...BB.B.....BBBB.B..B...B.......",
+    "to_move": 0,
+    "moves": 80,
+    "quiet_moves": 80,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 1.0,
+    "centrality": -0.36515294919010355,
+    "mobility": -0.12053571428571352
+   },
+   "total": -1.2016832253318412
+  },
+  {
+   "state": {
+    "board": "...W.W.......WW...WWW.W.W.WW..WWW..B.W..W..W.W...B.W.WWW....W..B...BW.B....W.B......BB...W..W..B.W.B.BB.B...........B.B..B...B..B......B...BB.B.....B.BB.B..B...B.......",
+    "to_move": 0,
+    "moves": 90,
+    "quiet_moves": 90,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 1.0,
+    "centrality": -0.3716387544799007,
+    "mobility": -0.11160714285714324
+   },
+   "total": -1.2097693036338892
+  },
+  {
+   "state": {
+    "board": "...W.W........W..WWWW.W.WWWW...W.....W...W.W.W...B.W.WWWW...WW.B...BW.B....W.B......BB....BBW....W.B.B.BB.....B..........B...B..B..B...B...BB.B.....B.BB.B..B...B.......",
+    "to_move": 0,
+    "moves": 100,
+    "quiet_moves": 100,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": -0.573130768245611,
+    "mobility": -1.1071428571428568
+   },
+   "total": -4.506808787268158
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWW.WWWWWWWWWWWWWW..WW.......................................B..............W.............W............................B............B.BBBBBBBBBBB..BBBBBBBBBBB.B.B",
+    "to_move": 1,
+    "moves": 9,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 0.0,
+    "centrality": 0.09184666929176188,
+    "mobility": 0.01388888888888884
+   },
+   "total": 8.395164454944826
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWW.W.WWWWWWWWWWWW..WW.............W.......................................................B..........................B....B.......B..BB.BBBBBBB..WBBBBBBBBBB..B.B",
+    "to_move": 1,
+    "moves": 19,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -5.0,
+    "centrality": 0.2211884591990252,
+    "mobility": 0.0707692307692307
+   },
+   "total": -31.47370770166544
+  },
+  {
+   "state": {
+    "board": "WWWWWWW.W.W.WWWWWWWW.WWW..W...................W........W..................W........W.................B.............B........B....B.......B..BBB..BB...BBBBBBB.BBBBB..B.B",
+    "to_move": 1,
+    "moves": 29,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": -2.0,
+    "territory": -2.0,
+    "centrality": -0.10108877891724433,
+    "mobility": 1.0414583333333334
+   },
+   "total": -45.32143844900231
+  },
+  {
+   "state": {
+    "board": "WWWW.WW.W.W.WWWWW.WW.WWW..W...W............W..W........W..............................WB.....................B.............BB....B..........BBB..BB...B.BBBBB.BBBBB..B.B",
+    "to_move": 1,
+    "moves": 39,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -8.0,
+    "centrality": -0.012481868745771507,
+    "mobility": 0.01313405797101419
+   },
+   "total": -26.02365935904106
+  },
+  {
+   "state": {
+    "board": "WW.W.WW.W.W.WWWW..WW.WWW..W................WW.W........W...........................B..............................W........BB.B.BW...........BB..BB...B.BB.BB.BBBBB..B.B",
+    "to_move": 1,
+    "moves": 49,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -17.0,
+    "centrality": -0.22461510198374413,
+    "mobility": -0.06702898550724656
+   },
+   "total": -45.53251837894947
+  },
+  {
+   "state": {
+    "board": ".WWW.W..W.W.WWW...W..WWW..W................WBW.W.......W..W.............B..........B.......................................BB.B..............B...BB...B.BB.B..BBBBB..B.B",
+    "to_move": 1,
+    "moves": 59,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 1.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 5.0,
+    "centrality": -0.12607061274799314,
+    "mobility": -0.012500000000000178
+   },
+   "total": 47.97071754900803
+  },
+  {
+   "state": {
+    "board": "WWW.......W.WWW......WW...W....W............WW.W.......W............W....W.........W....W..................................BB.B..............B...BB...B.BB.B..BBBBB..B.B",
+    "to_move": 1,
+    "moves": 69,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -17.0,
+    "centrality": -0.3749971493541562,
+    "mobility": -1.1149380804953557
+   },
+   "total": -56.22986475840734
+  },
+  {
+   "state": {
+    "board": "WWW.......W.WWW......WW...W....W............WWW........W.........B..W....................WB.B...W..........................BB.B.....B........B...B......BB.B..BB.BB....B",
+    "to_move": 1,
+    "moves": 79,
+    "quiet_moves": 5,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -6.0,
+    "centrality": 0.5149984710472788,
+    "mobility": -0.0020424836601304897
+   },
+   "total": -38.94409108313115
+  },
+  {
+   "state": {
+    "board": "WWW.......W.WWW......WW...W....W...............WWW.....W............W......................BB.........W......W.............BB.B.....B........B...B.B....BB.B..BB..B....B",
+    "to_move": 1,
+    "moves": 89,
+    "quiet_moves": 4,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -11.0,
+    "centrality": 0.17062927796882654,
+    "mobility": -0.02690972222222232
+   },
+   "total": -72.87130233256913
+  },
+  {
+   "state": {
+    "board": ".WW.......W.WW..W.....W...W.W.......W.....W....WWW.......B.......................W...........BB.......B...................BBB.B..........B...B...B.......B.B..BB........",
+    "to_move": 1,
+    "moves": 99,
+    "quiet_moves": 0,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 8.0,
+    "centrality": 0.27038442137411334,
+    "mobility": 0.07499999999999973
+   },
+   "total": 5.231537685496453
+  },
+  {
+   "state": {
+    "board": ".WW.......W.WW............W..W...B..WW.........BBW......WB............W........W..............B.......B.....................B.B..........B...B...B.......B.B..BB........",
+    "to_move": 1,
+    "moves": 109,
+    "quiet_moves": 1,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 2.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 24.0,
+    "centrality": 0.6567724218685331,
+    "mobility": 0.10064102564102573
+   },
+   "total": 74.82837173875618
+  },
+  {
+   "state": {
+    "board": ".WW.......W.WW.W....B.....W.........WW....W.....BB.......B.....................W....W.........B.......B.......................B.........B..B.B...B.......B.B..BB........",
+    "to_move": 1,
+    "moves": 119,
+    "quiet_moves": 9,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": 3.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 29.0,
+    "centrality": 0.9529878130304246,
+    "mobility": 0.12916666666666643
+   },
+   "total": 108.57028458545503
+  },
+  {
+   "state": {
+    "board": "WWWWW.W.WWWW.WWWWW.WWW.WWWWW...W........W...W...W............W.........................................................B............B.....B.BBBBBBBBBBBBBBBBBB.B.BBB.BBB",
+    "to_move": 1,
+    "moves": 7,
+    "quiet_moves": 7,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": 0.0,
+    "centrality": -0.07593603253098635,
+    "mobility": -0.049107142857142794
+   },
+   "total": -8.40195841583823
+  },
+  {
+   "state": {
+    "board": "WWWW....WWWWWWWWW..WW..W.WWW..WWW.W.....W..WW...W............W.........................................................B.....B......BB...B.BBBBBBBBBBB.BB.BBBB....BBBBBB",
+    "to_move": 1,
+    "moves": 17,
+    "quiet_moves": 17,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -3.0,
+    "centrality": -0.03626699184467075,
+    "mobility": -0.05803571428571441
+   },
+   "total": -1.7611393959501118
+  },
+  {
+   "state": {
+    "board": ".W.WWWW.WW.WWWWWW..WW..WWW.W..W.W.W.....W..WW...W.W..........W.......................................................B.B.....B......BB...B.BBBBBB...BBBBB.BBBBB...BBBBBB",
+    "to_move": 1,
+    "moves": 27,
+    "quiet_moves": 27,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -8.0,
+    "centrality": -0.3639082131855389,
+    "mobility": -1.1071428571428572
+   },
+   "total": 8.330081432972129
+  },
+  {
+   "state": {
+    "board": ".W.WW.W.WW.WWWWWW..WW......W..W.WWW...WWW..WW...W..W.........W..W....................................................B.B...BBBB..B..BB...B.B.BBBB...BBB.B.BB.BB...B.BBBB",
+    "to_move": 1,
+    "moves": 37,
+    "quiet_moves": 37,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -5.0,
+    "centrality": -0.42882337709271123,
+    "mobility": -1.0624999999999996
+   },
+   "total": 1.659706491629156
+  },
+  {
+   "state": {
+    "board": ".WW.W.W.WW.WWWW.WWWWW.W.W..W..W..WWW...WW..WW......W............W..................................B.....B........B..B....BBB.B.....B....B.B.BBB....BBB.B.BB.BB..BBBBB.B",
+    "to_move": 1,
+    "moves": 47,
+    "quiet_moves": 47,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -5.0,
+    "centrality": -0.17820355964730705,
+    "mobility": -0.008928571428571175
+   },
+   "total": 12.76932861855363
+  },
+  {
+   "state": {
+    "board": ".WW.W.W.WW.WWWW.WWWWW.W.W.....W...WW....W.WW...W...W.W...........W.W...............................B.B...B..B....B...B.....BBBBB....B....B.....BB...BBB.B.B..BB..BBBBB.B",
+    "to_move": 1,
+    "moves": 57,
+    "quiet_moves": 57,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -2.0,
+    "centrality": -0.04269867736263766,
+    "mobility": 0.013392857142857206
+   },
+   "total": 14.855991004835165
+  },
+  {
+   "state": {
+    "board": ".WW.W...WW.WWWW.WWWWW.W.W.......W.W.W...W.WW.W.W...W...............WWW...............................B..B..BB....B...B....BBBB..BB..B........B.BB...BBB...B..BB..BBBBB.B",
+    "to_move": 1,
+    "moves": 67,
+    "quiet_moves": 67,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": 1.0,
+    "centrality": 0.2928600166073796,
+    "mobility": 1.0044642857142856
+   },
+   "total": 19.680368637858088
+  },
+  {
+   "state": {
+    "board": ".W..W....WW.WWW.W.WWW.W...........W..W..W.WW.W.....W...W......W.W..W.W.......WW.............W........B..B..WB....B.B.B.....BBB..B...B........BBBBB.B......B.B.B..BBBBB.B",
+    "to_move": 1,
+    "moves": 77,
+    "quiet_moves": 2,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -18.0,
+    "centrality": -0.5517581869550519,
+    "mobility": -0.10267857142857117
+   },
+   "total": -47.412389890677346
+  },
+  {
+   "state": {
+    "board": ".W..W....WW.WWW.WWWW..W..............W..W.WWW...W..W...W......W.WW.W.W.......WW......................B.....WB..B.BBB.BB....B.B...B..B........BBBBB.B......B...B..BB.BBBB",
+    "to_move": 1,
+    "moves": 87,
+    "quiet_moves": 12,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -18.0,
+    "centrality": -0.4912076252952442,
+    "mobility": 0.9254807692307692
+   },
+   "total": -53.11386896271944
+  },
+  {
+   "state": {
+    "board": "..WWW....WW.WWW.W.WW..W..............W..W.WWW..W.......W........WWWW.W......W.W...........W.............B..WB..B..BB.BBB...B.BBB.B...B.......BB.BBB.......B...B...B.BBBB",
+    "to_move": 1,
+    "moves": 97,
+    "quiet_moves": 22,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -15.0,
+    "centrality": -0.3774441364883092,
+    "mobility": -1.0693681318681318
+   },
+   "total": -63.1485128096895
+  },
+  {
+   "state": {
+    "board": "WW.W.....WW.WWW.W.WW..W.......W......W..W.WW...W.......W........WWWW.W......W.W...........W.............B..W.B.B..BBBBBB...B.BBB.BB..B.......B.B.BB...B...B.......B..BBB",
+    "to_move": 1,
+    "moves": 107,
+    "quiet_moves": 32,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -7.0,
+    "centrality": -0.09542704289637971,
+    "mobility": -1.0223214285714288
+   },
+   "total": -57.92635102872838
+  },
+  {
+   "state": {
+    "board": "...W.....WW.WW..W.WW..W.....WWWW.....W..WWWW...W.......W........WWWW........W.W....B......W.W....B......B.....B...B.B.BB...B..BB.BB.BB......B..B.BBB..B...B.......B..BBB",
+    "to_move": 1,
+    "moves": 117,
+    "quiet_moves": 42,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -18.0,
+    "centrality": -0.38582391513535264,
+    "mobility": -1.0600961538461537
+   },
+   "total": -64.66348796823372
+  },
+  {
+   "state": {
+    "board": ".W.W.....W..WW....WW..W.WW..WWWW........WWWW...W.....W.W........WW.W..........W....B.....WW.W....B......BB....B.B.B.B..B...B..B..BB.BB...B..B..B.B.B......B....B..B..BBB",
+    "to_move": 1,
+    "moves": 127,
+    "quiet_moves": 52,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -24.0,
+    "centrality": -0.23679331316222285,
+    "mobility": -0.05494505494505475
+   },
+   "total": -65.057063362539
+  },
+  {
+   "state": {
+    "board": ".W.W.....W..WW...WW.W.W.WWW.W.W.........W.WW...W.....W.W.W......WW.W...........W...B.....WW.W....B.....BBB......B.B....B.....B...BB.BB...BB.B..B.B.B......B.B..B..B..BBB",
+    "to_move": 1,
+    "moves": 137,
+    "quiet_moves": 62,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -30.0,
+    "centrality": -0.2584964084604815,
+    "mobility": 0.9347527472527473
+   },
+   "total": -66.16448013933643
+  },
+  {
+   "state": {
+    "board": ".W.W.....W..WW...WW.W.W.WW..W.W..........WWW...W.....W.W.W......WWW............W.W.B....W.W..B.W.B.....BBBB....BBB.....B.........BB..B...BB.B......B......B.B.BB..B..BBB",
+    "to_move": 1,
+    "moves": 147,
+    "quiet_moves": 72,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": -2.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -30.0,
+    "centrality": -0.1107730661140085,
+    "mobility": 0.9515796703296706
+   },
+   "total": -65.53993292379668
+  },
+  {
+   "state": {
+    "board": "WW.WW.WWWWW.WWWWWWWWWWW.WWWWW......W.WW................................................................................B..........B.........BBB.BB.BBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 1,
+    "moves": 7,
+    "quiet_moves": 7,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 9.0,
+    "territory": -6.0,
+    "centrality": -0.0540932056220651,
+    "mobility": -0.07142857142857162
+   },
+   "total": 68.6407700346546
+  },
+  {
+   "state": {
+    "board": "WW....WWWWW.WWWWWWWWWWW.WWW..WW....W.WWW..W................B.........................................................BB...........B...B.....BBB.BB.BBBB.BBBBBBBBBB.B.BBB",
+    "to_move": 1,
+    "moves": 17,
+    "quiet_moves": 17,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 3.0,
+    "territory": -9.0,
+    "centrality": 0.1276607668900498,
+    "mobility": -1.0223214285714284
+   },
+   "total": 17.96600021041734
+  },
+  {
+   "state": {
+    "board": "W......WWWW.WWWW.WWW.WW..WW..WWW..WW.WW....W..WW......W....B.........W............................................B...B..........BB...B.....BBBBBB.BBBBB.BBBBB..BB.B.BBB",
+    "to_move": 1,
+    "moves": 27,
+    "quiet_moves": 27,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": -9.0,
+    "centrality": -0.20328485065307156,
+    "mobility": -1.120535714285714
+   },
+   "total": -7.554210831183714
+  },
+  {
+   "state": {
+    "board": "W......WWWW.WWWWW.W..WW.W....WWWW.WW.WW..W.W..WW...........B........WW................................................B.B.B.....BBB...B..B..BBBBBBBBBB...BBBBB..B..B..BB",
+    "to_move": 1,
+    "moves": 37,
+    "quiet_moves": 37,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 0.0,
+    "centrality": 0.01774229743055411,
+    "mobility": -1.0491071428571432
+   },
+   "total": -2.02724509599207
+  },
+  {
+   "state": {
+    "board": "W......WW.W.WWWWW.W..W.WW....WW...W..W...W.WWWWWW..........B.W.....W.W....W............................B..............B.B.B.....BBB...B.....BBBBB.BBBB..BBBBBB..B..B..BB",
+    "to_move": 1,
+    "moves": 47,
+    "quiet_moves": 47,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 2.0,
+    "territory": -3.0,
+    "centrality": -0.212429877079634,
+    "mobility": -3.116071428571428
+   },
+   "total": 7.418137634538608
+  },
+  {
+   "state": {
+    "board": ".......WW.W.WWWWW.W..W......WWW...W..W.W.W.WW.W.WW.W......WB.W.....W.W....W................B...........BB............BB.B.B.....BB...BBBB..BBBB.B..BB...B.BB.B..B.....BB",
+    "to_move": 1,
+    "moves": 57,
+    "quiet_moves": 57,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 1.0,
+    "centrality": 0.24079324755255005,
+    "mobility": -1.0178571428571432
+   },
+   "total": -0.5725412955040863
+  },
+  {
+   "state": {
+    "board": ".......WW.W.WWWW.WW.WW......WW.......W.W.W.W..W.WW.W.....WW..W.....W.WW..BW................B..........BBB............BB...B.....BB...BBBB..BBBB.B..BB...B.BB.B..B.....BB",
+    "to_move": 1,
+    "moves": 67,
+    "quiet_moves": 67,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 4.0,
+    "centrality": 0.3112509168261628,
+    "mobility": -1.0491071428571432
+   },
+   "total": 1.1467893815903647
+  },
+  {
+   "state": {
+    "board": ".......W..W.W.WW.WW.WW......WW.....WWW.W.W.W..WWW.WW...W.WW........W.WW..B.................B.............BBB.........BB..BB.....BB.....BB..BBBB.BBB.BB..B.BB.B........BB",
+    "to_move": 1,
+    "moves": 77,
+    "quiet_moves": 77,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 2.0,
+    "centrality": 0.24489348209295692,
+    "mobility": -1.0357142857142856
+   },
+   "total": 7.9081453569432565
+  },
+  {
+   "state": {
+    "board": ".......W..W.W.WWWWW..WW......WW....WWW.W.W.W..WWW.WW...W..W........W..W..B.........W.......B.............BBB..........BBB.B.......BB...BB.BBBBB.BBB.BB.B..BB.B.........B",
+    "to_move": 1,
+    "moves": 87,
+    "quiet_moves": 87,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": 2.0,
+    "centrality": 0.40827168603283326,
+    "mobility": 1.9821428571428572
+   },
+   "total": 14.597372458417048
+  },
+  {
+   "state": {
+    "board": ".......W..W.W...WWWWWWW.......W....W.W.W.WWW..WWWWW....W..W.......WW..W..B.........W.......BB............B.B......B..BB.B.B....B..BB...BB.B..BB.BBB.BB.B.BB..B.........B",
+    "to_move": 1,
+    "moves": 97,
+    "quiet_moves": 97,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 0.0,
+    "territory": 8.0,
+    "centrality": 0.3149085168078054,
+    "mobility": -2.0178571428571423
+   },
+   "total": 1.223919781516937
+  },
+  {
+   "state": {
+    "board": "WW.WWWWWWWWWWWW..WWWWWWWW.WW..W........W....W.............W..........................BB.....................................................BBBBB.BBBBBBBBBBBBBB.BBBBBBB",
+    "to_move": 0,
+    "moves": 6,
+    "quiet_moves": 6,
+    "last_capturer": -1
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 4.0,
+    "territory": 0.0,
+    "centrality": 0.19399581185673043,
+    "mobility": 1.0223214285714284
+   },
+   "total": 34.820626104569776
+  },
+  {
+   "state": {
+    "board": "WW.WWWW.WWWWWWW..WWWWWWWW.WW.......W...W..................B.............B.............B...............W..........................B..........BBBB..BBBBBBBBBBBB...BBBBBBB",
+    "to_move": 0,
+    "moves": 16,
+    "quiet_moves": 4,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -11.0,
+    "centrality": 0.21716100621527,
+    "mobility": -0.03899572649572658
+   },
+   "total": -42.70934742813037
+  },
+  {
+   "state": {
+    "board": "WW....W.WWWWWWW..W.WWWWWW.WW..BW.W.W...W..................W..........................................................B...........BB.........BBB...BBBBBBBBBB.B...BBBBBBB",
+    "to_move": 0,
+    "moves": 26,
+    "quiet_moves": 2,
+    "last_capturer": 1
+   },
+   "terms": {
+    "material": -1.0,
+    "crossing": 0.0,
+    "home_row_defense": -1.0,
+    "territory": -5.0,
+    "centrality": 0.20118649693399604,
+    "mobility": 0.010625000000000107
+   },
+   "total": -39.674004012264014
+  },
+  {
+   "state": {
+    "board": "WW....W.W.WWWWW.BW.WWW.WW.WW...W.W.....W..................W...............W.........................W............W...B.B......BB.BB...B.....B.B...BBB.BBBB...B...BBB.BBB",
+    "to_move": 0,
+    "moves": 36,
+    "quiet_moves": 1,
+    "last_capturer": 0
+   },
+   "terms": {
+    "material": 0.0,
+    "crossing": 0.0,
+    "home_row_defense": 1.0,
+    "territory": -2.0,
+    "centrality": -0.08829726957104711,
+    "mobility": 0.015625
+   },
+   "total": 6.678060921715812
+  }
+ ]
+}

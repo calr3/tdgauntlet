@@ -1,0 +1,16 @@
+# Tooling for the Python parts of the repo: clients/pysdk, clients/jax and conformance/.
+# There is no Python package to build here; each client documents how to run it.
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["clients/pysdk/tests", "clients/jax/tests"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true

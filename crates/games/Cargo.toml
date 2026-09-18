@@ -1,0 +1,20 @@
+[package]
+name = "tdg-games"
+description = "Game rules for tdgauntlet, behind a game-agnostic trait"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+tdg-proto = { path = "../proto" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+rand = "0.9"
+
+[dev-dependencies]
+flate2 = "1"
+proptest = "1"
+rand_chacha = "0.9"

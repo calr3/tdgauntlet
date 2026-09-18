@@ -1,0 +1,22 @@
+# Reproduces the one recorded result for pgx's negamax.py (EPAMINONDAS_EXPERIMENTS.md, "An
+# alpha-beta opponent"): 6-0 against random at 0.5 s per action, three games from each seat.
+# Here that is 1.5 s per move, split across its three actions. Run from the pgx environment.
+game = "epaminondas/1"
+seed = 5
+concurrency = 6
+out = "../results/negamax_py_v_random.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 3
+
+[[player]]
+name = "negamax.py"
+cmd = "env JAX_PLATFORMS=cpu PYTHONPATH=../clients/jax python3 -m tdg_jax.negamax --port {port}"
+budget_ms = 1500
+timeout_ms = 30000
+
+[[player]]
+name = "random"
+cmd = "../target/release/tdg-random --port {port}"

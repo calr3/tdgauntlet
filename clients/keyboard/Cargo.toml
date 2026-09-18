@@ -1,0 +1,21 @@
+[package]
+name = "tdg-keyboard"
+description = "A tdgauntlet client that asks a human at the terminal"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "tdg-keyboard"
+path = "src/main.rs"
+
+[dependencies]
+tdg-client-kit = { path = "../../crates/client-kit" }
+tdg-games = { path = "../../crates/games" }
+tdg-proto = { path = "../../crates/proto" }
+anyhow.workspace = true
+clap = { version = "4", features = ["derive"] }
+serde_json.workspace = true
+tokio = { version = "1", features = ["full"] }

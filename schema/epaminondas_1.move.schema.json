@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/epaminondas_1.move.schema.json",
+  "title": "epaminondas/1 move",
+  "type": "object",
+  "required": ["lead", "rear", "dest"],
+  "properties": {
+    "lead": { "type": "integer", "minimum": 0, "maximum": 167 },
+    "rear": {
+      "type": "integer", "minimum": 0, "maximum": 167,
+      "description": "Rear of the moving phalanx; equal to `lead` for a single piece."
+    },
+    "dest": { "type": "integer", "minimum": 0, "maximum": 167 },
+    "san": { "type": "string", "description": "Optional, ignored on input." }
+  }
+}

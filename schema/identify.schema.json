@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/identify.schema.json",
+  "title": "Identify",
+  "description": "Response body of GET /identify.",
+  "type": "object",
+  "required": ["protocol", "name", "games"],
+  "properties": {
+    "protocol": { "const": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string" },
+    "games": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9_-]+/[0-9]+$" },
+      "minItems": 1
+    },
+    "max_concurrency": { "type": "integer", "minimum": 1, "default": 1 }
+  }
+}

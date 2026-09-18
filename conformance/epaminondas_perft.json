@@ -1,0 +1,109 @@
+{
+ "kind": "perft",
+ "pgx_env_version": "v6",
+ "pgx_commit": "9ce4539b784757f8ae75db8455ec0a52c62c23a4",
+ "pgx_rules_dirty": false,
+ "seed": 77659,
+ "games": 24,
+ "cases": [
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "depth": 1,
+   "nodes": 114
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "depth": 2,
+   "nodes": 12996
+  },
+  {
+   "state": {
+    "board": "WWWWWWWWWWWWWWWWWWWWWWWWWWWW................................................................................................................BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 0,
+    "quiet_moves": 0,
+    "last_capturer": -1
+   },
+   "depth": 3,
+   "nodes": 1787292
+  },
+  {
+   "state": {
+    "board": "W.WW.WWW.WWWWWWWWWWWWW.WWWW.W....WW.W...........W...........................................................B.....BBB....B.....BBBB.B.........B..BB.BBBBBBBB.B...B.BBBBB",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "depth": 2,
+   "nodes": 35419
+  },
+  {
+   "state": {
+    "board": "WWW.W..W.WWWWWWW.WWW.WWWW..W...W...W.........WW...W..W..........W.............W........................B.B.......BB.BBB.B.......BB....B.....B..B.BBB...BBBBBB...BB.BB.BB",
+    "to_move": 1,
+    "moves": 45,
+    "quiet_moves": 45,
+    "last_capturer": -1
+   },
+   "depth": 2,
+   "nodes": 37889
+  },
+  {
+   "state": {
+    "board": "WWWWWW....WWW.WWWWWWW.WWWW.W......W.WWW........W...WW...............................................................B..B......B...B.BB...B...BB..B.B.BBBBBBBBBBBB.BBBBB.",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "depth": 2,
+   "nodes": 37052
+  },
+  {
+   "state": {
+    "board": ".WW....WWWW..WWWWWWW..WW...W...W.W.W..WWW.....W.............W..B...W........B.WWB.........BBWB.B.....B......B........B..B.BB...B....BB..B..BBB.B....BB.B..B..BBB........",
+    "to_move": 1,
+    "moves": 75,
+    "quiet_moves": 75,
+    "last_capturer": -1
+   },
+   "depth": 2,
+   "nodes": 47408
+  },
+  {
+   "state": {
+    "board": "WW.WWW.WWWW.WW...WWWW..WW.WWW.WW.....W.W..........W..W..........W.W.................................BB.........................BBB.B.B.......B.BB..B.BBBBB.B.BBBBBBBBBBB",
+    "to_move": 0,
+    "moves": 20,
+    "quiet_moves": 20,
+    "last_capturer": -1
+   },
+   "depth": 2,
+   "nodes": 33712
+  },
+  {
+   "state": {
+    "board": "..WWW...W.W.WW.WW..W...W...........W....W..W.W.WWW..W....W.W.W.WW.....B..W...W..W...BBW.............B..BBB...B.BBB......B..........B.....B......B..B..B..B.BBBBBBB...BBB",
+    "to_move": 1,
+    "moves": 75,
+    "quiet_moves": 75,
+    "last_capturer": -1
+   },
+   "depth": 2,
+   "nodes": 42842
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+# The JAX client against alpha-beta and random.
+#
+# Start the JAX client yourself, in the pgx environment, first:
+#   cd clients/jax && JAX_PLATFORMS=cpu python -m tdg_jax --port 9313 --sims 16 \
+#       --checkpoint ~/calr3gh/pgx/checkpoints/<run>/<step>.ckpt
+game = "epaminondas/1"
+seed = 11
+concurrency = 12
+out = "../results/three_way.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 6
+
+[[player]]
+name = "jax"
+url = "http://127.0.0.1:9313"
+budget_sims = 16
+timeout_ms = 120000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 128"
+budget_ms = 100
+
+[[player]]
+name = "random"
+cmd = "../target/release/tdg-random --port {port}"
