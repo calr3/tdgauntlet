@@ -31,9 +31,10 @@ struct Args {
     /// Searches to run at once. Defaults to the number of CPUs.
     #[arg(long)]
     threads: Option<u32>,
-    /// A JSON file of evaluation weights (see `eval::NAMES`); missing names keep pgx's values.
-    #[arg(long)]
-    weights: Option<std::path::PathBuf>,
+    /// Evaluation weights: `recommended`, `pgx` for exactly pgx's evaluator, or a JSON file of
+    /// weights (see `eval::NAMES`) in which missing names keep pgx's values.
+    #[arg(long, default_value = "recommended")]
+    weights: String,
     /// `plain` alpha-beta, or `all` for every refinement in `search::Features::ALL`. Plain is the
     /// default because it has measured stronger at real time controls; see TUNING.md.
     #[arg(long, default_value = "plain")]
@@ -103,9 +104,10 @@ async fn main() -> anyhow::Result<()> {
     let threads = args
         .threads
         .unwrap_or_else(|| std::thread::available_parallelism().map_or(4, |n| n.get() as u32));
-    let weights = match &args.weights {
-        Some(path) => Weights::load(path).map_err(anyhow::Error::msg)?,
-        None => Weights::default(),
+    let weights = match args.weights.as_str() {
+        "recommended" => Weights::recommended(),
+        "pgx" => Weights::default(),
+        path => Weights::load(std::path::Path::new(path)).map_err(anyhow::Error::msg)?,
     };
     let features = match args.search.as_str() {
         "plain" => Features::NONE,

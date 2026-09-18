@@ -12,7 +12,7 @@ count = 5
 
 [[player]]
 name = "tdg-alphabeta"
-cmd = "../target/release/tdg-alphabeta --port {port} --threads 4 --hash-mb 128"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 4 --hash-mb 128 --weights pgx"
 budget_ms = 1500
 
 [[player]]

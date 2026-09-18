@@ -11,7 +11,8 @@
 //! Three terms are this engine's own and absent from LEONIDAS, because under the v6 rules most
 //! games that reach the quiet-move clock are decided on advancement: `advancement`, `tiebreak`
 //! and `tiebreak_clock`. Their default weight is zero, so `Weights::default()` is exactly pgx's
-//! evaluator; `Weights::load` reads tuned ones.
+//! evaluator. `Weights::recommended()` is what the client plays with; `Weights::load` reads
+//! others.
 
 use tdg_games::epaminondas::{home_row, stone, Position, EMPTY, HEIGHT, MAX_QUIET_MOVES, N, WIDTH};
 use tdg_games::Side;
@@ -41,6 +42,18 @@ impl Default for Weights {
             advancement: 0.0,
             tiebreak: 0.0,
             tiebreak_clock: 0.0,
+        }
+    }
+}
+
+impl Weights {
+    /// pgx's weights plus a small pull forward. Without it the engine drifts back to its home
+    /// rank and leaves games to be settled by the advancement tiebreak at the quiet-move clock.
+    /// See TUNING.md for the matches behind the value.
+    pub fn recommended() -> Self {
+        Self {
+            advancement: 1.0,
+            ..Self::default()
         }
     }
 }
@@ -377,6 +390,19 @@ mod tests {
         assert_eq!(
             (w.advancement, w.tiebreak, w.tiebreak_clock),
             (0.0, 0.0, 0.0)
+        );
+    }
+
+    #[test]
+    fn recommended_weights_are_pgx_plus_advancement() {
+        let (r, d) = (Weights::recommended(), Weights::default());
+        assert!(r.advancement > 0.0);
+        assert_eq!(
+            Weights {
+                advancement: d.advancement,
+                ..r
+            },
+            d
         );
     }
 

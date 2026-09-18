@@ -42,7 +42,7 @@ fn main() {
             println!("resuming from {out} after {done} iterations");
             (w.to_vec(), done)
         }
-        _ => (Weights::default().to_vec(), 0),
+        _ => (Weights::recommended().to_vec(), 0),
     };
     let mut log = std::fs::OpenOptions::new()
         .create(true)

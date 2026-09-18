@@ -1,6 +1,11 @@
-//! Search features against each other at a time control:
+//! Search features, or evaluation weights, against each other at a time control:
 //!
 //!   cargo run --release -p tdg-alphabeta --example versus -- <ms> <openings> <threads>
+//!   cargo run --release -p tdg-alphabeta --example versus -- <ms> <openings> <threads> \
+//!       weights <a.json> [<b.json> ...]
+//!
+//! With `weights`, each file plays pgx's weights (`Weights::default()`), both with the plain
+//! search.
 
 #[path = "common/arena.rs"]
 mod arena;
@@ -9,8 +14,8 @@ use arena::{describe, openings, run_match, Budget, Engine};
 use tdg_alphabeta::eval::Weights;
 use tdg_alphabeta::search::Features;
 
-/// Usage: versus <budget> <openings> <threads> [ablate], where budget is `250` (ms),
-/// `n40000` (nodes) or `d3` (depth).
+/// Usage: versus <budget> <openings> <threads> [ablate | weights <file>...], where budget is
+/// `250` (ms), `n40000` (nodes) or `d3` (depth).
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let spec = args.first().map(String::as_str).unwrap_or("100");
@@ -27,6 +32,23 @@ fn main() {
         features,
         budget,
     };
+    if args.get(3).map(String::as_str) == Some("weights") {
+        let default = engine(Features::NONE);
+        for path in &args[4..] {
+            let challenger = Engine {
+                weights: Weights::load(std::path::Path::new(path)).expect("weights"),
+                ..engine(Features::NONE)
+            };
+            let started = std::time::Instant::now();
+            let t = run_match(&challenger, &default, &ops, threads);
+            println!(
+                "{path} v default {spec}: {}  [{:.0}s]",
+                describe(&t),
+                started.elapsed().as_secs_f64()
+            );
+        }
+        return;
+    }
     let none = Features::NONE;
     let ordering = Features {
         incursions: false,

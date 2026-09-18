@@ -6,9 +6,13 @@ too, not just the log.
 
 ## Current recommendation
 
-- Run with the **plain search** (`--search plain`, the default) and **pgx's LEONIDAS weights**
-  (no `--weights`). Everything below that was meant to improve on it has so far measured neutral
-  or worse at real time controls, for reasons not yet pinned down.
+- Run with the **plain search** (`--search plain`, the default) and the **recommended weights**
+  (`--weights recommended`, the default): pgx's LEONIDAS weights plus `advancement` = 1. That one
+  term scores 96-98% against pgx's weights (see "An advancement term", 19 September). The search
+  refinements below have so far measured neutral or worse at real time controls, for reasons not
+  yet pinned down.
+- Use `--weights pgx` wherever the evaluation must match pgx's exactly, as in the calibration
+  match against `negamax.py`.
 - Measure strength at **~1 s per move or more**. At 100 ms every variant stops at depth 2, so
   changes to the search cannot show up at all (see "How deep each variant gets").
 
@@ -22,6 +26,7 @@ All in `examples/`, all in process (no HTTP), all scored as tournaments are (min
 | `bench <depth>` | fixed-depth node counts over 27 positions, one row per search feature |
 | `reach <ms>` | the depth each feature set reaches at a time control |
 | `versus <budget> <openings> <threads> [ablate]` | engine against engine; budget `250` ms, `n40000` nodes, or `d3` depth |
+| `versus <budget> <openings> <threads> weights <a.json>...` | each weights file against pgx's weights, plain search |
 | `spsa <iterations> <openings> <threads> <out.json>` | SPSA self-play tuning of the weights; resumes from `<out.json>` |
 
 Use nodes or depth, not milliseconds, whenever the machine is shared (a training run, another
@@ -126,9 +131,43 @@ were tuned with the search features that are under suspicion. The clearest signa
 defence falling to a quarter, and the clock-scaled tiebreak rising steadily — are worth checking
 first.
 
+## Findings, 19 September 2026
+
+### An advancement term: pgx's weights plus `advancement` = 1
+
+Self-play at 1 s a move showed how the engine loses: after the middle-game exchanges both sides
+retreat to their home ranks and shuffle until the 100-move quiet clock, and a single stray
+piece decides the advancement tiebreak. Nothing in pgx's weights pulls a piece forward.
+
+Each weights file below against pgx's weights, plain search, 40k nodes a move, 60 openings:
+
+| weights | score | counted | games |
+|---|---|---|---|
+| advancement 0.5 | 82.9% | 41 | 87-33 |
+| advancement 1 | **97.9%** | 47 | 105-15 |
+| advancement 1.5 | 97.7% | 44 | 102-18 |
+| advancement 2 | 93.0% | 43 | 97-23 |
+| advancement 3 | **25.8%** | 31 | 45-75 |
+| tiebreak_clock 27 | 73.7% | 38 | 78-42 |
+| tiebreak 5, tiebreak_clock 27 | 68.3% | 41 | 75-45 |
+| advancement 1, tiebreak_clock 27 | 97.9% | 47 | 105-15 |
+
+At 150k nodes a move, 30 openings: advancement 1 scores 96.0% (25 counted, 53-7) and 1.5 scores
+100% (18 counted, 48-12). The gain survives a deeper search.
+
+The peak is broad (1-1.5) but there is a cliff between 2 and 3; 1 was chosen for its distance
+from it. The clock-scaled tiebreak helps on its own but adds nothing to advancement. The largest
+signals from the partial SPSA run below (home-row defence falling, the clock tiebreak rising)
+were probably the same pressure found indirectly; that run started from zero advancement.
+
+Not yet measured: at real time controls, and with the search features on (the open question
+below was measured under pgx's weights and may look different now).
+
 ## Next steps
 
-1. Depth 3 against depth 4, plain search, fixed depth: settle the odd/even question.
-2. Validate `weights/spsa_partial_iter38.json` against the defaults at 1 s.
-3. Resume SPSA (`spsa ... results/spsa_weights.json` resumes from its log) with whichever search
-   step 1 recommends, on as many threads as are free.
+1. Confirm the recommended weights at 1 s a move in an HTTP tournament against `--weights pgx`,
+   on an otherwise idle machine.
+2. Depth 3 against depth 4, plain search, fixed depth: settle the odd/even question, now under
+   the recommended weights.
+3. Restart SPSA from the recommended weights rather than resuming the partial run, which began
+   from zero advancement; `weights/spsa_partial_iter38.json` is superseded as a starting point.
