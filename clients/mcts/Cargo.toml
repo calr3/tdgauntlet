@@ -1,0 +1,28 @@
+[package]
+name = "tdg-mcts"
+description = "A tdgauntlet client: Monte Carlo Tree Search with UCT bounds"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "tdg-mcts"
+path = "src/main.rs"
+
+[dependencies]
+tdg-client-kit = { path = "../../crates/client-kit" }
+tdg-games = { path = "../../crates/games" }
+tdg-proto = { path = "../../crates/proto" }
+anyhow.workspace = true
+clap = { version = "4", features = ["derive"] }
+rand = "0.9"
+serde_json.workspace = true
+tokio = { version = "1", features = ["full"] }
+
+[dev-dependencies]
+tdg-tourney = { path = "../../crates/tourney" }

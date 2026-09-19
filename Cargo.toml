@@ -9,6 +9,7 @@ members = [
     "clients/keyboard",
     "clients/web",
     "clients/alphabeta",
+    "clients/mcts",
 ]
 
 [workspace.package]

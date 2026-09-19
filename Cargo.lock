@@ -1650,6 +1650,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "tdg-mcts"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "rand 0.9.5",
+ "serde_json",
+ "tdg-client-kit",
+ "tdg-games",
+ "tdg-proto",
+ "tdg-tourney",
+ "tokio",
+]
+
+[[package]]
 name = "tdg-proto"
 version = "0.1.0"
 dependencies = [
