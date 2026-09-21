@@ -7,6 +7,7 @@
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use tdg_games::epaminondas::{Move, Position, MAX_QUIET_MOVES, N};
+use tdg_games::Side;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Bound {
@@ -108,6 +109,12 @@ struct Keys {
     /// The quiet-move clock only changes a position's value close to its end, so it joins the
     /// key only then: far from it, the same board at different counts shares an entry.
     clock: [u64; 32],
+    /// The clock at its exact value, for [`exact_key`].
+    clock_exact: [u64; MAX_QUIET_MOVES as usize + 1],
+    /// Who captured last, by side, for [`exact_key`].
+    last_capturer: [u64; 2],
+    /// Separates [`exact_key`]'s entries from [`key`]'s in a shared table.
+    solver: u64,
 }
 
 fn splitmix(state: &mut u64) -> u64 {
@@ -131,17 +138,27 @@ static KEYS: std::sync::LazyLock<Keys> = std::sync::LazyLock::new(|| {
     for k in &mut clock {
         *k = splitmix(&mut s);
     }
+    let mut clock_exact = [0; MAX_QUIET_MOVES as usize + 1];
+    for k in &mut clock_exact {
+        *k = splitmix(&mut s);
+    }
+    let last_capturer = [splitmix(&mut s), splitmix(&mut s)];
+    let solver = splitmix(&mut s);
     Keys {
         piece,
         black_to_move,
         clock,
+        clock_exact,
+        last_capturer,
+        solver,
     }
 });
 
 /// Moves before the clock runs out at which the clock starts to matter to the key.
 pub const CLOCK_HORIZON: u32 = 31;
 
-pub fn key(pos: &Position) -> u64 {
+/// The board and the side to move: everything both keys below have in common.
+fn board_key(pos: &Position) -> u64 {
     let k = &*KEYS;
     let mut h = 0;
     for (s, &c) in pos.board.iter().enumerate() {
@@ -149,14 +166,38 @@ pub fn key(pos: &Position) -> u64 {
             h ^= k.piece[c as usize - 1][s];
         }
     }
-    if pos.to_move == tdg_games::Side::Second {
+    if pos.to_move == Side::Second {
         h ^= k.black_to_move;
     }
-    let left = MAX_QUIET_MOVES.saturating_sub(pos.quiet_moves);
-    if left <= CLOCK_HORIZON {
-        h ^= k.clock[left as usize];
-    }
     h
+}
+
+pub fn key(pos: &Position) -> u64 {
+    let left = MAX_QUIET_MOVES.saturating_sub(pos.quiet_moves);
+    let clock = if left <= CLOCK_HORIZON {
+        KEYS.clock[left as usize]
+    } else {
+        0
+    };
+    board_key(pos) ^ clock
+}
+
+/// The key for a search whose only evaluation is the game's own result: [`crate::solve`].
+///
+/// It separates everything the outcome depends on, which [`key`] does not have to: the clock at
+/// its exact value, because how much of it is left decides the game by advancement, and who
+/// captured last, because that settles the tiebreak when advancement is level. `solve` proves
+/// wins and losses and then keeps them in the table at any depth, so a key that merged two
+/// positions the rules decide differently would not cost it a slightly wrong score — it would
+/// spread a wrong proof. The tag keeps these entries from ever reading as `key`'s, so one table
+/// can serve both searches.
+pub fn exact_key(pos: &Position) -> u64 {
+    let k = &*KEYS;
+    let capturer = pos.last_capturer.map_or(0, |s| k.last_capturer[s.index()]);
+    board_key(pos)
+        ^ k.clock_exact[pos.quiet_moves.min(MAX_QUIET_MOVES) as usize]
+        ^ capturer
+        ^ k.solver
 }
 
 #[cfg(test)]
@@ -224,5 +265,22 @@ mod tests {
             ..p.clone()
         };
         assert_ne!(key(&p), key(&black));
+    }
+
+    #[test]
+    fn the_exact_key_separates_everything_the_outcome_depends_on() {
+        let p = Position::start();
+        let with = |q: u32, c: Option<Side>| {
+            exact_key(&Position {
+                quiet_moves: q,
+                last_capturer: c,
+                ..p.clone()
+            })
+        };
+        assert_ne!(with(0, None), with(40, None), "every count is its own key");
+        assert_ne!(with(40, None), with(41, None));
+        assert_ne!(with(0, None), with(0, Some(Side::First)), "the tiebreak");
+        assert_ne!(with(0, Some(Side::First)), with(0, Some(Side::Second)));
+        assert_ne!(exact_key(&p), key(&p), "tagged apart in a shared table");
     }
 }

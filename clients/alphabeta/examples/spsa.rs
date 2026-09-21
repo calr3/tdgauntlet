@@ -66,11 +66,7 @@ fn main() {
         let ck = 1.0 / (1.0 + k as f64).powf(0.101);
         let plus = Weights::from_vec(std::array::from_fn(|i| theta[i] + ck * C[i] * delta[i]));
         let minus = Weights::from_vec(std::array::from_fn(|i| theta[i] - ck * C[i] * delta[i]));
-        let engine = |w| Engine {
-            weights: w,
-            features: Features::ALL,
-            budget: Budget::Nodes(NODES),
-        };
+        let engine = |w| Engine::heuristic(w, Features::ALL, Budget::Nodes(NODES));
         let (a, b) = (engine(plus), engine(minus));
 
         // Plus's net wins over every game, both colours of each opening.

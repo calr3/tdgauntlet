@@ -3,13 +3,14 @@
 //! allows a client to keep.
 
 use clap::Parser;
-use serde_json::json;
+use serde_json::{json, Value};
 use std::time::{Duration, Instant};
 use tdg_alphabeta::eval::Weights;
 use tdg_alphabeta::search::{search_with, Features, Limits};
+use tdg_alphabeta::solve::{self, solve_with};
 use tdg_alphabeta::tt::Table;
 use tdg_client_kit::{serve, Answer, Engine, Info};
-use tdg_games::epaminondas::{self, Epaminondas};
+use tdg_games::epaminondas::{self, Epaminondas, Move, Position};
 use tdg_games::Game;
 use tdg_proto::{MoveInfo, MoveRequest};
 
@@ -32,23 +33,45 @@ struct Args {
     #[arg(long)]
     threads: Option<u32>,
     /// Evaluation weights: `recommended`, `pgx` for exactly pgx's evaluator, or a JSON file of
-    /// weights (see `eval::NAMES`) in which missing names keep pgx's values.
+    /// weights (see `eval::NAMES`) in which missing names keep pgx's values. Ignored by
+    /// `--search solve`, which has no evaluation.
     #[arg(long, default_value = "recommended")]
     weights: String,
-    /// `plain` alpha-beta, or `all` for every refinement in `search::Features::ALL`. Plain is the
-    /// default because it has measured stronger at real time controls; see TUNING.md.
+    /// `plain` alpha-beta, `all` for every refinement in `search::Features::ALL`, or `solve` for
+    /// the search with no game knowledge at all: to the depth the budget allows, and a win, a
+    /// loss or nothing. Plain is the default because it has measured stronger at real time
+    /// controls; see TUNING.md.
     #[arg(long, default_value = "plain")]
     search: String,
+}
+
+/// Which search answers a request.
+enum Mode {
+    /// Alpha-beta over the LEONIDAS evaluation.
+    Heuristic(Weights, Features),
+    /// Alpha-beta over the rules alone.
+    Solve(solve::Features),
 }
 
 struct AlphaBeta {
     name: String,
     tt: Table,
-    weights: Weights,
-    features: Features,
+    mode: Mode,
     default_ms: u64,
     max_depth: u32,
     threads: u32,
+}
+
+/// The moves of a principal variation, in this game's notation.
+fn pv_json(pos: &Position, pv: &[Move]) -> Vec<Value> {
+    let mut p = pos.clone();
+    pv.iter()
+        .map(|m| {
+            let san = Epaminondas.describe_move(&p, m);
+            p = p.apply(*m);
+            json!(san)
+        })
+        .collect()
 }
 
 impl Engine for AlphaBeta {
@@ -74,26 +97,41 @@ impl Engine for AlphaBeta {
             nodes: req.budget.nodes,
             depth: self.max_depth,
         };
-        let r = search_with(&pos, &self.tt, &self.weights, limits, self.features)
-            .ok_or("no legal moves")?;
-        let mut p = pos.clone();
-        let pv =
-            r.pv.iter()
-                .map(|m| {
-                    let san = Epaminondas.describe_move(&p, m);
-                    p = p.apply(*m);
-                    json!(san)
-                })
-                .collect();
+        let (best, info) = match &self.mode {
+            Mode::Heuristic(weights, features) => {
+                let r = search_with(&pos, &self.tt, weights, limits, *features)
+                    .ok_or("no legal moves")?;
+                let info = MoveInfo {
+                    eval: Some(r.score as f64 / 100.0),
+                    depth: Some(r.depth),
+                    nodes: Some(r.nodes),
+                    pv: pv_json(&pos, &r.pv),
+                    ..MoveInfo::default()
+                };
+                (r.best, info)
+            }
+            Mode::Solve(features) => {
+                let r = solve_with(&pos, &self.tt, limits, *features).ok_or("no legal moves")?;
+                // There is no evaluation to report, so `eval` is the verdict as 1, -1 or 0, and
+                // the verdict itself goes alongside it in the result file.
+                let mut info = MoveInfo {
+                    eval: Some(r.verdict.eval()),
+                    depth: Some(r.depth),
+                    nodes: Some(r.nodes),
+                    pv: pv_json(&pos, &r.pv),
+                    ..MoveInfo::default()
+                };
+                info.extra
+                    .insert("verdict".into(), json!(r.verdict.label()));
+                if let Some(plies) = r.verdict.plies() {
+                    info.extra.insert("verdict_plies".into(), json!(plies));
+                }
+                (r.best, info)
+            }
+        };
         Ok(Answer {
-            mv: Epaminondas.encode_move(&pos, &r.best),
-            info: Some(MoveInfo {
-                eval: Some(r.score as f64 / 100.0),
-                depth: Some(r.depth),
-                nodes: Some(r.nodes),
-                pv,
-                ..MoveInfo::default()
-            }),
+            mv: Epaminondas.encode_move(&pos, &best),
+            info: Some(info),
         })
     }
 }
@@ -104,21 +142,21 @@ async fn main() -> anyhow::Result<()> {
     let threads = args
         .threads
         .unwrap_or_else(|| std::thread::available_parallelism().map_or(4, |n| n.get() as u32));
-    let weights = match args.weights.as_str() {
-        "recommended" => Weights::recommended(),
-        "pgx" => Weights::default(),
-        path => Weights::load(std::path::Path::new(path)).map_err(anyhow::Error::msg)?,
+    let weights = || match args.weights.as_str() {
+        "recommended" => Ok(Weights::recommended()),
+        "pgx" => Ok(Weights::default()),
+        path => Weights::load(std::path::Path::new(path)).map_err(anyhow::Error::msg),
     };
-    let features = match args.search.as_str() {
-        "plain" => Features::NONE,
-        "all" => Features::ALL,
-        other => anyhow::bail!("--search must be plain or all, not {other:?}"),
+    let mode = match args.search.as_str() {
+        "plain" => Mode::Heuristic(weights()?, Features::NONE),
+        "all" => Mode::Heuristic(weights()?, Features::ALL),
+        "solve" => Mode::Solve(solve::Features::ALL),
+        other => anyhow::bail!("--search must be plain, all or solve, not {other:?}"),
     };
     let engine = AlphaBeta {
         name: args.name,
         tt: Table::new(args.hash_mb),
-        weights,
-        features,
+        mode,
         default_ms: args.default_ms,
         max_depth: args.max_depth,
         threads,

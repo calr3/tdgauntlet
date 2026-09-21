@@ -8,6 +8,7 @@ use std::sync::Mutex;
 use std::time::{Duration, Instant};
 use tdg_alphabeta::eval::Weights;
 use tdg_alphabeta::search::{search_with, Features, Limits};
+use tdg_alphabeta::solve::{self, solve_with};
 use tdg_alphabeta::tt::Table;
 use tdg_games::epaminondas::{Epaminondas, Position};
 use tdg_games::{DynGame, Game, Outcome, Side};
@@ -26,9 +27,32 @@ pub struct Engine {
     pub weights: Weights,
     pub features: Features,
     pub budget: Budget,
+    /// Search the rules alone rather than the evaluation, leaving `weights` and `features`
+    /// unused: `tdg_alphabeta::solve`.
+    pub solve: Option<solve::Features>,
 }
 
 impl Engine {
+    /// The heuristic search, with these weights and refinements.
+    pub fn heuristic(weights: Weights, features: Features, budget: Budget) -> Engine {
+        Engine {
+            weights,
+            features,
+            budget,
+            solve: None,
+        }
+    }
+
+    /// The search with no game knowledge, at the same budget.
+    pub fn solver(budget: Budget) -> Engine {
+        Engine {
+            weights: Weights::default(),
+            features: Features::NONE,
+            budget,
+            solve: Some(solve::Features::ALL),
+        }
+    }
+
     fn choose(&self, pos: &Position, tt: &Table) -> tdg_games::epaminondas::Move {
         let limits = match self.budget {
             Budget::Millis(ms) => Limits {
@@ -47,9 +71,14 @@ impl Engine {
                 depth: d,
             },
         };
-        search_with(pos, tt, &self.weights, limits, self.features)
-            .expect("a legal move")
-            .best
+        match self.solve {
+            Some(f) => solve_with(pos, tt, limits, f).expect("a legal move").best,
+            None => {
+                search_with(pos, tt, &self.weights, limits, self.features)
+                    .expect("a legal move")
+                    .best
+            }
+        }
     }
 }
 

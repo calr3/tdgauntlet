@@ -26,6 +26,9 @@ cargo build --release
 # Alpha-beta against random.
 ./target/release/tdgauntlet run examples/alphabeta_v_random.toml
 
+# The same engine with no evaluation at all, against the one with it.
+./target/release/tdgauntlet run examples/solve_v_alphabeta.toml
+
 # Check a client you have written before entering it.
 ./target/release/tdgauntlet check http://127.0.0.1:9001
 ```
@@ -60,7 +63,7 @@ to the config file, so a config means the same thing wherever it is run from.
 | `clients/random` | uniformly random legal moves; the reference client |
 | `clients/keyboard` | a human at the terminal |
 | `clients/web` | a human in a web browser |
-| `clients/alphabeta` | alpha-beta search over King and Peterson's LEONIDAS heuristics |
+| `clients/alphabeta` | alpha-beta search over King and Peterson's LEONIDAS heuristics, or over the rules alone (`--search solve`) |
 | `clients/jax` | a pgx AlphaZero checkpoint under Gumbel MCTS |
 | `clients/pysdk` | write a client in Python with the standard library alone |
 | `conformance/` | position vectors from pgx, and the scripts that dump them |

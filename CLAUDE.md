@@ -81,12 +81,16 @@ ruff format, mypy and pytest. Run the same before committing.
 
 ## Measuring engines
 
+- `tdg-alphabeta` has two searches: `search.rs` over the LEONIDAS evaluation, and `solve.rs` over
+  the rules alone (win, loss or don't know). Nothing game-specific may enter `solve.rs`, its move
+  ordering included — that is the whole point of it. It is the floor the evaluation is measured
+  against, so keep it honest.
 - Read `clients/alphabeta/TUNING.md` before touching the alpha-beta. It records what has been
   measured, the open question (the faster search loses at 1 s; the odd/even-depth hypothesis is
   untested) and the current recommendation. When a result changes the recommendation, update that
   section, not just the log.
-- Use the in-process tools in `clients/alphabeta/examples/` (`bench`, `reach`, `versus`, `spsa`)
-  for engine work; HTTP tournaments are for final validation.
+- Use the in-process tools in `clients/alphabeta/examples/` (`bench`, `reach`, `versus`, `spsa`,
+  `solve`) for engine work; HTTP tournaments are for final validation.
 - **Nothing below ~1 s a move can show a search improvement:** at 100 ms every variant stops at
   depth 2. Short matches measure noise.
 - Use node or depth budgets, not milliseconds, whenever the CPU is shared (training, another

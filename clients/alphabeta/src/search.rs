@@ -14,8 +14,8 @@ use tdg_games::epaminondas::{home_row, Move, Position, N, WIDTH};
 use tdg_games::{Outcome, Side};
 
 pub const WIN: i32 = 1_000_000_000;
-const INF: i32 = WIN + 1;
-const MAX_PLY: usize = 128;
+pub(crate) const INF: i32 = WIN + 1;
+pub(crate) const MAX_PLY: usize = 128;
 const QUIESCENCE_DEPTH: u32 = 6;
 /// Slack for delta pruning, in search units: what a capture may be worth beyond its material.
 const DELTA_MARGIN: i32 = 2_000;
@@ -126,7 +126,9 @@ fn is_incursion(pos: &Position, m: Move) -> bool {
     m.dest as usize / WIDTH == home_row(pos.to_move.other())
 }
 
-fn terminal_score(o: Outcome, pos: &Position, ply: usize) -> i32 {
+/// What a finished game is worth to the side to move, `ply` plies from the root: a win sooner
+/// beats a win later, and a loss later beats a loss sooner.
+pub(crate) fn terminal_score(o: Outcome, pos: &Position, ply: usize) -> i32 {
     match o {
         Outcome::Draw => 0,
         Outcome::Win { side } if side == pos.to_move => WIN - ply as i32,

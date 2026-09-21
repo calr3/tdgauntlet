@@ -1,0 +1,30 @@
+# The heuristic-free search against the evaluation, and against random.
+#
+# `--search solve` has no evaluation: it searches to the depth the budget allows and scores what
+# it finds as a win, a loss or nothing at all. Until a result is inside its horizon every move
+# looks the same to it, so it is the floor the LEONIDAS weights have to beat — and the check that
+# they beat it. Every move it reports carries a `verdict` in the result file.
+game = "epaminondas/1"
+seed = 4181
+concurrency = 8
+out = "../results/solve_v_alphabeta.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 20
+
+[[player]]
+name = "solve"
+cmd = "../target/release/tdg-alphabeta --port {port} --search solve --name solve --threads 8 --hash-mb 128"
+budget_ms = 1000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 128"
+budget_ms = 1000
+
+[[player]]
+name = "random"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 1000

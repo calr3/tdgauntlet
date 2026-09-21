@@ -15,6 +15,10 @@ too, not just the log.
   match against `negamax.py`.
 - Measure strength at **~1 s per move or more**. At 100 ms every variant stops at depth 2, so
   changes to the search cannot show up at all (see "How deep each variant gets").
+- `--search solve` is not a recommendation for strength; it is the floor. It searches the rules
+  alone — win, loss or don't know — with no evaluation and no game knowledge in its ordering
+  either, so what it scores against a weight set says how much of that weight set is real. It
+  loses every game to both weight sets and beats random; see "A search with no game knowledge".
 
 ## Tools
 
@@ -27,6 +31,8 @@ All in `examples/`, all in process (no HTTP), all scored as tournaments are (min
 | `reach <ms>` | the depth each feature set reaches at a time control |
 | `versus <budget> <openings> <threads> [ablate]` | engine against engine; budget `250` ms, `n40000` nodes, or `d3` depth |
 | `versus <budget> <openings> <threads> weights <a.json>...` | each weights file against pgx's weights, plain search |
+| `versus <budget> <openings> <threads> solve` | the heuristic-free search against both weight sets |
+| `solve <depth>` | what the heuristic-free search decides, and what its ordering saves, by depth |
 | `spsa <iterations> <openings> <threads> <out.json>` | SPSA self-play tuning of the weights; resumes from `<out.json>` |
 
 Use nodes or depth, not milliseconds, whenever the machine is shared (a training run, another
@@ -163,6 +169,80 @@ were probably the same pressure found indirectly; that run started from zero adv
 Not yet measured: at real time controls, and with the search features on (the open question
 below was measured under pgx's weights and may look different now).
 
+## Findings, 21 September 2026
+
+### A search with no game knowledge
+
+`--search solve` (`src/solve.rs`) is the same alpha-beta with the evaluation taken out. A position
+is a win, a loss, or `unknown`, scored `WIN - ply`, `-(WIN - ply)` and 0; every non-zero score is
+a proof rather than an opinion. Nothing in it knows what a capture, a phalanx or a home rank is,
+its move ordering included: the table's move, then killers, then history, all of which would work
+in any game. There is no quiescence — it searches captures, and a capture is game knowledge, and
+with no evaluation there is nothing for it to stabilise.
+
+It needs a stricter transposition key than the heuristic search (`tt::exact_key`): the quiet-move
+clock at its exact value rather than only near its end, and who captured last, because both decide
+games under v6. A merged key costs the heuristic search a slightly wrong number; it would cost
+this one a wrong proof. The keys are tagged apart, so one table still serves both.
+
+**It is the floor, and the evaluation clears it.** 40 openings, 40k nodes a move, in process:
+
+| match | score | counted | games |
+|---|---|---|---|
+| solve v plain, pgx weights | **0.0%** | 40 | 0-0-80 |
+| solve v plain, recommended weights | **0.0%** | 40 | 0-0-80 |
+
+Not a single game out of 160. In a three-way HTTP tournament at 200 ms (6 openings, so 5-6
+counted per pairing — far too few to separate anything close, which these are not):
+
+| pairing | score |
+|---|---|
+| solve v alphabeta | 0.0% (6 counted) |
+| solve v random | 100.0% (5 counted, 1 excluded) |
+
+So proofs alone beat random play and lose to any evaluation. The games against random ran 475 to
+2201 moves: with nothing to prefer among undecided moves it never tries to make progress, it only
+declines to lose, and the game ends when a win finally drifts inside its horizon.
+
+### How far a proof-only search can see
+
+`cargo run --release -p tdg-alphabeta --example solve -- 4`, over the bench's 27 midgame positions
+and 48 positions from the last plies of random games:
+
+| positions | depth 1 | depth 2 | depth 3 | depth 4 |
+|---|---|---|---|---|
+| midgame, decided | 0/27 | 0/27 | 0/27 | 0/27 |
+| midgame, nodes | 5k | 21k | 1.0M | 3.7M |
+| endgame, decided | 6/48 | 11/48 | 12/48 | 12/48 |
+| endgame, nodes | 10k | 36k | 1.2M | 4.2M |
+
+Nothing in a midgame position is decidable at any depth this search reaches, which is the honest
+version of what the heuristic search is doing there with a number. The endgame verdicts arrive at
+even depths: the win condition is tested at the *start* of a turn, so the win a move creates is
+two plies away, not one.
+
+Depth costs much less here than in the heuristic search — 3.7M nodes against its 11.7M at depth 4
+on the same positions — because a three-valued score prunes almost perfectly: once a move is known
+not to lose, every alternative is cut by a null window.
+
+### Its ordering is worth what killers are worth
+
+Depth 4 over the 48 endgame positions. The decided column must not move, and does not:
+
+| ordering | nodes | first-move cutoffs |
+|---|---|---|
+| table move only | 9.9M | 65.7% |
+| + killers | 4.7M | 98.8% |
+| + history | 4.6M | 99.0% |
+| + PVS | 4.2M | 99.0% |
+| + proof promotion | 4.2M | 99.0% |
+
+Killers are almost the whole of it: -53% of nodes on their own. With the value domain this small,
+one refutation refutes everything, and the killer is that refutation. Proof promotion (keeping a
+proven win or loss in the table at any depth, since a proof does not depend on the depth left when
+it was found) is worth little at depth 4 — it pays over a game, not inside one search, where a
+proof found at one move is still there at the next.
+
 ## Next steps
 
 1. Confirm the recommended weights at 1 s a move in an HTTP tournament against `--weights pgx`,
@@ -171,3 +251,6 @@ below was measured under pgx's weights and may look different now).
    the recommended weights.
 3. Restart SPSA from the recommended weights rather than resuming the partial run, which began
    from zero advancement; `weights/spsa_partial_iter38.json` is superseded as a starting point.
+4. Use `--search solve` as the control for the odd/even question above: it has no evaluation to
+   be wrong at even depths, so if it too plays worse at depth 4 than at depth 3 the cause is the
+   search or the quiescence, not the weights.
