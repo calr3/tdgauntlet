@@ -61,7 +61,7 @@ to the config file, so a config means the same thing wherever it is run from.
 | `clients/keyboard` | a human at the terminal |
 | `clients/web` | a human in a web browser |
 | `clients/alphabeta` | alpha-beta search over King and Peterson's LEONIDAS heuristics |
-| `clients/jax` | a pgx AlphaZero checkpoint under Gumbel MCTS; also pgx's own `negamax.py` |
+| `clients/jax` | a pgx AlphaZero checkpoint under Gumbel MCTS |
 | `clients/pysdk` | write a client in Python with the standard library alone |
 | `conformance/` | position vectors from pgx, and the scripts that dump them |
 | `examples/` | tournament configs |

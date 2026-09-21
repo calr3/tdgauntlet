@@ -1,0 +1,20 @@
+# Alpha-beta against the random client, both started by the server.
+game = "epaminondas/1"
+seed = 1
+concurrency = 8
+out = "../results/tune2_10x.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 20
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 128"
+budget_ms = 1000
+
+[[player]]
+name = "alphabeta_deep"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 128"
+budget_ms = 10000

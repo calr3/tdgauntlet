@@ -1,0 +1,58 @@
+# E7 and E14 against the Rust alpha-beta, one minimatch per randomised first move.
+#
+# `plies = 1` is one full Epaminondas move (three pgx actions). 114 distinct
+# first moves exist, so `count` cannot exceed 114. Each opening is played twice
+# with colours swapped; a minimatch split 1-1 is excluded from the score, on the
+# grounds that the opening decided it.
+#
+# No `pairs`, so this is a full round robin: az-e7 v alphabeta, az-e14 v
+# alphabeta, and az-e7 v az-e14 as a by-product under identical conditions.
+#
+# Start both model clients first, in the pgx environment. Two JAX processes
+# share the GPU, so cap each one's share or the first takes 75% and the second
+# fails:
+#   cd ~/calr3gh/tdgauntlet/clients/jax
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.3 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9330 --sims 256 --allow-rules-mismatch \
+#       --checkpoint ~/calr3gh/pgx/checkpoints/epaminondas_20260918013629/000160.ckpt
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.3 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9331 --sims 256 --allow-rules-mismatch \
+#       --checkpoint ~/calr3gh/pgx/checkpoints/epaminondas_20260919191528/000120.ckpt
+#
+# --allow-rules-mismatch means two different things here, and only one is benign:
+#   az-e14 records v9, whose rules AND 7-plane observation are identical to v6,
+#     so the mismatch is a label.
+#   az-e7 records v5, whose rules really do differ (absolute 300-move cap rather
+#     than a 100-quiet-move clock). It is the strongest model we have and has won
+#     every v6 tournament it has played, but it is playing rules it never trained
+#     on, and any result should say so.
+game = "epaminondas/1"
+seed = 1909
+concurrency = 8          # the alpha-beta client's max_concurrency; the models' is 16
+out = "../results/az_v_alphabeta_gauntlet.json"
+
+[openings]
+kind = "random"
+plies = 1
+count = 20
+
+[[player]]
+name = "mcts"
+cmd = "../target/release/tdg-mcts --port {port} --threads 8"
+budget_ms = 1000
+
+[[player]]
+name = "az"
+url = "http://127.0.0.1:9313"
+budget_sims = 256
+timeout_ms = 300000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 1000
+
+[[player]]
+name = "random"
+cmd = "../target/release/tdg-mcts --port {port} --threads 8"
+budget_ms = 1000

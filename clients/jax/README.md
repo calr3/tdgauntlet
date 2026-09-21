@@ -1,7 +1,7 @@
-# JAX clients
+# JAX client
 
-Two clients that run inside the **pgx environment** and reuse pgx's own code rather than copying
-it. Neither installs anything: the HTTP side is `clients/pysdk`, which is standard library only,
+A client that runs inside the **pgx environment** and reuses pgx's own code rather than copying
+it. It installs nothing: the HTTP side is `clients/pysdk`, which is standard library only,
 so the JAX/CUDA versions pgx depends on are left alone.
 
 ## `tdg_jax` — a checkpoint under Gumbel MCTS
@@ -22,16 +22,6 @@ per action). Concurrent requests from different games are searched together in o
   compilation happens mid-tournament.
 - The simulation count is fixed at startup (`--sims`); the millisecond budget is not used.
 - Omit `JAX_PLATFORMS=cpu` to use the GPU, if a training run is not already on it.
-
-## `tdg_jax.negamax` — pgx's alpha-beta engine
-
-```bash
-JAX_PLATFORMS=cpu python -m tdg_jax.negamax --port 9314
-```
-
-`examples/alphazero/negamax.py`, the fixed reference in `EPAMINONDAS_EXPERIMENTS.md`, over the
-protocol. A move's millisecond budget is split across its three actions. It searches one position
-at a time.
 
 ## Tests
 
