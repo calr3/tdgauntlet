@@ -23,6 +23,19 @@ per action). Concurrent requests from different games are searched together in o
 - The simulation count is fixed at startup (`--sims`); the millisecond budget is not used.
 - Omit `JAX_PLATFORMS=cpu` to use the GPU, if a training run is not already on it.
 
+### `--policy-only`
+
+```bash
+JAX_PLATFORMS=cpu python -m tdg_jax --port 9314 --policy-only \
+    --checkpoint ~/calr3gh/pgx/checkpoints/<run>/<step>.ckpt
+```
+
+No search: each of the three actions is the legal action with the largest policy logit, one
+network evaluation per decision. It is the network's raw opinion, so a gauntlet against the same
+checkpoint under `--sims` measures what the search adds. `--sims` is ignored and reported as 0,
+the move is deterministic for a given position, and the default client name gains a `-policy`
+suffix. `examples/policy_v_mcts.toml` sets that comparison up.
+
 ## Tests
 
 ```bash

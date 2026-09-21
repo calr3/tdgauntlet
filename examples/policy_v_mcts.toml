@@ -1,0 +1,51 @@
+# What the search adds: one checkpoint played twice, once as the raw policy network and once
+# under full-strength Gumbel MCTS, one minimatch per randomised first move.
+#
+# `plies = 1` is one full Epaminondas move (three pgx actions). 114 distinct first moves exist,
+# so `count` cannot exceed 114. Each opening is played twice with colours swapped; a minimatch
+# split 1-1 is excluded from the score, on the grounds that the opening decided it. The policy
+# client is deterministic, so the openings are what stops every game being the same game.
+#
+# Start both clients first, in the pgx environment, from the SAME checkpoint — the comparison is
+# only about the search. Two JAX processes share the GPU, so cap each one's share or the first
+# takes 75% and the second fails:
+#   cd ~/calr3gh/tdgauntlet/clients/jax
+#   CKPT=~/calr3gh/pgx/checkpoints/<run>/<step>.ckpt
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.3 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9340 --policy-only --checkpoint $CKPT
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.3 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9341 --sims 256 --checkpoint $CKPT
+#
+# A checkpoint whose env_version is not v6 needs --allow-rules-mismatch on both, and whether that
+# is a relabelling or a real rules difference has to be checked first: see the note in
+# az_v_alphabeta_gauntlet.toml.
+#
+# The alpha-beta client is here as a fixed yardstick: without it, a win rate says which of the
+# two is better but not what either is worth. Drop its two rows for the head-to-head alone.
+pairs = [["policy", "mcts-256"], ["policy", "alphabeta"], ["mcts-256", "alphabeta"]]
+game = "epaminondas/1"
+seed = 256
+concurrency = 8          # the alpha-beta client's max_concurrency; the models' is 16
+out = "../results/policy_v_mcts.json"
+
+[openings]
+kind = "random"
+plies = 1
+count = 20
+
+[[player]]
+name = "policy"
+url = "http://127.0.0.1:9340"
+# No budget: one network evaluation per decision is all it ever does.
+timeout_ms = 300000
+
+[[player]]
+name = "mcts-256"
+url = "http://127.0.0.1:9341"
+budget_sims = 256
+timeout_ms = 300000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 1000

@@ -27,13 +27,21 @@ def main() -> None:
     ap.add_argument("--port", type=int, default=9001)
     ap.add_argument("--name", default=None, help="defaults to the checkpoint's run and step")
     ap.add_argument("--sims", type=int, default=256, help="MCTS simulations per decision")
+    ap.add_argument(
+        "--policy-only",
+        action="store_true",
+        help="no search: play the legal action with the largest policy logit (ignores --sims)",
+    )
     ap.add_argument("--considered", type=int, default=16, help="max_num_considered_actions")
     ap.add_argument("--max-batch", type=int, default=16, help="requests searched together")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--allow-rules-mismatch", action="store_true")
     args = ap.parse_args()
 
-    name = args.name or f"jax-{args.checkpoint.parent.name}-{args.checkpoint.stem}"
+    name = args.name or (
+        f"jax-{args.checkpoint.parent.name}-{args.checkpoint.stem}"
+        + ("-policy" if args.policy_only else "")
+    )
     loaded = threading.Event()
     agent_box: dict[str, Any] = {}
 
@@ -59,6 +67,7 @@ def main() -> None:
                 max_batch=args.max_batch,
                 seed=args.seed,
                 allow_rules_mismatch=args.allow_rules_mismatch,
+                policy_only=args.policy_only,
             )
             agent.warm_up(lambda size: print(f"{name}: compiled batch {size}", file=sys.stderr))
         except BaseException as e:  # noqa: BLE001

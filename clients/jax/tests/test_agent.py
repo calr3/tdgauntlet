@@ -2,6 +2,8 @@
 
 The model tests need a checkpoint: set TDG_JAX_CHECKPOINT, or they use the newest Epaminondas
 checkpoint under ~/calr3gh/pgx/checkpoints trained on the current rules, and skip if there is none.
+A checkpoint named in TDG_JAX_CHECKPOINT is taken as meant, rules label and all, so a newer-rules
+one can be used to exercise the agent against pgx's current network.
 """
 
 from __future__ import annotations
@@ -48,6 +50,7 @@ def find_checkpoint() -> Path | None:
 
 
 CHECKPOINT = find_checkpoint()
+ALLOW_MISMATCH = bool(os.environ.get("TDG_JAX_CHECKPOINT"))
 needs_model = pytest.mark.skipif(CHECKPOINT is None, reason="no current-rules checkpoint")
 
 
@@ -77,7 +80,7 @@ def test_a_checkpoint_for_another_game_is_refused(tmp_path: Path) -> None:
 @pytest.fixture(scope="module")
 def agent() -> Agent:
     assert CHECKPOINT is not None
-    a = Agent(CHECKPOINT, num_simulations=8, max_batch=8)
+    a = Agent(CHECKPOINT, num_simulations=8, max_batch=8, allow_rules_mismatch=ALLOW_MISMATCH)
     a.warm_up()
     return a
 
@@ -111,6 +114,26 @@ def test_it_plays_legal_moves(agent: Agent) -> None:
         actions, info = agent.choose(to_pgx(wire))
         assert legal_move(wire, actions), (wire, actions)
         assert info["sims"] == 8 and "eval" in info
+
+
+@needs_model
+def test_policy_only_plays_legal_moves_without_searching() -> None:
+    assert CHECKPOINT is not None
+    a = Agent(
+        CHECKPOINT,
+        num_simulations=8,
+        max_batch=4,
+        policy_only=True,
+        allow_rules_mismatch=ALLOW_MISMATCH,
+    )
+    a.warm_up()
+    for wire in some_positions(3):
+        actions, info = a.choose(to_pgx(wire))
+        assert legal_move(wire, actions), (wire, actions)
+        assert info["sims"] == 0 and info["policy_only"] is True
+    # No search means no randomness: the same position always gets the same move.
+    wire = some_positions(1)[0]
+    assert a.choose(to_pgx(wire))[0] == a.choose(to_pgx(wire))[0]
 
 
 @needs_model

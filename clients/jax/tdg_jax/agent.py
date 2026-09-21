@@ -5,6 +5,9 @@ network, the same `recurrent_fn` (including the +1 discount between the three st
 Epaminondas move), the same `gumbel_muzero_policy` with no Gumbel noise. A move is three
 decisions, each a full search, exactly as that tournament plays it.
 
+With `policy_only`, no search runs at all: the move is the legal action with the largest policy
+logit, one network evaluation per decision. That is the network's own opinion, unimproved.
+
 What differs is that requests arrive concurrently from many games. Each stage of each request is
 put on a queue; one worker thread takes whatever is waiting (up to `max_batch`), pads it to a
 power of two so jit compiles only a handful of shapes, and runs one batched search for all of it.
@@ -86,13 +89,15 @@ class Agent:
         max_batch: int = 16,
         seed: int = 0,
         allow_rules_mismatch: bool = False,
+        policy_only: bool = False,
     ) -> None:
         _use_alphazero_modules()
         from network import make_forward  # type: ignore[import-not-found]
 
         self.config, self.model = load_checkpoint(checkpoint, allow_rules_mismatch)
         self.forward = make_forward(ENV.num_actions, self.config)
-        self.num_simulations = num_simulations
+        self.policy_only = policy_only
+        self.num_simulations = 0 if policy_only else num_simulations
         self.max_considered = max_considered
         self.max_batch = max_batch
         self._key = jax.random.PRNGKey(seed)
@@ -129,6 +134,9 @@ class Agent:
     def _run(self, key: jnp.ndarray, states: pgx.State, num_simulations: int):
         params, net_state = self.model
         (logits, value), _ = self.forward.apply(params, net_state, states.observation, is_eval=True)
+        if self.policy_only:
+            masked = jnp.where(states.legal_action_mask, logits, -jnp.inf)
+            return jnp.argmax(masked, axis=-1), value
         root = mctx.RootFnOutput(prior_logits=logits, value=value, embedding=states)  # type: ignore[call-arg]
         out = mctx.gumbel_muzero_policy(
             params=self.model,
@@ -224,6 +232,8 @@ class Agent:
             "sims": self.num_simulations,
             "elapsed_ms": round(1000 * (time.monotonic() - started)),
         }
+        if self.policy_only:
+            info["policy_only"] = True
         if value is not None:
             info["eval"] = value
         return actions, info
