@@ -31,7 +31,7 @@ does not need the server's agreement to think, but it cannot play a move the ser
 
 The envelope is fixed; `state` and `move` are arbitrary JSON defined by the game, identified by
 the `game` field (`"<name>/<version>"`). The tournament layer never interprets them. See
-[`games/epaminondas.md`](games/epaminondas.md) for the first game.
+[`games/`](games/) for each game's state and move encoding: `epaminondas/1` and `gess/1` so far.
 
 ## Endpoints
 
@@ -98,7 +98,7 @@ Response:
 A client that cannot move returns a non-2xx status with:
 
 ```json
-{"error": "unsupported game: gess/1"}
+{"error": "unsupported game: chess/1"}
 ```
 
 ## What the server does when a client misbehaves

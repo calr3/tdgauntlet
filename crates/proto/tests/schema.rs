@@ -165,6 +165,48 @@ fn epaminondas_doc_examples_match_their_schemas() {
 }
 
 #[test]
+fn gess_doc_examples_match_their_schemas() {
+    let doc = std::fs::read_to_string(repo_root().join("games/gess.md")).unwrap();
+    let (state, mv) = (
+        compile("gess_1.state.schema.json"),
+        compile("gess_1.move.schema.json"),
+    );
+    let mut seen = (false, false);
+    for value in json_blocks(&doc) {
+        let obj = value.as_object().unwrap();
+        if obj.contains_key("board") {
+            // The document elides the middle of the board string for readability, so check the
+            // fields that are really there rather than the length.
+            for key in ["to_move", "moves", "quiet_moves"] {
+                assert!(obj.contains_key(key), "the state example lost {key}");
+            }
+            seen.0 = true;
+        } else {
+            assert_valid(&mv, &value, "gess move example");
+            seen.1 = true;
+        }
+    }
+    assert_eq!(seen, (true, true));
+    // A real full-length board does validate, and a stone off the 20 x 20 grid does not.
+    let board: String = ".".repeat(400);
+    assert_valid(
+        &state,
+        &serde_json::json!({"board": board, "to_move": 0, "moves": 0, "quiet_moves": 0}),
+        "empty board",
+    );
+    assert_invalid(
+        &state,
+        &serde_json::json!({"board": ".".repeat(399), "to_move": 0, "moves": 0, "quiet_moves": 0}),
+        "399 cells",
+    );
+    assert_invalid(
+        &mv,
+        &serde_json::json!({"from": 0, "to": 400}),
+        "a cell off the grid",
+    );
+}
+
+#[test]
 fn schemas_reject_what_the_rust_types_reject() {
     let request = compile("move_request.schema.json");
     let base = serde_json::json!({

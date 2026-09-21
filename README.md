@@ -9,7 +9,8 @@ asked about many games at once, in any order. That is what lets a client keep so
 in memory (a compiled JAX model, a transposition table) without the tournament having to care.
 
 Positions and moves are opaque JSON tagged with a game id, so the tournament layer knows nothing
-about any particular game. [Epaminondas](games/epaminondas.md) is the first one.
+about any particular game. [Epaminondas](games/epaminondas.md) and [Gess](games/gess.md) are the
+two so far.
 
 - [`PROTOCOL.md`](PROTOCOL.md) — the wire contract; start here to write a client.
 - [`schema/`](schema/) — JSON Schema for every message.
@@ -28,6 +29,9 @@ cargo build --release
 
 # The same engine with no evaluation at all, against the one with it.
 ./target/release/tdgauntlet run examples/solve_v_alphabeta.toml
+
+# Gess, which only the game-agnostic clients play so far.
+./target/release/tdgauntlet run examples/gess_random.toml
 
 # Check a client you have written before entering it.
 ./target/release/tdgauntlet check http://127.0.0.1:9001
@@ -57,13 +61,13 @@ to the config file, so a config means the same thing wherever it is run from.
 | path | what |
 |---|---|
 | `crates/proto` | wire types |
-| `crates/games` | the `Game` trait, the registry, and the rules of each game |
+| `crates/games` | the `Game` trait, the registry, and the rules of each game (Epaminondas, Gess) |
 | `crates/tourney` | the `tdgauntlet` binary: openings, scheduling, adjudication, scoring, reporting |
 | `crates/client-kit` | serve a Rust engine as a client |
-| `clients/random` | uniformly random legal moves; the reference client |
+| `clients/random` | uniformly random legal moves, in any game; the reference client |
 | `clients/keyboard` | a human at the terminal |
 | `clients/web` | a human in a web browser |
-| `clients/alphabeta` | alpha-beta search over King and Peterson's LEONIDAS heuristics, or over the rules alone (`--search solve`) |
+| `clients/alphabeta` | Epaminondas: alpha-beta over King and Peterson's LEONIDAS heuristics, or over the rules alone (`--search solve`) |
 | `clients/jax` | a pgx AlphaZero checkpoint under Gumbel MCTS |
 | `clients/pysdk` | write a client in Python with the standard library alone |
 | `conformance/` | position vectors from pgx, and the scripts that dump them |
@@ -124,15 +128,17 @@ and what the server did about it, and the standings.
 ## The rules, and pgx
 
 `epaminondas/1` is pgx's Epaminondas at env version **v6** (100-move quiet clock, advancement
-tiebreak, no draws). The Rust engine in `crates/games` is an independent implementation, held to
-pgx by `cargo test -p tdg-games --test conformance`: several thousand positions, every legal move
-from each, every successor state and outcome, and perft counts, all dumped from pgx.
+tiebreak, no draws) and `gess/1` is pgx's Gess at **v1**. The Rust engines in `crates/games` are
+independent implementations, held to pgx by `cargo test -p tdg-games --test conformance` and
+`--test gess_conformance`: hundreds to thousands of positions each, every legal move from each,
+every successor state and outcome, and perft counts, all dumped from pgx.
 
 When pgx's rules change, regenerate the vectors in the pgx environment and commit them:
 
 ```bash
-JAX_PLATFORMS=cpu python conformance/dump_pgx.py      # positions and perft (slow: perft(3))
+JAX_PLATFORMS=cpu python conformance/dump_pgx.py      # Epaminondas positions and perft (slow: perft(3))
 JAX_PLATFORMS=cpu python conformance/dump_eval.py     # evaluator reference for clients/alphabeta
+JAX_PLATFORMS=cpu python conformance/dump_gess.py     # Gess positions and perft
 ```
 
 ## Development
@@ -141,5 +147,5 @@ JAX_PLATFORMS=cpu python conformance/dump_eval.py     # evaluator reference for 
 cargo test --workspace                                  # everything Rust, including conformance
 python -m pytest                                        # the Python SDK (JAX tests skip without pgx)
 JAX_PLATFORMS=cpu python -m pytest -p no:xdist clients/jax   # in the pgx environment
-cargo run --release -p tdg-games --example perft -- 4
+cargo run --release -p tdg-games --example perft -- 4 [game]
 ```

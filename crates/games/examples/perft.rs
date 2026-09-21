@@ -1,10 +1,10 @@
-//! `cargo run --release -p tdg-games --example perft -- 4` — move-tree node counts from the start.
+//! `cargo run --release -p tdg-games --example perft -- 4 [game]` — move-tree node counts from
+//! the start of any game this build knows. The game defaults to `epaminondas/1`.
 
 use std::time::Instant;
-use tdg_games::epaminondas::{Epaminondas, Position};
-use tdg_games::Game;
+use tdg_games::{epaminondas::Epaminondas, gess::Gess, Game};
 
-fn perft(g: &Epaminondas, pos: &Position, depth: u32) -> u64 {
+fn perft<G: Game>(g: &G, pos: &G::State, depth: u32) -> u64 {
     if depth == 0 {
         return 1;
     }
@@ -18,18 +18,26 @@ fn perft(g: &Epaminondas, pos: &Position, depth: u32) -> u64 {
         .sum()
 }
 
-fn main() {
-    let max: u32 = std::env::args()
-        .nth(1)
-        .and_then(|a| a.parse().ok())
-        .unwrap_or(3);
+fn run<G: Game>(g: &G, max: u32) {
+    println!("{}", g.id());
     for d in 1..=max {
         let t = Instant::now();
-        let n = perft(&Epaminondas, &Position::start(), d);
+        let n = perft(g, &g.initial(), d);
         let secs = t.elapsed().as_secs_f64();
         println!(
             "perft({d}) = {n}  ({secs:.2}s, {:.1}M nodes/s)",
             n as f64 / secs / 1e6
         );
+    }
+}
+
+fn main() {
+    let mut args = std::env::args().skip(1);
+    let max: u32 = args.next().and_then(|a| a.parse().ok()).unwrap_or(3);
+    let id = args.next().unwrap_or_else(|| Epaminondas.id().into());
+    match id.as_str() {
+        id if id == Epaminondas.id() => run(&Epaminondas, max),
+        id if id == Gess.id() => run(&Gess, max),
+        other => eprintln!("unknown game {other:?}; try {:?}", tdg_games::all_ids()),
     }
 }

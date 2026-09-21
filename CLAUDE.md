@@ -7,8 +7,9 @@ have already been made once.
 
 A tournament server for board-game agents. The Rust server owns the rules, clock, adjudication
 and score; clients answer "what is your move in this position?" over HTTP and keep **no per-game
-state**. Read `README.md` for the overview and `PROTOCOL.md` for the wire contract. Epaminondas is
-the only game so far.
+state**. Read `README.md` for the overview and `PROTOCOL.md` for the wire contract. The games are
+Epaminondas and Gess; only the game-agnostic clients (`random`, `keyboard`, `web`, the Python SDK)
+play Gess.
 
 It sits next to `~/calr3gh/pgx` (JAX training, the reference rules, checkpoints) and replaces
 pgx's `examples/alphazero/interactive_tournament.py`. Nothing here should ever edit pgx.
@@ -45,8 +46,9 @@ ruff format, mypy and pytest. Run the same before committing.
 ## Rules and conformance
 
 - `epaminondas/1` is pgx's Epaminondas at **env version v6** (100-move quiet clock, advancement
-  tiebreak, no draws). The Rust engine in `crates/games` is independent and is held to pgx by
-  `crates/games/tests/conformance.rs`, which replays vectors dumped from pgx.
+  tiebreak, no draws) and `gess/1` is pgx's Gess at **v1**. The Rust engines in `crates/games` are
+  independent and are held to pgx by `crates/games/tests/conformance.rs` and
+  `gess_conformance.rs`, which replay vectors dumped from pgx.
 - **If pgx's rules change, the vectors must be regenerated and committed**, in the pgx env:
   `JAX_PLATFORMS=cpu ~/.venv/bin/python3 conformance/dump_pgx.py` (positions and perft; perft(3)
   takes ~15 minutes, run it detached) and `conformance/dump_eval.py` (alpha-beta evaluator
@@ -56,6 +58,14 @@ ruff format, mypy and pytest. Run the same before committing.
 - A coverage test fails if the vectors stop exercising captures, incursions and the clock. Plain
   random play almost never produces captures or incursions, which is why `dump_pgx.py` mixes in
   an aggressive policy. Keep it.
+- The same goes for `dump_gess.py`, for the opposite reason: random play in Gess is mostly
+  suicide (lifting a piece from around your own ring destroys it and loses), so those games are
+  three moves long. Two of its three policies only play moves that keep their own ring, which is
+  what makes a game long enough to reach a capture or the 20-move quiet clock.
+- Gess regenerates in about a minute: `JAX_PLATFORMS=cpu ~/.venv/bin/python3
+  conformance/dump_gess.py`. Its `moves` counter is tdgauntlet's own; pgx's state has none.
+- Anything that walks a random game to a fixed depth has to cope with a game that ends first.
+  `check.rs` used to retry the same depth for ever and hung on Gess.
 - pgx's `EpaminondasCli` labels board row 0 as rank 12, contradicting its own docstring. Here,
   square 0 is `a1` and white's home is rank 1. Don't copy pgx's labels.
 

@@ -6,6 +6,7 @@
 //! opaque JSON that travels on the wire.
 
 pub mod epaminondas;
+pub mod gess;
 
 use serde_json::Value;
 use std::sync::Arc;
@@ -148,11 +149,12 @@ impl<G: Game> DynGame for G {
 pub fn by_id(id: &str) -> Option<Arc<dyn DynGame>> {
     match id {
         epaminondas::ID => Some(Arc::new(epaminondas::Epaminondas)),
+        gess::ID => Some(Arc::new(gess::Gess)),
         _ => None,
     }
 }
 
 /// Every game this build knows.
 pub fn all_ids() -> &'static [&'static str] {
-    &[epaminondas::ID]
+    &[epaminondas::ID, gess::ID]
 }

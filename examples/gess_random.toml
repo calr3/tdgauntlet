@@ -1,0 +1,23 @@
+# Two random clients playing Gess, both started by the server.
+#
+# Random play in Gess is mostly suicide: a piece lifted from around your own ring destroys it,
+# and the game ends there. Expect very short games.
+game = "gess/1"
+seed = 5
+concurrency = 8
+out = "../results/gess_random.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 10
+
+[[player]]
+name = "random-a"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100
+
+[[player]]
+name = "random-b"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100

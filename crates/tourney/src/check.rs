@@ -41,22 +41,27 @@ impl Default for CheckOptions {
 }
 
 /// Undecided positions from random games, at a spread of depths.
+///
+/// A random game can be over well before the depth asked for — in Gess most are inside three
+/// moves — so each walk keeps the deepest position that still had a game in it rather than being
+/// thrown away and tried again, which would never finish in a game like that.
 fn sample_positions(game: &dyn DynGame, n: usize, seed: u64) -> Vec<serde_json::Value> {
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let mut out = Vec::new();
     while out.len() < n {
         let mut state = game.initial();
-        let depth = out.len() * 3;
-        for _ in 0..depth {
+        for _ in 0..out.len() * 3 {
             let moves = game.legal_moves(&state).expect("own state");
             let Some(mv) = moves.choose(&mut rng) else {
                 break;
             };
-            state = game.play(&state, mv).expect("legal").state;
+            let next = game.play(&state, mv).expect("legal").state;
+            if game.outcome(&next).expect("own state").is_some() {
+                break;
+            }
+            state = next;
         }
-        if game.outcome(&state).expect("own state").is_none() {
-            out.push(state);
-        }
+        out.push(state);
     }
     out
 }
@@ -209,5 +214,29 @@ fn request(
             ply: 0,
             side,
         },
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Sampling has to finish for any game, including one whose random games are over in three
+    /// moves: it used to discard a walk that ended early and try the same depth again, which in
+    /// Gess never finished.
+    #[test]
+    fn sampling_finishes_and_leaves_a_game_to_play_in_every_game() {
+        for id in tdg_games::all_ids() {
+            let game = tdg_games::by_id(id).expect("a registered game");
+            let positions = sample_positions(game.as_ref(), 16, 7);
+            assert_eq!(positions.len(), 16, "{id}");
+            for p in &positions {
+                assert!(game.outcome(p).unwrap().is_none(), "{id}: already decided");
+                assert!(
+                    !game.legal_moves(p).unwrap().is_empty(),
+                    "{id}: nothing to play"
+                );
+            }
+        }
     }
 }

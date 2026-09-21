@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/gess_1.state.schema.json",
+  "title": "gess/1 state",
+  "type": "object",
+  "required": [
+    "board",
+    "to_move",
+    "moves",
+    "quiet_moves"
+  ],
+  "properties": {
+    "board": {
+      "type": "string",
+      "description": "400 chars of '.', 'B' or 'W', row-major from a20 (top left). Row 0 is the top, on white's side. The outer ring - row or column 0 or 19 - is the border and is always empty.",
+      "pattern": "^[.BW]{400}$"
+    },
+    "to_move": {
+      "enum": [
+        0,
+        1
+      ],
+      "description": "0 black, 1 white. Black moves first."
+    },
+    "moves": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Completed moves, for reporting only."
+    },
+    "quiet_moves": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Moves since a stone was last taken off the board; the game is decided on stone count at 20."
+    }
+  },
+  "description": "pgx Gess env v1."
+}

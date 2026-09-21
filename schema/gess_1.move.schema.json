@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/gess_1.move.schema.json",
+  "title": "gess/1 move",
+  "type": "object",
+  "required": ["from", "to"],
+  "properties": {
+    "from": {
+      "type": "integer", "minimum": 0, "maximum": 399,
+      "description": "Centre of the 3x3 piece being moved."
+    },
+    "to": {
+      "type": "integer", "minimum": 0, "maximum": 399,
+      "description": "Centre the piece lands on."
+    },
+    "san": { "type": "string", "description": "Optional, ignored on input." }
+  }
+}
