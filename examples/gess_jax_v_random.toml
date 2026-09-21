@@ -1,0 +1,28 @@
+# A trained Gess network against random play.
+#
+# Start the JAX client yourself, in the pgx environment, first:
+#   cd clients/jax && JAX_PLATFORMS=cpu python -m tdg_jax --port 9421 --sims 64 \
+#       --checkpoint ~/calr3gh/pgx/checkpoints/<gess run>/<step>.ckpt
+#
+# The checkpoint decides the game, so the client advertises gess/1 and nothing else. Random play
+# in Gess loses to almost anything: a piece lifted from around your own ring destroys it.
+game = "gess/1"
+seed = 19
+concurrency = 4
+out = "../results/gess_jax_v_random.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 8
+
+[[player]]
+name = "jax"
+url = "http://127.0.0.1:9421"
+budget_ms = 10000
+timeout_ms = 120000
+
+[[player]]
+name = "random"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 1000

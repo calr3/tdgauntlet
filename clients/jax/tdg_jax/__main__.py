@@ -1,6 +1,9 @@
-"""Serve a pgx Epaminondas checkpoint as a tdgauntlet client.
+"""Serve a pgx AlphaZero checkpoint as a tdgauntlet client.
 
     JAX_PLATFORMS=cpu python -m tdg_jax --checkpoint ~/calr3gh/pgx/checkpoints/<run>/000040.ckpt
+
+The checkpoint decides the game: it records the pgx env it was trained on, and the client
+advertises the one tdgauntlet game id that goes with it (`epaminondas/1` or `gess/1`).
 
 Run it in the pgx environment. It needs only the standard library beyond what pgx training
 already uses: the HTTP side is `clients/pysdk`.
@@ -18,7 +21,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "pysdk"))
 from tdgauntlet_client import ClientError, serve  # noqa: E402
 
-from .wire import GAME_ID, actions_to_move, to_pgx  # noqa: E402
+from .agent import load_checkpoint  # noqa: E402
 
 
 def main() -> None:
@@ -42,31 +45,38 @@ def main() -> None:
         f"jax-{args.checkpoint.parent.name}-{args.checkpoint.stem}"
         + ("-policy" if args.policy_only else "")
     )
+    # Which game this is cannot wait for the model: the client has to name it in `identify`.
+    # Reading the checkpoint is the quick part of loading it; building the network is not.
+    try:
+        checkpoint = load_checkpoint(args.checkpoint, args.allow_rules_mismatch)
+    except BaseException as e:  # noqa: BLE001
+        print(f"{name}: failed to load: {e}", file=sys.stderr, flush=True)
+        raise SystemExit(1) from e
+    wire = checkpoint.wire
     loaded = threading.Event()
     agent_box: dict[str, Any] = {}
 
     def choose_move(game: str, state: Any, budget: dict[str, Any], context: dict[str, Any]) -> Any:
         agent = agent_box["agent"]
         try:
-            pgx_state = to_pgx(state)
+            pgx_state = wire.to_pgx(state)
         except (ValueError, KeyError, TypeError) as e:
             raise ClientError(f"bad state: {e}") from e
         # The simulation count is fixed at startup; a request's `sims` budget is honoured only
         # when it matches, since each distinct count is a separate compilation.
         actions, info = agent.choose(pgx_state)
-        return actions_to_move(actions), info
+        return wire.actions_to_move(actions), info
 
     def load() -> None:
         try:
             from .agent import Agent
 
             agent = Agent(
-                args.checkpoint,
+                checkpoint,
                 num_simulations=args.sims,
                 max_considered=args.considered,
                 max_batch=args.max_batch,
                 seed=args.seed,
-                allow_rules_mismatch=args.allow_rules_mismatch,
                 policy_only=args.policy_only,
             )
             agent.warm_up(lambda size: print(f"{name}: compiled batch {size}", file=sys.stderr))
@@ -76,7 +86,7 @@ def main() -> None:
             os._exit(1)
         agent_box["agent"] = agent
         loaded.set()
-        print(f"{name}: ready", file=sys.stderr, flush=True)
+        print(f"{name}: ready to play {wire.game_id}", file=sys.stderr, flush=True)
 
     # Open the port straight away and report healthy once the model is in memory, so a server
     # that spawned this process can tell "loading" from "dead".
@@ -84,7 +94,7 @@ def main() -> None:
     serve(
         name=name,
         version="0.1.0",
-        games=[GAME_ID],
+        games=[wire.game_id],
         choose_move=choose_move,
         port=args.port,
         max_concurrency=args.max_batch,

@@ -8,8 +8,9 @@ have already been made once.
 A tournament server for board-game agents. The Rust server owns the rules, clock, adjudication
 and score; clients answer "what is your move in this position?" over HTTP and keep **no per-game
 state**. Read `README.md` for the overview and `PROTOCOL.md` for the wire contract. The games are
-Epaminondas and Gess; only the game-agnostic clients (`random`, `keyboard`, `web`, the Python SDK)
-play Gess.
+Epaminondas and Gess. Gess is played by the game-agnostic clients (`random`, `keyboard`, `web`,
+the Python SDK) and by `clients/jax`, whose checkpoint decides its game; `alphabeta` and `mcts`
+are Epaminondas only.
 
 It sits next to `~/calr3gh/pgx` (JAX training, the reference rules, checkpoints) and replaces
 pgx's `examples/alphazero/interactive_tournament.py`. Nothing here should ever edit pgx.
@@ -55,6 +56,11 @@ ruff format, mypy and pytest. Run the same before committing.
   reference). The test refuses vectors from uncommitted pgx rules; check `git status` in pgx.
 - pgx has changed its rules mid-project before (v5 to v6 happened during the first session).
   Before porting or trusting a rule, check pgx's working copy against its HEAD.
+- **pgx's Epaminondas is now at v11 and its observation has grown from 7 channels to 19**, while
+  `epaminondas/1` is still v6. So no checkpoint can play `epaminondas/1` as trained: the current
+  ones are other rules (`--allow-rules-mismatch` plays them anyway) and the last v6 ones cannot
+  be built against the env installed now. `clients/jax`'s Epaminondas tests skip, saying so.
+  Gess is unaffected: pgx is on v1 and so is `gess/1`.
 - A coverage test fails if the vectors stop exercising captures, incursions and the clock. Plain
   random play almost never produces captures or incursions, which is why `dump_pgx.py` mixes in
   an aggressive policy. Keep it.

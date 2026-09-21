@@ -68,7 +68,7 @@ to the config file, so a config means the same thing wherever it is run from.
 | `clients/keyboard` | a human at the terminal |
 | `clients/web` | a human in a web browser |
 | `clients/alphabeta` | Epaminondas: alpha-beta over King and Peterson's LEONIDAS heuristics, or over the rules alone (`--search solve`) |
-| `clients/jax` | a pgx AlphaZero checkpoint under Gumbel MCTS |
+| `clients/jax` | a pgx AlphaZero checkpoint under Gumbel MCTS, in whichever game it was trained for |
 | `clients/pysdk` | write a client in Python with the standard library alone |
 | `conformance/` | position vectors from pgx, and the scripts that dump them |
 | `examples/` | tournament configs |

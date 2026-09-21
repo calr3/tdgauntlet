@@ -1,9 +1,12 @@
 """Gumbel MCTS over a pgx AlphaZero checkpoint, batched across concurrent requests.
 
 The search mirrors `ModelAgent` in pgx's `examples/alphazero/interactive_tournament.py`: the same
-network, the same `recurrent_fn` (including the +1 discount between the three stages of one
-Epaminondas move), the same `gumbel_muzero_policy` with no Gumbel noise. A move is three
-decisions, each a full search, exactly as that tournament plays it.
+network, the same `recurrent_fn` (including the +1 discount between the stages of one move), the
+same `gumbel_muzero_policy` with no Gumbel noise. A move is one full search per stage, exactly as
+that tournament plays it: three for Epaminondas, two for Gess.
+
+Which game a process plays is the checkpoint's to say. It names the pgx env it was trained on,
+that picks the `Wire`, and the client advertises the one game id that goes with it.
 
 With `policy_only`, no search runs at all: the move is the legal action with the largest policy
 logit, one network evaluation per decision. That is the network's own opinion, unimproved.
@@ -31,7 +34,7 @@ import mctx
 import numpy as np
 import pgx
 
-from .wire import ENV, RULES_VERSION
+from .wire import Wire, for_env_id
 
 Model = tuple[Any, Any]
 
@@ -48,23 +51,35 @@ def _use_alphazero_modules() -> None:
         sys.path.insert(0, str(alphazero_dir()))
 
 
-def load_checkpoint(path: Path, allow_rules_mismatch: bool = False) -> tuple[Any, Model]:
+@dataclass
+class Checkpoint:
+    """A loaded checkpoint, and the game it says it plays."""
+
+    config: Any
+    model: Model
+    wire: Wire
+
+
+def load_checkpoint(path: Path, allow_rules_mismatch: bool = False) -> Checkpoint:
     _use_alphazero_modules()
     from config import Config  # type: ignore[import-not-found]
 
     with open(path, "rb") as f:
         ckpt = pickle.load(f)
-    if ckpt.get("env_id", "epaminondas") != "epaminondas":
-        raise ValueError(f"{path} is a {ckpt['env_id']} checkpoint, not epaminondas")
+    env_id = ckpt.get("env_id", "epaminondas")
+    try:
+        wire = for_env_id(env_id)
+    except ValueError as e:
+        raise ValueError(f"{path} is a {env_id} checkpoint: {e}") from e
     version = ckpt.get("env_version")
-    if version != RULES_VERSION and not allow_rules_mismatch:
+    if version != wire.rules_version and not allow_rules_mismatch:
         raise ValueError(
-            f"{path} was trained on pgx epaminondas {version}, but epaminondas/1 is "
-            f"{RULES_VERSION}. Pass --allow-rules-mismatch to play it anyway."
+            f"{path} was trained on pgx {env_id} {version}, but {wire.game_id} is "
+            f"{wire.rules_version}. Pass --allow-rules-mismatch to play it anyway."
         )
     # Rehydrate through the current Config so older checkpoints get newer fields' defaults.
     config = Config(**ckpt["config"].__dict__)
-    return config, ckpt["model"]
+    return Checkpoint(config, ckpt["model"], wire)
 
 
 def _bucket(n: int) -> int:
@@ -83,7 +98,7 @@ class _Job:
 class Agent:
     def __init__(
         self,
-        checkpoint: Path,
+        checkpoint: Path | Checkpoint,
         num_simulations: int,
         max_considered: int = 16,
         max_batch: int = 16,
@@ -94,8 +109,12 @@ class Agent:
         _use_alphazero_modules()
         from network import make_forward  # type: ignore[import-not-found]
 
-        self.config, self.model = load_checkpoint(checkpoint, allow_rules_mismatch)
-        self.forward = make_forward(ENV.num_actions, self.config)
+        if isinstance(checkpoint, Path):
+            checkpoint = load_checkpoint(checkpoint, allow_rules_mismatch)
+        self.wire = checkpoint.wire
+        self.env = self.wire.env
+        self.config, self.model = checkpoint.config, checkpoint.model
+        self.forward = make_forward(self.env.num_actions, self.config)
         self.policy_only = policy_only
         self.num_simulations = 0 if policy_only else num_simulations
         self.max_considered = max_considered
@@ -103,7 +122,7 @@ class Agent:
         self._key = jax.random.PRNGKey(seed)
         self._key_lock = threading.Lock()
         self._search = jax.jit(self._run, static_argnames=("num_simulations",))
-        self._step = jax.jit(ENV.step)
+        self._step = jax.jit(self.env.step)
         self._jobs: queue.Queue[_Job] = queue.Queue()
         self.batches: list[int] = []  # sizes of the batches run, for tests and diagnostics
         threading.Thread(target=self._worker, daemon=True).start()
@@ -114,13 +133,13 @@ class Agent:
         del rng_key
         params, net_state = model
         current_player = state.current_player
-        state = jax.vmap(ENV.step)(state, action)
+        state = jax.vmap(self.env.step)(state, action)
         (logits, value), _ = self.forward.apply(params, net_state, state.observation, is_eval=True)
         logits = jnp.where(state.legal_action_mask, logits, jnp.finfo(logits.dtype).min)
         reward = state.rewards[jnp.arange(state.rewards.shape[0]), current_player]
         value = jnp.where(state.terminated, 0.0, value)
         # +1 while the same player is still choosing the rest of a move, -1 when the turn has
-        # passed, 0 at the end: one Epaminondas move is three actions by the same player.
+        # passed, 0 at the end: one move is several actions by the same player.
         discount = jnp.where(state.current_player == current_player, 1.0, -1.0)
         discount = jnp.where(state.terminated, 0.0, discount)
         return (
@@ -184,17 +203,7 @@ class Agent:
     def warm_up(self, report: Any = None) -> None:
         """Compile every batch size the worker can use, so no compile lands mid-tournament and
         blows a move's time limit."""
-        from .wire import to_pgx
-
-        start = to_pgx(
-            {
-                "board": "W" * 28 + "." * 112 + "B" * 28,
-                "to_move": 0,
-                "moves": 0,
-                "quiet_moves": 0,
-                "last_capturer": -1,
-            }
-        )
+        start = self.env.init(jax.random.PRNGKey(0))
         size = 1
         while size <= _bucket(self.max_batch):
             batch = jax.tree_util.tree_map(lambda x, size=size: jnp.stack([x] * size), start)
@@ -204,7 +213,8 @@ class Agent:
             if report:
                 report(size)
             size *= 2
-        jax.block_until_ready(self._step(start, jnp.int32(15)))
+        first_legal = int(np.flatnonzero(np.asarray(start.legal_action_mask))[0])
+        jax.block_until_ready(self._step(start, jnp.int32(first_legal)))
 
     def _decide(self, state: pgx.State) -> tuple[int, float | None]:
         legal = np.flatnonzero(np.asarray(state.legal_action_mask))
@@ -218,11 +228,11 @@ class Agent:
         return job.action, job.value
 
     def choose(self, state: pgx.State) -> tuple[list[int], dict[str, Any]]:
-        """The three actions of one move, and what to record about it."""
+        """The actions of one move — one decision per stage — and what to record about it."""
         started = time.monotonic()
         actions: list[int] = []
         value: float | None = None
-        for _ in range(3):
+        for _ in range(self.wire.actions_per_move):
             action, v = self._decide(state)
             if value is None:
                 value = v
