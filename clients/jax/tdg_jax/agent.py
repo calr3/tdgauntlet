@@ -6,7 +6,9 @@ same `gumbel_muzero_policy` with no Gumbel noise. A move is one full search per 
 that tournament plays it: three for Epaminondas, two for Gess.
 
 Which game a process plays is the checkpoint's to say. It names the pgx env it was trained on,
-that picks the `Wire`, and the client advertises the one game id that goes with it.
+that picks the `Wire`, and the client advertises the one game id that goes with it. A wire id
+covers every pgx version with its rules, so checkpoints from either side of an observation change
+play each other here; each is fed the leading planes it was trained on.
 
 With `policy_only`, no search runs at all: the move is the legal action with the largest policy
 logit, one network evaluation per decision. That is the network's own opinion, unimproved.
@@ -72,14 +74,59 @@ def load_checkpoint(path: Path, allow_rules_mismatch: bool = False) -> Checkpoin
     except ValueError as e:
         raise ValueError(f"{path} is a {env_id} checkpoint: {e}") from e
     version = ckpt.get("env_version")
-    if version != wire.rules_version and not allow_rules_mismatch:
+    if version not in wire.rules_versions and not allow_rules_mismatch:
+        known = ", ".join(wire.rules_versions)
         raise ValueError(
             f"{path} was trained on pgx {env_id} {version}, but {wire.game_id} is "
-            f"{wire.rules_version}. Pass --allow-rules-mismatch to play it anyway."
+            f"{known}. Pass --allow-rules-mismatch to play it anyway."
         )
     # Rehydrate through the current Config so older checkpoints get newer fields' defaults.
     config = Config(**ckpt["config"].__dict__)
     return Checkpoint(config, ckpt["model"], wire)
+
+
+def stem_inputs(params: Any) -> int | None:
+    """Channels the stem convolution takes, or None if there is no `stem_conv` (the MLP nets).
+
+    The weight's shape is (kh, kw, in, out), so its third axis is the count.
+    """
+    if not hasattr(params, "items"):
+        return None
+    for module, entries in params.items():
+        if module.endswith("stem_conv"):
+            w = entries.get("w")
+            if getattr(w, "ndim", 0) == 4:
+                return int(w.shape[2])
+    return None
+
+
+def obs_channels(model: Model, forward: Any, env: Any) -> int | None:
+    """Observation planes the checkpoint was trained on, or None when it cannot be told.
+
+    Read off the stem convolution, but not directly: a network may feed the stem more than the
+    observation. GessFormer pads the board and adds an is_border plane, so its stem takes five
+    channels for a four-plane observation. So build the same architecture against the env
+    installed now, and measure the gap between what its stem takes and what the env provides -
+    whatever the network adds, it adds to both.
+    """
+    trained = stem_inputs(model[0])
+    if trained is None:
+        return None
+    start = env.init(jax.random.PRNGKey(0))
+    reference, _ = forward.init(jax.random.PRNGKey(0), start.observation[None], is_eval=True)
+    provided = stem_inputs(reference)
+    if provided is None:
+        return None
+    return int(env.observation_shape[-1]) - (provided - trained)
+
+
+def narrow(observation: jnp.ndarray, channels: int | None) -> jnp.ndarray:
+    """The leading `channels` planes of an observation: what a checkpoint from before later
+    planes were added saw in training. `None`, or a count that already matches, passes it
+    through."""
+    if channels is None or channels == observation.shape[-1]:
+        return observation
+    return observation[..., :channels]
 
 
 def _bucket(n: int) -> int:
@@ -115,6 +162,20 @@ class Agent:
         self.env = self.wire.env
         self.config, self.model = checkpoint.config, checkpoint.model
         self.forward = make_forward(self.env.num_actions, self.config)
+        # pgx appends observation planes and never reorders them, so a checkpoint from before a
+        # plane was added is shown exactly what it saw in training by dropping the trailing ones.
+        # That is what keeps the whole v6-to-v11 family playable side by side (pgx does the same
+        # in `examples/alphazero/model_tournament.py::narrow_observation`). It is sound only while
+        # the append-only invariant holds: if a plane ever changes meaning, pgx bumps the rules
+        # version and `wire.rules_versions` drops it.
+        self.obs_channels = obs_channels(self.model, self.forward, self.env)
+        env_channels = int(self.env.observation_shape[-1])
+        if self.obs_channels is not None and self.obs_channels > env_channels:
+            raise ValueError(
+                f"the checkpoint was trained on {self.obs_channels} observation planes but "
+                f"pgx {self.wire.env_id} now provides {env_channels}: planes it needs are gone, "
+                "so it cannot play against this env."
+            )
         self.policy_only = policy_only
         self.num_simulations = 0 if policy_only else num_simulations
         self.max_considered = max_considered
@@ -134,7 +195,9 @@ class Agent:
         params, net_state = model
         current_player = state.current_player
         state = jax.vmap(self.env.step)(state, action)
-        (logits, value), _ = self.forward.apply(params, net_state, state.observation, is_eval=True)
+        (logits, value), _ = self.forward.apply(
+            params, net_state, narrow(state.observation, self.obs_channels), is_eval=True
+        )
         logits = jnp.where(state.legal_action_mask, logits, jnp.finfo(logits.dtype).min)
         reward = state.rewards[jnp.arange(state.rewards.shape[0]), current_player]
         value = jnp.where(state.terminated, 0.0, value)
@@ -152,7 +215,9 @@ class Agent:
 
     def _run(self, key: jnp.ndarray, states: pgx.State, num_simulations: int):
         params, net_state = self.model
-        (logits, value), _ = self.forward.apply(params, net_state, states.observation, is_eval=True)
+        (logits, value), _ = self.forward.apply(
+            params, net_state, narrow(states.observation, self.obs_channels), is_eval=True
+        )
         if self.policy_only:
             masked = jnp.where(states.legal_action_mask, logits, -jnp.inf)
             return jnp.argmax(masked, axis=-1), value

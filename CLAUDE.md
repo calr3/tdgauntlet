@@ -56,10 +56,12 @@ ruff format, mypy and pytest. Run the same before committing.
   reference). The test refuses vectors from uncommitted pgx rules; check `git status` in pgx.
 - pgx has changed its rules mid-project before (v5 to v6 happened during the first session).
   Before porting or trusting a rule, check pgx's working copy against its HEAD.
-- **pgx's Epaminondas is now at v11 and its observation has grown from 7 channels to 19**, while
-  `epaminondas/1` is still v6. So no checkpoint can play `epaminondas/1` as trained: the current
-  ones are other rules (`--allow-rules-mismatch` plays them anyway) and the last v6 ones cannot
-  be built against the env installed now. `clients/jax`'s Epaminondas tests skip, saying so.
+- **pgx's Epaminondas is at v11, and v6 to v11 are all the same rules**: v7 onwards only grew
+  the observation, from 7 planes to 19. Regenerating `conformance/epaminondas.jsonl.gz` from pgx
+  v11 reproduces the committed v6 vectors byte for byte, which is the check that says so, and
+  `clients/jax` accepts the whole family (`wire.rules_versions`) rather than the one label. It
+  narrows the observation to the planes each checkpoint's stem was built for, so a v6 model and a
+  v11 model play each other unchanged and no `--allow-rules-mismatch` is needed for either.
   Gess is unaffected: pgx is on v1 and so is `gess/1`.
 - A coverage test fails if the vectors stop exercising captures, incursions and the clock. Plain
   random play almost never produces captures or incursions, which is why `dump_pgx.py` mixes in

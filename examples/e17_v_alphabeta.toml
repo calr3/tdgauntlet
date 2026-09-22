@@ -1,0 +1,36 @@
+# E17 against the Rust alpha-beta: 25 randomised first moves, each played twice with the
+# colours swapped, so 50 games. A minimatch split 1-1 is excluded from the score, on the
+# grounds that the opening decided it.
+#
+# `plies = 1` is one full Epaminondas move (three pgx actions). 114 distinct first moves
+# exist, so `count` cannot exceed 114.
+#
+# E17 is pgx v11 (19 observation planes). No `--allow-rules-mismatch`: v6 to v11 are one set
+# of rules, `wire.rules_versions` says so, and regenerating conformance/epaminondas.jsonl.gz
+# from v11 reproduces the committed v6 vectors byte for byte.
+#
+# Start the model client first, in the pgx environment. The GPU is free when no training run
+# is on it; otherwise cap its share with XLA_PYTHON_CLIENT_MEM_FRACTION.
+#   cd ~/calr3gh/tdgauntlet/clients/jax
+#   ~/.venv/bin/python3 -m tdg_jax --port 9350 --sims 256 \
+#       --checkpoint ~/calr3gh/pgx/checkpoints/epaminondas_20260922033505/000252.ckpt
+game = "epaminondas/1"
+seed = 1909              # the seed of az_v_alphabeta_gauntlet.toml: the same openings E7 and E14 played
+concurrency = 8          # the alpha-beta client's max_concurrency; the model's is 16
+out = "../results/e17_v_alphabeta.json"
+
+[openings]
+kind = "random"
+plies = 1
+count = 25
+
+[[player]]
+name = "e17"
+url = "http://127.0.0.1:9350"
+budget_sims = 256
+timeout_ms = 300000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 1000

@@ -24,7 +24,13 @@ import sys  # noqa: E402
 import jax  # noqa: E402
 import jax.numpy as jnp  # noqa: E402
 import numpy as np  # noqa: E402
-from tdg_jax.agent import Agent, alphazero_dir, load_checkpoint  # noqa: E402
+from tdg_jax.agent import (  # noqa: E402
+    Agent,
+    alphazero_dir,
+    load_checkpoint,
+    narrow,
+    stem_inputs,
+)
 from tdg_jax.wire import WIRES, Wire, for_env_id, for_game_id  # noqa: E402
 
 
@@ -48,9 +54,8 @@ def find_checkpoints() -> tuple[dict[str, Path], dict[str, str]]:
     why it was not usable otherwise.
 
     Only the newest run is considered. An older one that happens to carry the right rules label
-    is not a substitute: pgx's envs change their observation with their rules, so a checkpoint
-    from before that cannot be built against the env installed now — its network has the wrong
-    number of input channels."""
+    is no better: it plays the same rules, and the agent narrows the observation for it either
+    way."""
     if os.environ.get("TDG_JAX_CHECKPOINT"):
         path = Path(os.environ["TDG_JAX_CHECKPOINT"])
         wire = for_env_id(read_meta(path).get("env_id", "epaminondas"))
@@ -65,12 +70,12 @@ def find_checkpoints() -> tuple[dict[str, Path], dict[str, str]]:
             why[wire.game_id] = f"no {wire.env_id} checkpoint under {root}"
             continue
         version = read_meta(newest).get("env_version")
-        if version == wire.rules_version:
+        if version in wire.rules_versions:
             found[wire.game_id] = newest
         else:
             why[wire.game_id] = (
                 f"the newest {wire.env_id} run is pgx {version}, and {wire.game_id} plays "
-                f"{wire.rules_version}"
+                f"{', '.join(wire.rules_versions)}"
             )
     return found, why
 
@@ -131,8 +136,48 @@ def test_a_checkpoint_for_a_game_the_server_lacks_is_refused(tmp_path: Path) -> 
 
 def test_the_checkpoint_says_which_game_is_played(tmp_path: Path) -> None:
     for wire in WIRES:
-        path = fake_checkpoint(tmp_path, env_id=wire.env_id, env_version=wire.rules_version)
-        assert load_checkpoint(path).wire.game_id == wire.game_id
+        for version in wire.rules_versions:
+            path = fake_checkpoint(tmp_path, env_id=wire.env_id, env_version=version)
+            assert load_checkpoint(path).wire.game_id == wire.game_id
+
+
+def test_every_version_with_a_game_ids_rules_is_accepted(tmp_path: Path) -> None:
+    """pgx bumps its env version for observation changes too, and those leave the rules alone,
+    so a wire id stands for a family rather than one version. `epaminondas/1` is pgx v6, and v7
+    to v11 only grew the planes: regenerating conformance/epaminondas.jsonl.gz from pgx v11
+    reproduces the committed v6 vectors byte for byte."""
+    for version in ("v6", "v11"):
+        path = fake_checkpoint(tmp_path, env_id="epaminondas", env_version=version)
+        assert load_checkpoint(path).wire.game_id == "epaminondas/1"
+
+
+def test_stem_inputs_reads_the_stem_and_narrow_drops_the_rest() -> None:
+    assert stem_inputs({"board_former/stem_conv": {"w": np.zeros((3, 3, 7, 64))}}) == 7
+    assert stem_inputs({"mlp/linear": {"w": np.zeros((4, 4))}}) is None
+
+    obs = jnp.arange(2 * 3 * 19, dtype=jnp.float32).reshape(2, 3, 19)
+    np.testing.assert_array_equal(narrow(obs, 7), obs[..., :7])
+    np.testing.assert_array_equal(narrow(obs, 19), obs)
+    np.testing.assert_array_equal(narrow(obs, None), obs)
+
+
+def test_a_checkpoints_plane_count_is_measured_against_its_own_architecture(wire: Wire) -> None:
+    """A network may feed its stem more than the observation - GessFormer adds an is_border
+    plane - so the count has to come from the gap against the same architecture built here, not
+    from the stem's width alone. A current checkpoint was trained on the env's own planes."""
+    agent = agent_for(wire)
+    assert agent.obs_channels == int(wire.env.observation_shape[-1])
+
+
+def test_the_agent_is_fed_the_planes_its_checkpoint_was_trained_on(wire: Wire) -> None:
+    """Whatever the checkpoint's vintage, what reaches the network has the channel count its
+    stem was built for - which for a current checkpoint is the env's own."""
+    agent = agent_for(wire)
+    channels = agent.obs_channels
+    assert channels is not None
+    assert channels <= int(wire.env.observation_shape[-1])
+    state = wire.env.init(jax.random.PRNGKey(0))
+    assert narrow(state.observation, channels).shape[-1] == channels
 
 
 def some_positions(wire: Wire, n: int) -> list[dict[str, Any]]:

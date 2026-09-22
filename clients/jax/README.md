@@ -21,8 +21,11 @@ the same `recurrent_fn`, `gumbel_muzero_policy` with no Gumbel noise, one search
 three for an Epaminondas move, two for a Gess move (source, then destination). Concurrent
 requests from different games are searched together in one batch.
 
-- It refuses a checkpoint whose `env_version` is not the rules its game plays (`epaminondas/1` is
-  pgx v6, `gess/1` is pgx v1); `--allow-rules-mismatch` overrides that.
+- It refuses a checkpoint whose `env_version` is not the rules its game plays (`epaminondas/1`
+  is pgx v6 through v11, which are one set of rules with a growing observation; `gess/1` is pgx
+  v1); `--allow-rules-mismatch` overrides that.
+- Within that family the observation is narrowed to the planes each checkpoint's stem was built
+  for, so models from either side of a plane being added play each other unchanged.
 - Every batch size up to `--max-batch` is compiled before `/health` reports ready, so no
   compilation happens mid-tournament.
 - The simulation count is fixed at startup (`--sims`); the millisecond budget is not used.

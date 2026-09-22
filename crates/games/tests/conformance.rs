@@ -63,9 +63,14 @@ fn read_vectors() -> (Value, Vec<Value>) {
 #[test]
 fn vectors_come_from_the_rules_version_this_engine_implements() {
     let (meta, _) = read_vectors();
-    assert_eq!(
-        meta["pgx_env_version"], "v6",
-        "regenerate the vectors, or port the new rules"
+    // pgx bumps its env version for observation changes too, and those leave the rules alone.
+    // These are the versions whose rules are `epaminondas/1`'s; v11 regenerates these vectors
+    // byte for byte. Keep it in step with `rules_versions` in clients/jax/tdg_jax/wire.py.
+    const RULES_VERSIONS: [&str; 6] = ["v6", "v7", "v8", "v9", "v10", "v11"];
+    let version = meta["pgx_env_version"].as_str().unwrap_or_default();
+    assert!(
+        RULES_VERSIONS.contains(&version),
+        "vectors are from pgx {version}, which is not one of {RULES_VERSIONS:?}:          regenerate the vectors, or port the new rules"
     );
     assert_eq!(
         meta["pgx_rules_dirty"], false,

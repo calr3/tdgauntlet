@@ -40,7 +40,12 @@ class Wire:
 
     game_id: str
     env_id: str
-    rules_version: str
+    #: Every pgx env version whose *rules* are this game id's, newest last. pgx bumps its env
+    #: version for observation changes too, and those leave the rules alone, so one wire id
+    #: stands for a family: `epaminondas/1` is pgx v6, and v7 to v11 only grew the planes the
+    #: network sees. The first is the version the conformance vectors were dumped from, and the
+    #: family is checked by regenerating them - v11 reproduces the v6 vectors byte for byte.
+    rules_versions: tuple[str, ...]
     #: Board characters, indexed by the cell value pgx stores.
     glyphs: str
     #: The move's fields, in the order pgx takes them as actions.
@@ -111,7 +116,7 @@ class Wire:
 class _Epaminondas(Wire):
     game_id = "epaminondas/1"
     env_id = "epaminondas"
-    rules_version = "v6"
+    rules_versions = ("v6", "v7", "v8", "v9", "v10", "v11")
     glyphs = ".WB"
     move_fields = ("lead", "rear", "dest")
 
@@ -153,7 +158,7 @@ class _Epaminondas(Wire):
 class _Gess(Wire):
     game_id = "gess/1"
     env_id = "gess"
-    rules_version = "v1"
+    rules_versions = ("v1",)
     # pgx stores 1 for black, who moves first, and 2 for white: the other way round to Epaminondas.
     glyphs = ".BW"
     move_fields = ("from", "to")

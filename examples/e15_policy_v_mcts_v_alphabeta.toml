@@ -1,0 +1,48 @@
+# E15 (the nine evaluation-feature planes) under full MCTS and as a raw policy,
+# against the Rust alpha-beta, one minimatch per randomised first move.
+#
+# `seed = 1909` is deliberately the seed of az_v_alphabeta_gauntlet.toml, so the
+# twenty openings are the same ones E7 and E14 played. That makes E15's score
+# against alphabeta directly comparable to theirs (-311 and -257) without
+# re-running them, and the alpha-beta client is unchanged.
+#
+# Start both model clients first, in the pgx environment, from the SAME
+# checkpoint - the policy/MCTS comparison is only about the search:
+#   cd ~/calr3gh/tdgauntlet/clients/jax
+#   CKPT=~/calr3gh/pgx/checkpoints/epaminondas_20260921161241/000070.ckpt
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.3 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9340 --policy-only --allow-rules-mismatch --checkpoint $CKPT
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.3 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9341 --sims 256 --allow-rules-mismatch --checkpoint $CKPT
+#
+# --allow-rules-mismatch: the checkpoint records env version v10, the client
+# pins v6. v7 onwards changed only the observation, never the rules, and v10's
+# sixteen planes are what this checkpoint was trained on, so the mismatch is a
+# label. A v5 checkpoint would be a real rules difference - see the note in
+# az_v_alphabeta_gauntlet.toml.
+game = "epaminondas/1"
+seed = 1909
+concurrency = 8          # the alpha-beta client's max_concurrency; the models' is 16
+out = "../results/e15_policy_v_mcts_v_alphabeta.json"
+
+[openings]
+kind = "random"
+plies = 1
+count = 20
+
+[[player]]
+name = "e15-policy"
+url = "http://127.0.0.1:9340"
+# No budget: one network evaluation per decision is all it ever does.
+timeout_ms = 300000
+
+[[player]]
+name = "e15-mcts"
+url = "http://127.0.0.1:9341"
+budget_sims = 256
+timeout_ms = 300000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 1000
