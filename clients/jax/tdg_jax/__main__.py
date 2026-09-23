@@ -30,10 +30,16 @@ def main() -> None:
     ap.add_argument("--port", type=int, default=9001)
     ap.add_argument("--name", default=None, help="defaults to the checkpoint's run and step")
     ap.add_argument("--sims", type=int, default=256, help="MCTS simulations per decision")
-    ap.add_argument(
+    mode = ap.add_mutually_exclusive_group()
+    mode.add_argument(
         "--policy-only",
         action="store_true",
         help="no search: play the legal action with the largest policy logit (ignores --sims)",
+    )
+    mode.add_argument(
+        "--value-only",
+        action="store_true",
+        help="no search: play the move whose successor the value head likes best (ignores --sims)",
     )
     ap.add_argument("--considered", type=int, default=16, help="max_num_considered_actions")
     ap.add_argument("--max-batch", type=int, default=16, help="requests searched together")
@@ -44,6 +50,7 @@ def main() -> None:
     name = args.name or (
         f"jax-{args.checkpoint.parent.name}-{args.checkpoint.stem}"
         + ("-policy" if args.policy_only else "")
+        + ("-value" if args.value_only else "")
     )
     # Which game this is cannot wait for the model: the client has to name it in `identify`.
     # Reading the checkpoint is the quick part of loading it; building the network is not.
@@ -78,6 +85,7 @@ def main() -> None:
                 max_batch=args.max_batch,
                 seed=args.seed,
                 policy_only=args.policy_only,
+                value_only=args.value_only,
             )
             agent.warm_up(lambda size: print(f"{name}: compiled batch {size}", file=sys.stderr))
         except BaseException as e:  # noqa: BLE001

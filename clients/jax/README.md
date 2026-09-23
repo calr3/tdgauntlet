@@ -44,6 +44,25 @@ checkpoint under `--sims` measures what the search adds. `--sims` is ignored and
 the move is deterministic for a given position, and the default client name gains a `-policy`
 suffix. `examples/policy_v_mcts.toml` sets that comparison up.
 
+### `--value-only`
+
+```bash
+JAX_PLATFORMS=cpu python -m tdg_jax --port 9315 --value-only \
+    --checkpoint ~/calr3gh/pgx/checkpoints/<run>/<step>.ckpt
+```
+
+The other half of the network, also without search: every legal move is played out in full (all
+three actions of an Epaminondas move, both of a Gess move) and the value head scores the position
+each one leaves, from the mover's side: the result if the game is over, otherwise the value
+negated, since it is the opponent's turn. The best-scoring move is played, and its score is the
+reported `eval`; `successors` says how many moves were scored. The policy head is never read.
+
+It costs one network evaluation per legal move rather than one per action, so it is slower than
+`--policy-only`: successors are stepped and scored in padded chunks of up to 1024 (all the batched
+requests' together), and every chunk size is compiled before `/health` reports ready. Like
+`--policy-only` it is deterministic, `--sims` is ignored and reported as 0, and the default client
+name gains a `-value` suffix. The two flags cannot be combined.
+
 ## Tests
 
 ```bash

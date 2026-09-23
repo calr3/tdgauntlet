@@ -82,7 +82,7 @@ def find_checkpoints() -> tuple[dict[str, Path], dict[str, str]]:
 
 CHECKPOINTS, NO_CHECKPOINT = find_checkpoints()
 ALLOW_MISMATCH = bool(os.environ.get("TDG_JAX_CHECKPOINT"))
-_AGENTS: dict[tuple[str, bool], Agent] = {}
+_AGENTS: dict[tuple[str, bool, bool], Agent] = {}
 
 
 @pytest.fixture(params=[w.game_id for w in WIRES])
@@ -92,15 +92,16 @@ def wire(request: Any) -> Wire:
     return for_game_id(request.param)
 
 
-def agent_for(wire: Wire, policy_only: bool = False) -> Agent:
-    """One agent per game, kept for the whole session: loading is the slow part."""
-    key = (wire.game_id, policy_only)
+def agent_for(wire: Wire, policy_only: bool = False, value_only: bool = False) -> Agent:
+    """One agent per game and mode, kept for the whole session: loading is the slow part."""
+    key = (wire.game_id, policy_only, value_only)
     if key not in _AGENTS:
         a = Agent(
             CHECKPOINTS[wire.game_id],
             num_simulations=8,
             max_batch=8,
             policy_only=policy_only,
+            value_only=value_only,
             allow_rules_mismatch=ALLOW_MISMATCH,
         )
         a.warm_up()
@@ -225,6 +226,83 @@ def test_policy_only_plays_legal_moves_without_searching(wire: Wire) -> None:
     # No search means no randomness: the same position always gets the same move.
     state = some_positions(wire, 1)[0]
     assert agent.choose(wire.to_pgx(state))[0] == agent.choose(wire.to_pgx(state))[0]
+
+
+def all_moves(wire: Wire, state: Any) -> list[list[int]]:
+    """Every legal move from a position between moves, walked one action at a time."""
+    step = jax.jit(wire.env.step)
+    moves: list[list[int]] = []
+
+    def walk(state: Any, prefix: list[int]) -> None:
+        if len(prefix) == wire.actions_per_move:
+            moves.append(prefix)
+            return
+        for a in np.flatnonzero(np.asarray(state.legal_action_mask)):
+            walk(step(state, jnp.int32(a)), [*prefix, int(a)])
+
+    walk(state, [])
+    return moves
+
+
+def score(agent: Agent, state: Any, move: list[int]) -> float:
+    """What the value head makes of the position a move leaves, for the player who made it."""
+    mover = int(state.current_player)
+    for a in move:
+        state = agent.wire.env.step(state, jnp.int32(a))
+    if bool(state.terminated):
+        return float(state.rewards[mover])
+    params, net_state = agent.model
+    obs = narrow(state.observation[None], agent.obs_channels)
+    (_, value), _ = agent.forward.apply(params, net_state, obs, is_eval=True)
+    return float(value[0]) * (1 if int(state.current_player) == mover else -1)
+
+
+def test_value_only_plays_the_move_the_value_head_likes_best(wire: Wire) -> None:
+    agent = agent_for(wire, value_only=True)
+    rng = np.random.default_rng(2)
+    for state_wire in some_positions(wire, 2):
+        state = wire.to_pgx(state_wire)
+        actions, info = agent.choose(state)
+        assert legal_move(wire, state_wire, actions), (state_wire, actions)
+        assert info["sims"] == 0 and info["value_only"] is True
+        moves = all_moves(wire, state)
+        assert info["successors"] == len(moves)
+        # Its own score is the eval it reports, and no other move scores better.
+        assert score(agent, state, actions) == pytest.approx(info["eval"], abs=1e-4)
+        for i in rng.choice(len(moves), size=min(8, len(moves)), replace=False):
+            assert score(agent, state, moves[i]) <= info["eval"] + 1e-4, moves[i]
+    state = wire.to_pgx(some_positions(wire, 1)[0])
+    assert agent.choose(state)[0] == agent.choose(state)[0]
+
+
+def test_value_only_batches_concurrent_requests(wire: Wire) -> None:
+    agent = agent_for(wire, value_only=True)
+    positions = some_positions(wire, 6)
+    results: dict[int, list[int]] = {}
+    agent.batches.clear()
+
+    def ask(i: int) -> None:
+        results[i] = agent.choose(wire.to_pgx(positions[i]))[0]
+
+    threads = [threading.Thread(target=ask, args=(i,)) for i in range(len(positions))]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    for i, state in enumerate(positions):
+        assert legal_move(wire, state, results[i]), f"request {i} got a move for another position"
+    assert max(agent.batches) > 1, f"requests were never batched: {agent.batches}"
+
+
+def test_policy_only_and_value_only_are_exclusive(wire: Wire) -> None:
+    with pytest.raises(ValueError, match="choose one"):
+        Agent(
+            CHECKPOINTS[wire.game_id],
+            num_simulations=8,
+            policy_only=True,
+            value_only=True,
+            allow_rules_mismatch=ALLOW_MISMATCH,
+        )
 
 
 def test_concurrent_requests_from_different_games_are_batched_and_kept_apart(wire: Wire) -> None:

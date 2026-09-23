@@ -1,0 +1,29 @@
+# The network's two heads, each on its own and without search: one checkpoint played as
+# `--policy-only` (the legal action with the largest policy logit, one stage at a time) and as
+# `--value-only` (every legal move played out, the one whose successor the value head likes best).
+#
+# One minimatch from the normal starting position: two games, colours swapped. Both clients are
+# deterministic, so a second minimatch from the same position would replay the same two games.
+# A 1-1 split here means they are level on this opening, not that the opening decided it.
+#
+# Both clients run on the CPU (the GPU is usually training) and are spawned by the server. Neither
+# takes a budget; `--max-batch 2` keeps warm-up short, since only two games are ever in flight.
+game = "epaminondas/1"
+seed = 1
+concurrency = 2
+out = "../results/policy_v_value.json"
+
+[openings]
+kind = "start"
+
+[[player]]
+name = "policy"
+cmd = "env JAX_PLATFORMS=cpu PYTHONPATH=../clients/jax /home/charlie/.venv/bin/python3 -m tdg_jax --port {port} --max-batch 2 --policy-only --checkpoint /home/charlie/calr3gh/pgx/checkpoints/epaminondas_20260922180057/000276.ckpt"
+timeout_ms = 300000
+startup_timeout_s = 600
+
+[[player]]
+name = "value"
+cmd = "env JAX_PLATFORMS=cpu PYTHONPATH=../clients/jax /home/charlie/.venv/bin/python3 -m tdg_jax --port {port} --max-batch 2 --value-only --checkpoint /home/charlie/calr3gh/pgx/checkpoints/epaminondas_20260922180057/000276.ckpt"
+timeout_ms = 300000
+startup_timeout_s = 600
