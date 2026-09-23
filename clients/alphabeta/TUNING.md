@@ -243,6 +243,19 @@ proven win or loss in the table at any depth, since a proof does not depend on t
 it was found) is worth little at depth 4 — it pays over a game, not inside one search, where a
 proof found at one move is still there at the next.
 
+## Findings, 23 September 2026
+
+### Random tie-breaking costs nothing, and rarely fires
+
+The client now draws between root moves that share the best score (`--seed`, default 0); the
+library search does so only when `Limits::seed` is set, so the in-process tools are unchanged. To
+see ties, the root keeps alpha one below the best score, so an equal move returns its exact score
+instead of failing low. On 6 of the bench positions at depth 4 that cost +0.06% nodes (plain) and
+-0.3% (all features), within noise, and **none of the 6 had a tie**: at evaluation times 100 the
+midgame rarely produces one. Ties come from symmetry (the start position, where every move ties
+with its mirror image) and from equally quick forced wins. The draw depends on the seed and the
+position only, so one process with one seed plays a given position the same way every time.
+
 ## Next steps
 
 1. Confirm the recommended weights at 1 s a move in an HTTP tournament against `--weights pgx`,

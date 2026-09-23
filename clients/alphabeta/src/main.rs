@@ -43,6 +43,12 @@ struct Args {
     /// controls; see TUNING.md.
     #[arg(long, default_value = "plain")]
     search: String,
+    /// Seed for breaking ties: when several moves share the best score, one of them is drawn at
+    /// random. The draw depends on the seed and the position only, so under one seed a position
+    /// always gets the same move; give each run its own seed to vary them. Not used by
+    /// `--search solve`.
+    #[arg(long, default_value_t = 0)]
+    seed: u64,
 }
 
 /// Which search answers a request.
@@ -60,6 +66,7 @@ struct AlphaBeta {
     default_ms: u64,
     max_depth: u32,
     threads: u32,
+    seed: u64,
 }
 
 /// The moves of a principal variation, in this game's notation.
@@ -96,18 +103,20 @@ impl Engine for AlphaBeta {
             deadline: Some(started + think),
             nodes: req.budget.nodes,
             depth: self.max_depth,
+            seed: Some(self.seed),
         };
         let (best, info) = match &self.mode {
             Mode::Heuristic(weights, features) => {
                 let r = search_with(&pos, &self.tt, weights, limits, *features)
                     .ok_or("no legal moves")?;
-                let info = MoveInfo {
+                let mut info = MoveInfo {
                     eval: Some(r.score as f64 / 100.0),
                     depth: Some(r.depth),
                     nodes: Some(r.nodes),
                     pv: pv_json(&pos, &r.pv),
                     ..MoveInfo::default()
                 };
+                info.extra.insert("ties".into(), json!(r.ties));
                 (r.best, info)
             }
             Mode::Solve(features) => {
@@ -160,6 +169,7 @@ async fn main() -> anyhow::Result<()> {
         default_ms: args.default_ms,
         max_depth: args.max_depth,
         threads,
+        seed: args.seed,
     };
     serve(engine, ([127, 0, 0, 1], args.port).into()).await
 }

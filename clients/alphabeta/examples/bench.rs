@@ -45,6 +45,7 @@ fn run(name: &str, features: Features, depth: u32, positions: &[Position]) {
             deadline: None,
             nodes: None,
             depth,
+            seed: None,
         };
         let r = search_with(p, &tt, &w, limits, features).unwrap();
         nodes += r.nodes;

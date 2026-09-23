@@ -56,6 +56,7 @@ fn run(label: &str, positions: &[Position], depth: u32, features: Features) {
             deadline: None,
             nodes: None,
             depth,
+            seed: None,
         };
         let r = solve_with(p, &tt, limits, features).unwrap();
         decided += r.verdict.is_proof() as usize;

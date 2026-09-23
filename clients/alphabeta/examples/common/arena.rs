@@ -59,16 +59,19 @@ impl Engine {
                 deadline: Some(Instant::now() + Duration::from_millis(ms)),
                 nodes: None,
                 depth: 64,
+                seed: None,
             },
             Budget::Nodes(n) => Limits {
                 deadline: None,
                 nodes: Some(n),
                 depth: 64,
+                seed: None,
             },
             Budget::Depth(d) => Limits {
                 deadline: None,
                 nodes: None,
                 depth: d,
+                seed: None,
             },
         };
         match self.solve {

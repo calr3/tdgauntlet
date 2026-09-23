@@ -51,6 +51,7 @@ fn main() {
                 deadline: Some(Instant::now() + Duration::from_millis(ms)),
                 nodes: None,
                 depth: 64,
+                seed: None,
             };
             let r = search_with(p, &tt, &Weights::default(), limits, f).unwrap();
             depth += r.depth;

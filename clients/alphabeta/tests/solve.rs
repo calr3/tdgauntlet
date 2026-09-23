@@ -24,6 +24,7 @@ fn depth(d: u32) -> Limits {
         deadline: None,
         nodes: None,
         depth: d,
+        seed: None,
     }
 }
 
@@ -107,6 +108,7 @@ fn it_respects_the_deadline_and_a_node_budget() {
         deadline: Some(started + Duration::from_millis(100)),
         nodes: None,
         depth: 64,
+        seed: None,
     };
     let r = solve(&Position::start(), &tt, limits).unwrap();
     assert!(started.elapsed() < Duration::from_millis(400));
@@ -117,6 +119,7 @@ fn it_respects_the_deadline_and_a_node_budget() {
             deadline: None,
             nodes: Some(20_000),
             depth: 64,
+            seed: None,
         }
     })
     .unwrap();

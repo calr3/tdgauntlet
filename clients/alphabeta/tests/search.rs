@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 use tdg_alphabeta::eval::Weights;
-use tdg_alphabeta::search::{search, Limits, WIN};
+use tdg_alphabeta::search::{search, search_with, Features, Limits, WIN};
 use tdg_alphabeta::tt::Table;
 use tdg_games::epaminondas::{parse_move, parse_square, Position};
 use tdg_games::Side;
@@ -20,6 +20,14 @@ fn depth(d: u32) -> Limits {
         deadline: None,
         nodes: None,
         depth: d,
+        seed: None,
+    }
+}
+
+fn seeded(d: u32, seed: u64) -> Limits {
+    Limits {
+        seed: Some(seed),
+        ..depth(d)
     }
 }
 
@@ -63,6 +71,7 @@ fn it_respects_the_deadline() {
             deadline: Some(started + Duration::from_millis(ms)),
             nodes: None,
             depth: 64,
+            seed: None,
         };
         let r = search(&Position::start(), &tt, &Weights::default(), limits).unwrap();
         let took = started.elapsed();
@@ -81,6 +90,7 @@ fn it_respects_a_node_budget() {
         deadline: None,
         nodes: Some(20_000),
         depth: 64,
+        seed: None,
     };
     let r = search(
         &Position::start(),
@@ -139,4 +149,58 @@ fn concurrent_searches_sharing_a_table_all_return_legal_moves() {
             });
         }
     });
+}
+
+#[test]
+fn equally_good_moves_are_chosen_between_by_the_seed() {
+    // As above: b12, c12 and d12 all win on the spot, and nothing else does.
+    let p = pos(Side::First, "c11 a3", "n7");
+    let winners = sq("b12 c12 d12");
+    let mut chosen = std::collections::BTreeSet::new();
+    for seed in 0..32 {
+        let r = search(&p, &Table::new(4), &Weights::default(), seeded(3, seed)).unwrap();
+        assert_eq!(r.ties, 3, "seed {seed}");
+        assert!(winners.contains(&(r.best.dest as usize)), "seed {seed}");
+        chosen.insert(r.best);
+    }
+    assert_eq!(
+        chosen.len(),
+        3,
+        "32 seeds should reach every winner: {chosen:?}"
+    );
+    // Without a seed nothing is drawn: the first winner in search order, as before.
+    let r = search(&p, &Table::new(4), &Weights::default(), depth(3)).unwrap();
+    assert_eq!(r.ties, 1);
+}
+
+#[test]
+fn a_seed_always_picks_the_same_move_whatever_the_search_order() {
+    // The start is symmetric left to right, so every move has a mirror image that scores the
+    // same, and the best is always tied.
+    let p = Position::start();
+    let w = Weights::default();
+    let mut chosen = std::collections::BTreeSet::new();
+    for seed in 0..8 {
+        let all = search_with(&p, &Table::new(16), &w, seeded(3, seed), Features::ALL).unwrap();
+        let none = search_with(&p, &Table::new(16), &w, seeded(3, seed), Features::NONE).unwrap();
+        assert!(all.ties >= 2, "the mirror image ties: {}", all.ties);
+        assert_eq!(
+            (all.best, all.score, all.ties),
+            (none.best, none.score, none.ties)
+        );
+        let again = search_with(&p, &Table::new(16), &w, seeded(3, seed), Features::ALL).unwrap();
+        assert_eq!(again.best, all.best);
+        chosen.insert(all.best);
+    }
+    assert!(chosen.len() >= 2, "every seed chose {chosen:?}");
+}
+
+#[test]
+fn a_seed_does_not_change_a_clear_best_move_or_its_score() {
+    let p = pos(Side::First, "c1 c2 c3 h1", "c5 c6 m12 n12");
+    let plain = search(&p, &Table::new(4), &Weights::default(), depth(2)).unwrap();
+    for seed in 0..4 {
+        let r = search(&p, &Table::new(4), &Weights::default(), seeded(2, seed)).unwrap();
+        assert_eq!((r.best, r.score, r.ties), (plain.best, plain.score, 1));
+    }
 }

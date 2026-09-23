@@ -8,7 +8,7 @@
 //! (`cargo run --release -p tdg-alphabeta --example bench`) can measure what each one is worth.
 
 use crate::eval::{evaluate, Weights};
-use crate::tt::{key, Bound, Entry, Table};
+use crate::tt::{exact_key, key, splitmix, Bound, Entry, Table};
 use std::time::Instant;
 use tdg_games::epaminondas::{home_row, Move, Position, N, WIDTH};
 use tdg_games::{Outcome, Side};
@@ -76,6 +76,9 @@ pub struct Limits {
     pub deadline: Option<Instant>,
     pub nodes: Option<u64>,
     pub depth: u32,
+    /// Break ties between equally scored root moves at random, from this seed. `None` plays the
+    /// first of them in search order, as the search always did.
+    pub seed: Option<u64>,
 }
 
 /// How well the search is pruning. `first_move_cutoffs / cutoffs` is the usual measure of move
@@ -98,6 +101,9 @@ pub struct SearchResult {
     pub nodes: u64,
     pub pv: Vec<Move>,
     pub stats: Stats,
+    /// How many root moves shared the best score in the deepest iteration: the number `best`
+    /// was drawn from. Always 1 without a seed, which does not look for ties.
+    pub ties: usize,
 }
 
 struct Search<'a> {
@@ -330,7 +336,12 @@ impl Search<'_> {
         best
     }
 
-    /// One iteration over the root moves within (alpha, beta). `None` if the budget ran out.
+    /// One iteration over the root moves within (alpha, beta): the best score, and every move
+    /// that reached it, in search order. `None` if the budget ran out.
+    ///
+    /// Plain alpha-beta proves a later move no better than the best, not whether it is equal.
+    /// So when ties are wanted, alpha trails the best score by one: a move that equals it then
+    /// comes back with its exact score, and one that is worse still fails low.
     fn root(
         &mut self,
         pos: &Position,
@@ -338,8 +349,9 @@ impl Search<'_> {
         depth: u32,
         mut alpha: i32,
         beta: i32,
-    ) -> Option<(Move, i32)> {
-        let mut best: Option<(Move, i32)> = None;
+    ) -> Option<(i32, Vec<Move>)> {
+        let ties = self.limits.seed.is_some();
+        let mut best: Option<(i32, Vec<Move>)> = None;
         for (i, &m) in root.iter().enumerate() {
             let child = pos.apply(m);
             let score = if i == 0 || !self.features.pvs {
@@ -356,11 +368,15 @@ impl Search<'_> {
             if self.stopped {
                 return None;
             }
-            if best.is_none_or(|(_, b)| score > b) {
-                best = Some((m, score));
-                alpha = alpha.max(score);
-                if alpha >= beta {
-                    break;
+            match &mut best {
+                Some((b, moves)) if ties && score == *b && score > alpha => moves.push(m),
+                Some((b, _)) if score <= *b => {}
+                _ => {
+                    best = Some((score, vec![m]));
+                    if score >= beta {
+                        break;
+                    }
+                    alpha = alpha.max(if ties { score - 1 } else { score });
                 }
             }
         }
@@ -384,6 +400,16 @@ impl Search<'_> {
         }
         out
     }
+}
+
+/// One of the moves tied for best: the first without a seed, and otherwise one drawn from the
+/// seed and the position. The draw is over the moves in a fixed order, not search order, so the
+/// same position gets the same move under the same seed however the search was ordered.
+fn pick(pos: &Position, mut ties: Vec<Move>, seed: Option<u64>) -> Move {
+    let Some(seed) = seed else { return ties[0] };
+    ties.sort_unstable();
+    let mut state = seed ^ exact_key(pos);
+    ties[(splitmix(&mut state) % ties.len() as u64) as usize]
 }
 
 /// Search `pos` until the limits run out; the result is from the deepest complete iteration.
@@ -414,6 +440,7 @@ pub fn search_with(
             nodes: 0,
             pv: vec![first],
             stats: Stats::default(),
+            ties: 1,
         });
     }
     let mut s = Search {
@@ -435,6 +462,7 @@ pub fn search_with(
         nodes: 0,
         pv: vec![root[0]],
         stats: Stats::default(),
+        ties: 1,
     };
 
     for depth in 1..=limits.depth.max(1) {
@@ -445,7 +473,7 @@ pub fn search_with(
                 let (lo, hi) = (result.score - width, result.score + width);
                 match s.root(pos, &root, depth, lo, hi) {
                     None => break None,
-                    Some((m, score)) if score > lo && score < hi => break Some((m, score)),
+                    Some((score, ties)) if score > lo && score < hi => break Some((score, ties)),
                     Some(_) if width >= WIN => break s.root(pos, &root, depth, -INF, INF),
                     Some(_) => width = width.saturating_mul(4),
                 }
@@ -454,7 +482,9 @@ pub fn search_with(
         } else {
             s.root(pos, &root, depth, -INF, INF)
         };
-        let Some((m, score)) = found else { break };
+        let Some((score, ties)) = found else { break };
+        let count = ties.len();
+        let m = pick(pos, ties, limits.seed);
         s.tt.store(
             key(pos),
             Entry {
@@ -471,6 +501,7 @@ pub fn search_with(
             nodes: s.nodes,
             pv: s.pv(pos, m, depth),
             stats: s.stats,
+            ties: count,
         };
         // Search the best move first next time.
         if let Some(i) = root.iter().position(|&r| r == m) {
