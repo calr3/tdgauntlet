@@ -117,6 +117,16 @@ ruff format, mypy and pytest. Run the same before committing.
   tied. That's the check that a search change is only a speed change.
 - Report sample sizes. With ~20-50 counted minimatches the standard error is 7-10 points; say so
   rather than calling a result. Epaminondas has no draws, so every minimatch is +1, -1 or excluded.
+- **`--threads` on `tdg-alphabeta` and `tdg-mcts` is the client's `max_concurrency`, not search
+  parallelism** (`clients/alphabeta/src/main.rs:83`). Each search is single-threaded, so
+  `concurrency = 8` with `--threads 8` uses 8 of the 24 cores, not 64. This was once misread as
+  oversubscription and "fixed" by dropping `concurrency` to 3 - which changed nothing for the
+  engine and cut the *model's* think time from ~5000 ms to 2892 ms, because the JAX client
+  batches whatever requests are in flight. Concurrency is a budget knob for the model client, so
+  keep it fixed across runs you mean to compare.
+- **A gauntlet result without both clocks attached is meaningless.** pgx's E17 scored 84.6%
+  (+296) against the alpha-beta at 5.0 s a move against its 1.0 s. At a comparable budget, E18 -
+  176 Elo stronger than E17 - scored 46.2%, a 7-6 dead heat. The 296 was the time, not the model.
 - Think time is measured from when a client actually receives the request, not from when the
   game started waiting for a free slot on a busy client.
 - Checkpoints record `env_version`; the JAX client refuses a mismatch with v6 unless told to.

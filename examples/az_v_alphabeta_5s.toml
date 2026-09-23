@@ -1,0 +1,49 @@
+# The AlphaZero model against the Rust alpha-beta at a MATCHED 5-second budget:
+# 25 randomised first moves, each played twice with the colours swapped, so 50
+# games. A minimatch split 1-1 is excluded, on the grounds that the opening
+# decided it.
+#
+# Seed 1909 is the seed of az_v_alphabeta_gauntlet.toml, so these are the same
+# openings E7, E14 and E17 have already played.
+#
+# `concurrency = 8`, as the earlier gauntlets used. It was once set to 3 here on
+# the belief that `--threads 8` meant 8 search threads, so 8 concurrent games
+# would put 64 threads on 24 cores. It does not: `--threads` is the client's
+# max_concurrency (clients/alphabeta/src/main.rs:83) and each search is
+# single-threaded, so eight concurrent searches fit 24 cores comfortably. The
+# 813 ms it averaged against a 1000 ms budget was iterative deepening stopping a
+# ply early, not starvation.
+#
+# Concurrency also sets what the *model* gets: the JAX client batches whatever
+# requests are in flight, so at 3 its think time fell to 2892 ms while the
+# engine's rose to 4191. Keep it at 8 so both sides see ~5 s.
+#
+# Per clients/alphabeta/TUNING.md, a timed run must not share the machine with
+# anything else heavy: do not start this while a training run holds the GPU and
+# its CPU-side self-play.
+#
+# Start the model client first, in the pgx environment, with whichever
+# checkpoint is being measured:
+#   cd ~/calr3gh/tdgauntlet/clients/jax
+#   ~/.venv/bin/python3 -m tdg_jax --port 9360 --sims 256 \
+#       --checkpoint ~/calr3gh/pgx/checkpoints/<run>/<step>.ckpt
+game = "epaminondas/1"
+seed = 1909
+concurrency = 8
+out = "../results/az_v_alphabeta_5s.json"
+
+[openings]
+kind = "random"
+plies = 1
+count = 25
+
+[[player]]
+name = "az"
+url = "http://127.0.0.1:9360"
+budget_sims = 256
+timeout_ms = 300000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 5000
