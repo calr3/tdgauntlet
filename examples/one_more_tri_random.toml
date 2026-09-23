@@ -1,0 +1,24 @@
+# Two random clients playing One More Tri (pgx's g_hex), both started by the server.
+#
+# Every game is exactly 20 moves, ten a side, and a total of 0 around the last empty triangle is
+# a draw, so expect a few drawn games and some drawn minimatches. The openings are two random
+# placements, which in this game is most of what varies between one game and the next.
+game = "one-more-tri/1"
+seed = 3
+concurrency = 8
+out = "../results/one_more_tri_random.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 20
+
+[[player]]
+name = "random-a"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100
+
+[[player]]
+name = "random-b"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100

@@ -14,7 +14,8 @@ JAX_PLATFORMS=cpu python -m tdg_jax --port 9313 --sims 256 \
 
 **The checkpoint decides the game.** It records the pgx env it was trained on, and the client
 advertises the one tdgauntlet game that goes with it and nothing else: `epaminondas` becomes
-`epaminondas/1`, `gess` becomes `gess/1`. One process, one checkpoint, one game.
+`epaminondas/1`, `gess` becomes `gess/1`, and `g_hex` becomes `one-more-tri/1`. One process, one
+checkpoint, one game.
 
 The search is `ModelAgent` from `examples/alphazero/interactive_tournament.py`: the same network,
 the same `recurrent_fn`, `gumbel_muzero_policy` with no Gumbel noise, one search per action —
@@ -24,6 +25,11 @@ requests from different games are searched together in one batch.
 - It refuses a checkpoint whose `env_version` is not the rules its game plays (`epaminondas/1`
   is pgx v6 through v11, which are one set of rules with a growing observation; `gess/1` is pgx
   v1); `--allow-rules-mismatch` overrides that.
+- One More Tri's move is a single pgx action (`tri * 10 + tile - 1`), so a move is one search.
+  The g_hex checkpoints predate the current training script: they pickled their config as
+  `__main__.Config`, which `read_checkpoint` maps to pgx's `config.Config`. Their network, the older
+  `az_net` ResNet, has no `stem_conv` to measure, so the observation reaches it unchanged; g_hex
+  has only ever had the one observation.
 - Within that family the observation is narrowed to the planes each checkpoint's stem was built
   for, so models from either side of a plane being added play each other unchanged.
 - Every batch size up to `--max-batch` is compiled before `/health` reports ready, so no

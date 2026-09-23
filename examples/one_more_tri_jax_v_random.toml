@@ -1,0 +1,28 @@
+# A trained One More Tri network (pgx's g_hex) against random play.
+#
+# Start the JAX client yourself, in the pgx environment, first:
+#   cd clients/jax && JAX_PLATFORMS=cpu python -m tdg_jax --port 9431 --sims 64 \
+#       --checkpoint ~/calr3gh/pgx/checkpoints/g_hex_20260504192940/001740.ckpt
+#
+# The checkpoint decides the game, so the client advertises one-more-tri/1 and nothing else.
+# A move is one search, and the game is always 20 moves, so this is quick even on the CPU.
+game = "one-more-tri/1"
+seed = 29
+concurrency = 8
+out = "../results/one_more_tri_jax_v_random.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 16
+
+[[player]]
+name = "jax"
+url = "http://127.0.0.1:9431"
+budget_sims = 64
+timeout_ms = 120000
+
+[[player]]
+name = "random"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100

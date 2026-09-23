@@ -15,6 +15,11 @@ network sees is bit-identical to the one it would have seen in self-play.
 A wire move is pgx's consecutive actions, one per field: `{lead, rear, dest}` in Epaminondas,
 `{from, to}` in Gess. pgx has no move counter in Gess, so `moves` there is the server's alone;
 nothing in the rules reads it, and it only feeds `_step_count`.
+
+One More Tri (pgx's `g_hex`) is the exception on both counts. Its board is a list of signed tile
+values rather than a string, and its move `{tri, tile}` is a single pgx action, `tri * 10 + tile -
+1`; it has no stages, so every state is between moves. pgx also draws which seat plays colour 0
+at random; here the seat is always the colour, as it is in the other two games.
 """
 
 from __future__ import annotations
@@ -26,8 +31,10 @@ import jax.numpy as jnp
 import numpy as np
 import pgx
 import pgx.epaminondas
+import pgx.g_hex
 import pgx.gess
 from pgx._src.games import epaminondas as epaminondas_game
+from pgx._src.games import g_hex as g_hex_game
 from pgx._src.games import gess as gess_game
 
 
@@ -108,8 +115,12 @@ class Wire:
         )
         return state.replace(observation=self._observe(state))
 
+    def between_moves(self, state: Any) -> bool:
+        """Whether a pgx state is at a move boundary, where the wire can describe it."""
+        return int(state._x.stage) == 0
+
     def _between_moves(self, state: Any) -> None:
-        if int(state._x.stage) != 0:
+        if not self.between_moves(state):
             raise ValueError("only a state between moves (stage 0) has a wire encoding")
 
 
@@ -192,9 +203,75 @@ class _Gess(Wire):
         }
 
 
+class _OneMoreTri(Wire):
+    game_id = "one-more-tri/1"
+    env_id = "g_hex"
+    rules_versions = ("v0",)
+    glyphs = ""
+    move_fields = ("tri", "tile")
+    triangles = 21
+    tiles = 10
+
+    def __init__(self) -> None:
+        super().__init__(pgx.g_hex.GHex(), g_hex_game.Game(), pgx.g_hex.State, self.triangles)
+
+    @property
+    def actions_per_move(self) -> int:
+        return 1  # both fields make one action
+
+    def between_moves(self, state: Any) -> bool:
+        return True
+
+    def move_to_actions(self, move: dict[str, Any]) -> list[int]:
+        tri, tile = int(move["tri"]), int(move["tile"])
+        if not (0 <= tri < self.triangles and 1 <= tile <= self.tiles):
+            raise ValueError(f"no triangle {tri} or no tile {tile}")
+        return [tri * self.tiles + tile - 1]
+
+    def actions_to_move(self, actions: list[int]) -> dict[str, int]:
+        if len(actions) != 1:
+            raise ValueError(f"{self.game_id} takes 1 action a move")
+        tri, tile = divmod(int(actions[0]), self.tiles)
+        return {"tri": tri, "tile": tile + 1}
+
+    def to_pgx(self, wire: dict[str, Any]) -> Any:
+        values = [int(v) for v in wire["board"]]
+        if len(values) != self.triangles or any(abs(v) > self.tiles for v in values):
+            raise ValueError(f"board must be {self.triangles} tile values in -10..10")
+        tiles = np.ones((2, self.tiles), dtype=bool)
+        for v in values:
+            if v:
+                colour, index = int(v < 0), abs(v) - 1
+                if not tiles[colour, index]:
+                    raise ValueError(f"tile {v} is on the board twice")
+                tiles[colour, index] = False
+        to_move = self._to_move(wire)
+        placed = sum(1 for v in values if v)
+        if to_move != placed % 2:
+            raise ValueError(f"to_move {to_move} with {placed} tiles placed; black moves first")
+        # pgx pads the board with a 22nd, always-empty triangle for "no neighbour".
+        board = np.zeros(self.triangles + 1, dtype=np.int32)
+        board[: self.triangles] = values
+        x = g_hex_game.GameState(
+            board=jnp.asarray(board),
+            tiles=jnp.asarray(tiles),
+            color=jnp.int32(to_move),
+            winner=jnp.int32(-1),
+        )
+        return self._state(x, to_move, placed)
+
+    def from_pgx(self, state: Any) -> dict[str, Any]:
+        x = state._x
+        return {
+            "board": [int(v) for v in np.asarray(x.board)[: self.triangles]],
+            "to_move": int(x.color),
+        }
+
+
 EPAMINONDAS = _Epaminondas()
 GESS = _Gess()
-WIRES: tuple[Wire, ...] = (EPAMINONDAS, GESS)
+ONE_MORE_TRI = _OneMoreTri()
+WIRES: tuple[Wire, ...] = (EPAMINONDAS, GESS, ONE_MORE_TRI)
 
 
 def for_env_id(env_id: str) -> Wire:

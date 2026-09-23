@@ -9,8 +9,8 @@ asked about many games at once, in any order. That is what lets a client keep so
 in memory (a compiled JAX model, a transposition table) without the tournament having to care.
 
 Positions and moves are opaque JSON tagged with a game id, so the tournament layer knows nothing
-about any particular game. [Epaminondas](games/epaminondas.md) and [Gess](games/gess.md) are the
-two so far.
+about any particular game. [Epaminondas](games/epaminondas.md), [Gess](games/gess.md) and
+[One More Tri](games/one-more-tri.md) are the three so far.
 
 - [`PROTOCOL.md`](PROTOCOL.md) — the wire contract; start here to write a client.
 - [`schema/`](schema/) — JSON Schema for every message.
@@ -32,6 +32,9 @@ cargo build --release
 
 # Gess, which only the game-agnostic clients play so far.
 ./target/release/tdgauntlet run examples/gess_random.toml
+
+# One More Tri, pgx's g_hex: 21 triangles, ten tiles a side.
+./target/release/tdgauntlet run examples/one_more_tri_random.toml
 
 # Check a client you have written before entering it.
 ./target/release/tdgauntlet check http://127.0.0.1:9001
@@ -128,9 +131,11 @@ and what the server did about it, and the standings.
 ## The rules, and pgx
 
 `epaminondas/1` is pgx's Epaminondas at env version **v6** (100-move quiet clock, advancement
-tiebreak, no draws) and `gess/1` is pgx's Gess at **v1**. The Rust engines in `crates/games` are
-independent implementations, held to pgx by `cargo test -p tdg-games --test conformance` and
-`--test gess_conformance`: hundreds to thousands of positions each, every legal move from each,
+tiebreak, no draws), `gess/1` is pgx's Gess at **v1**, and `one-more-tri/1` is pgx's `g_hex` at
+**v0**, one-sided 4-10 adjacency included (see [its rules](games/one-more-tri.md)). The Rust
+engines in `crates/games` are independent implementations, held to pgx by `cargo test -p
+tdg-games --test conformance`, `--test gess_conformance` and `--test one_more_tri_conformance`:
+hundreds to thousands of positions each, every legal move from each,
 every successor state and outcome, and perft counts, all dumped from pgx.
 
 When pgx's rules change, regenerate the vectors in the pgx environment and commit them:
@@ -139,6 +144,7 @@ When pgx's rules change, regenerate the vectors in the pgx environment and commi
 JAX_PLATFORMS=cpu python conformance/dump_pgx.py      # Epaminondas positions and perft (slow: perft(3))
 JAX_PLATFORMS=cpu python conformance/dump_eval.py     # evaluator reference for clients/alphabeta
 JAX_PLATFORMS=cpu python conformance/dump_gess.py     # Gess positions and perft
+JAX_PLATFORMS=cpu python conformance/dump_one_more_tri.py   # One More Tri (g_hex), ~20 s
 ```
 
 ## Development

@@ -66,12 +66,29 @@ class Checkpoint:
     wire: Wire
 
 
+class _Unpickler(pickle.Unpickler):
+    """Older checkpoints, the g_hex ones among them, were written by a training script that
+    defined `Config` itself, so they name it `__main__.Config`. That is pgx's `config.Config`."""
+
+    def find_class(self, module: str, name: str) -> Any:
+        if (module, name) == ("__main__", "Config"):
+            module = "config"
+        return super().find_class(module, name)
+
+
+def read_checkpoint(path: Path) -> dict[str, Any]:
+    """A checkpoint's contents, whichever script pickled its config."""
+    _use_alphazero_modules()
+    with open(path, "rb") as f:
+        ckpt: dict[str, Any] = _Unpickler(f).load()
+    return ckpt
+
+
 def load_checkpoint(path: Path, allow_rules_mismatch: bool = False) -> Checkpoint:
     _use_alphazero_modules()
     from config import Config  # type: ignore[import-not-found]
 
-    with open(path, "rb") as f:
-        ckpt = pickle.load(f)
+    ckpt = read_checkpoint(path)
     env_id = ckpt.get("env_id", "epaminondas")
     try:
         wire = for_env_id(env_id)

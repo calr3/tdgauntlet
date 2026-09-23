@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/one-more-tri_1.move.schema.json",
+  "title": "one-more-tri/1 move",
+  "type": "object",
+  "required": ["tri", "tile"],
+  "properties": {
+    "tri": {
+      "type": "integer", "minimum": 0, "maximum": 20,
+      "description": "The empty triangle the tile goes on, in pgx's numbering."
+    },
+    "tile": {
+      "type": "integer", "minimum": 1, "maximum": 10,
+      "description": "The value of the tile, one the mover still holds."
+    },
+    "san": { "type": "string", "description": "Optional, ignored on input." }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/one-more-tri_1.state.schema.json",
+  "title": "one-more-tri/1 state",
+  "type": "object",
+  "required": [
+    "board",
+    "to_move"
+  ],
+  "properties": {
+    "board": {
+      "type": "array",
+      "description": "The 21 triangles in pgx's numbering: a tile value, positive for black, negative for white, or 0 for empty. Each side's tiles 1-10 appear at most once each; the schema cannot say that, the server checks it.",
+      "items": {
+        "type": "integer",
+        "minimum": -10,
+        "maximum": 10
+      },
+      "minItems": 21,
+      "maxItems": 21
+    },
+    "to_move": {
+      "enum": [
+        0,
+        1
+      ],
+      "description": "0 black, 1 white. Black moves first and nobody passes, so this must agree with the tile counts."
+    }
+  },
+  "description": "pgx g_hex env v0."
+}

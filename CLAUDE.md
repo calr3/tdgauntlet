@@ -8,9 +8,9 @@ have already been made once.
 A tournament server for board-game agents. The Rust server owns the rules, clock, adjudication
 and score; clients answer "what is your move in this position?" over HTTP and keep **no per-game
 state**. Read `README.md` for the overview and `PROTOCOL.md` for the wire contract. The games are
-Epaminondas and Gess. Gess is played by the game-agnostic clients (`random`, `keyboard`, `web`,
-the Python SDK) and by `clients/jax`, whose checkpoint decides its game; `alphabeta` and `mcts`
-are Epaminondas only.
+Epaminondas, Gess and One More Tri (pgx's `g_hex`). Gess and One More Tri are played by the
+game-agnostic clients (`random`, `keyboard`, `web`, the Python SDK) and by `clients/jax`, whose
+checkpoint decides its game; `alphabeta` and `mcts` are Epaminondas only.
 
 It sits next to `~/calr3gh/pgx` (JAX training, the reference rules, checkpoints) and replaces
 pgx's `examples/alphazero/interactive_tournament.py`. Nothing here should ever edit pgx.
@@ -72,6 +72,12 @@ ruff format, mypy and pytest. Run the same before committing.
   what makes a game long enough to reach a capture or the 20-move quiet clock.
 - Gess regenerates in about a minute: `JAX_PLATFORMS=cpu ~/.venv/bin/python3
   conformance/dump_gess.py`. Its `moves` counter is tdgauntlet's own; pgx's state has none.
+- `one-more-tri/1` is pgx's **`g_hex` at v0**, and keeps its one quirk: `_ADJ` lists 10 as a
+  neighbour of 4 but not 4 of 10. The user chose to match pgx (the checkpoints were trained on
+  it); don't "fix" it here, since the conformance gate would rightly fail. A correction is a new
+  version, after pgx changes. `dump_one_more_tri.py` regenerates in ~20 s, and half its games
+  keep 4 and 10 empty to the end so that quirk stays covered. pgx randomises which seat plays
+  colour 0; tdgauntlet does not need to, since minimatches swap colours.
 - Anything that walks a random game to a fixed depth has to cope with a game that ends first.
   `check.rs` used to retry the same depth for ever and hung on Gess.
 - pgx's `EpaminondasCli` labels board row 0 as rank 12, contradicting its own docstring. Here,

@@ -27,15 +27,22 @@ CONFORMANCE = Path(__file__).resolve().parents[3] / "conformance"
 DIGEST_FIELDS = {
     "epaminondas/1": ("board", "to_move", "moves", "quiet_moves", "last_capturer"),
     "gess/1": ("board", "to_move", "moves", "quiet_moves"),
+    "one-more-tri/1": ("board", "to_move"),
 }
-VECTORS = {"epaminondas/1": "epaminondas.jsonl.gz", "gess/1": "gess.jsonl.gz"}
+VECTORS = {
+    "epaminondas/1": "epaminondas.jsonl.gz",
+    "gess/1": "gess.jsonl.gz",
+    "one-more-tri/1": "one_more_tri.jsonl.gz",
+}
 GAME_IDS = [w.game_id for w in WIRES]
 #: `_x` fields that mean nothing between moves, so the wire does not carry them. Gess leaves the
 #: last move's source in place; `test_a_stale_gess_source_is_invisible` is why that is harmless.
-SCRATCH = {"epaminondas/1": (), "gess/1": ("source",)}
+SCRATCH = {"epaminondas/1": (), "gess/1": ("source",), "one-more-tri/1": ()}
 #: Games to walk, and the least move boundaries that must produce. Random Gess is short: a piece
-#: lifted from around your own ring destroys it and loses on the spot.
-WALKS = {"epaminondas/1": (4, 100), "gess/1": (20, 30)}
+#: lifted from around your own ring destroys it and loses on the spot. One More Tri is always 20.
+WALKS = {"epaminondas/1": (4, 100), "gess/1": (20, 30), "one-more-tri/1": (4, 80)}
+#: Moves `test_moves_step_pgx_to_the_servers_successor` must check; the vector sets differ in size.
+STEPPED = {"epaminondas/1": 2000, "gess/1": 1500, "one-more-tri/1": 1000}
 
 
 @pytest.fixture(params=GAME_IDS)
@@ -50,7 +57,11 @@ def vectors(wire: Wire) -> list[dict[str, Any]]:
 
 def digest(wire: Wire, w: dict[str, Any]) -> str:
     """The conformance suite's successor digest (FNV-1a over a canonical rendering)."""
-    text = "|".join(str(w[f]) for f in DIGEST_FIELDS[wire.game_id])
+
+    def field(v: Any) -> str:
+        return ",".join(str(x) for x in v) if isinstance(v, list) else str(v)
+
+    text = "|".join(field(w[f]) for f in DIGEST_FIELDS[wire.game_id])
     h = 0x811C9DC5
     for b in text.encode():
         h = ((h ^ b) * 0x01000193) & 0xFFFFFFFF
@@ -78,9 +89,12 @@ def test_rebuilt_states_match_states_pgx_reached_itself(wire: Wire) -> None:
     checked = 0
     for game in range(games):
         state = wire.env.init(jax.random.PRNGKey(game))
+        # The wire's seat is the colour. pgx draws g_hex's at random, which changes whose rewards
+        # are whose but not the game; the other two games always start with seat 0 anyway.
+        state = state.replace(current_player=state._x.color)
         moves = 0
         while not bool(state.terminated) and moves < 60:
-            if int(state._x.stage) == 0:
+            if wire.between_moves(state):
                 assert_same_state(wire, wire.to_pgx(wire.from_pgx(state)), state)
                 checked += 1
                 moves += 1
@@ -119,7 +133,9 @@ def test_moves_step_pgx_to_the_servers_successor(wire: Wire) -> None:
     vstep = jax.jit(jax.vmap(wire.env.step))
     checked = 0
     for r in [r for r in vectors(wire) if "moves" in r][::60]:
-        moves = np.array(r["moves"])
+        moves = np.array(
+            [wire.move_to_actions(dict(zip(wire.move_fields, m, strict=True))) for m in r["moves"]]
+        )
         n = len(moves)
         if n == 0:
             continue
@@ -137,8 +153,7 @@ def test_moves_step_pgx_to_the_servers_successor(wire: Wire) -> None:
             got = wire.from_pgx(jax.tree_util.tree_map(lambda x, i=i: x[i], batch))
             assert digest(wire, got) == r["successors"][i], f"{moves[i]} from {r['state']}"
             checked += 1
-    # The two games' vector sets are different sizes; both check a few thousand moves.
-    assert checked > (2000 if wire.game_id == "epaminondas/1" else 1500)
+    assert checked > STEPPED[wire.game_id]
 
 
 def test_move_actions_round_trip() -> None:
@@ -153,6 +168,13 @@ def test_move_actions_round_trip() -> None:
     assert gess.actions_to_move([126, 166]) == {"from": 126, "to": 166}
     with pytest.raises(ValueError, match="2 actions"):
         gess.actions_to_move([126, 166, 3])
+    tri = for_game_id("one-more-tri/1")
+    # pgx's own encoding: `black(tile, triangle)` in pgx/g_hex.py.
+    assert tri.move_to_actions({"tri": 13, "tile": 7, "san": "7 on 13"}) == [136]
+    assert tri.actions_to_move([136]) == {"tri": 13, "tile": 7}
+    assert tri.actions_to_move([209]) == {"tri": 20, "tile": 10}
+    with pytest.raises(ValueError, match="1 action"):
+        tri.actions_to_move([13, 6])
 
 
 def epaminondas_state(**changes: Any) -> dict[str, Any]:
@@ -164,6 +186,10 @@ def epaminondas_state(**changes: Any) -> dict[str, Any]:
         "last_capturer": -1,
     }
     return {**base, **changes}
+
+
+def tri_state(**changes: Any) -> dict[str, Any]:
+    return {**{"board": [0] * 21, "to_move": 0}, **changes}
 
 
 def gess_state(**changes: Any) -> dict[str, Any]:
@@ -183,6 +209,11 @@ def gess_state(**changes: Any) -> dict[str, Any]:
         ("gess/1", gess_state(board="." * 168)),
         ("gess/1", gess_state(to_move=2)),
         ("gess/1", {k: v for k, v in gess_state().items() if k != "quiet_moves"}),
+        ("one-more-tri/1", tri_state(board=[0] * 20)),
+        ("one-more-tri/1", tri_state(board=[11] + [0] * 20)),
+        ("one-more-tri/1", tri_state(board=[3, 3] + [0] * 19, to_move=0)),
+        ("one-more-tri/1", tri_state(to_move=1)),
+        ("one-more-tri/1", {"board": [0] * 21}),
     ],
 )
 def test_malformed_states_are_rejected(game_id: str, bad: dict[str, Any]) -> None:

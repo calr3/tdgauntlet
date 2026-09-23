@@ -207,6 +207,49 @@ fn gess_doc_examples_match_their_schemas() {
 }
 
 #[test]
+fn one_more_tri_doc_examples_match_their_schemas() {
+    let doc = std::fs::read_to_string(repo_root().join("games/one-more-tri.md")).unwrap();
+    let (state, mv) = (
+        compile("one-more-tri_1.state.schema.json"),
+        compile("one-more-tri_1.move.schema.json"),
+    );
+    let mut seen = (false, false);
+    for value in json_blocks(&doc) {
+        if value.get("board").is_some() {
+            assert_valid(&state, &value, "one-more-tri state example");
+            seen.0 = true;
+        } else {
+            assert_valid(&mv, &value, "one-more-tri move example");
+            seen.1 = true;
+        }
+    }
+    assert_eq!(seen, (true, true));
+    let empty = serde_json::json!(vec![0; 21]);
+    assert_valid(
+        &state,
+        &serde_json::json!({"board": empty, "to_move": 0}),
+        "the empty board",
+    );
+    for (board, why) in [
+        (serde_json::json!(vec![0; 20]), "20 triangles"),
+        (serde_json::json!(vec![11; 21]), "a tile of 11"),
+    ] {
+        assert_invalid(
+            &state,
+            &serde_json::json!({"board": board, "to_move": 0}),
+            why,
+        );
+    }
+    for (value, why) in [
+        (serde_json::json!({"tri": 21, "tile": 3}), "triangle 21"),
+        (serde_json::json!({"tri": 3, "tile": 0}), "tile 0"),
+        (serde_json::json!({"tri": 3}), "no tile"),
+    ] {
+        assert_invalid(&mv, &value, why);
+    }
+}
+
+#[test]
 fn schemas_reject_what_the_rust_types_reject() {
     let request = compile("move_request.schema.json");
     let base = serde_json::json!({

@@ -26,6 +26,7 @@ import jax.numpy as jnp  # noqa: E402
 import numpy as np  # noqa: E402
 from tdg_jax.agent import (  # noqa: E402
     Agent,
+    _Unpickler,
     alphazero_dir,
     load_checkpoint,
     narrow,
@@ -41,7 +42,7 @@ def read_meta(path: Path) -> dict[str, Any]:
     sys.path.insert(0, str(alphazero_dir()))
     try:
         with open(path, "rb") as f:
-            meta: dict[str, Any] = pickle.load(f)
+            meta: dict[str, Any] = _Unpickler(f).load()
         return meta
     finally:
         sys.path.remove(str(alphazero_dir()))
@@ -64,7 +65,11 @@ def find_checkpoints() -> tuple[dict[str, Path], dict[str, str]]:
     why: dict[str, str] = {}
     root = Path.home() / "calr3gh" / "pgx" / "checkpoints"
     for wire in WIRES:
-        runs = sorted(root.glob(f"{wire.env_id}_*"), reverse=True)
+        # `g_hex_*` must not pick up `g_hex2_*`: a run is the env id and a timestamp.
+        runs = sorted(
+            (r for r in root.glob(f"{wire.env_id}_*") if r.name[len(wire.env_id) + 1 :].isdigit()),
+            reverse=True,
+        )
         newest = next((c for run in runs for c in sorted(run.glob("*.ckpt"), reverse=True)), None)
         if newest is None:
             why[wire.game_id] = f"no {wire.env_id} checkpoint under {root}"
@@ -162,22 +167,37 @@ def test_stem_inputs_reads_the_stem_and_narrow_drops_the_rest() -> None:
     np.testing.assert_array_equal(narrow(obs, None), obs)
 
 
+#: Games whose checkpoints use pgx's older `az_net` ResNet, which has no `stem_conv` to measure.
+#: Their envs have only ever had one observation, so the planes pass through unchanged.
+UNMEASURED = {"one-more-tri/1"}
+
+
 def test_a_checkpoints_plane_count_is_measured_against_its_own_architecture(wire: Wire) -> None:
     """A network may feed its stem more than the observation - GessFormer adds an is_border
     plane - so the count has to come from the gap against the same architecture built here, not
     from the stem's width alone. A current checkpoint was trained on the env's own planes."""
     agent = agent_for(wire)
-    assert agent.obs_channels == int(wire.env.observation_shape[-1])
+    expected = None if wire.game_id in UNMEASURED else int(wire.env.observation_shape[-1])
+    assert agent.obs_channels == expected
 
 
 def test_the_agent_is_fed_the_planes_its_checkpoint_was_trained_on(wire: Wire) -> None:
     """Whatever the checkpoint's vintage, what reaches the network has the channel count its
-    stem was built for - which for a current checkpoint is the env's own."""
+    stem was built for - which for a current checkpoint is the env's own. Where there is no stem
+    to read, the env's own planes go through untouched, and the network must take them."""
     agent = agent_for(wire)
     channels = agent.obs_channels
-    assert channels is not None
-    assert channels <= int(wire.env.observation_shape[-1])
     state = wire.env.init(jax.random.PRNGKey(0))
+    if channels is None:
+        assert wire.game_id in UNMEASURED
+        assert narrow(state.observation, None) is state.observation
+        params, net_state = agent.model
+        (logits, value), _ = agent.forward.apply(
+            params, net_state, state.observation[None], is_eval=True
+        )
+        assert logits.shape == (1, wire.env.num_actions) and value.shape == (1,)
+        return
+    assert channels <= int(wire.env.observation_shape[-1])
     assert narrow(state.observation, channels).shape[-1] == channels
 
 
@@ -189,7 +209,7 @@ def some_positions(wire: Wire, n: int) -> list[dict[str, Any]]:
     for game in range(100):
         state = wire.env.init(jax.random.PRNGKey(game))
         while len(out) < n and not bool(state.terminated):
-            if int(state._x.stage) == 0:
+            if wire.between_moves(state):
                 out.append(wire.from_pgx(state))
             legal = np.flatnonzero(np.asarray(state.legal_action_mask))
             state = step(state, jnp.int32(rng.choice(legal)))
@@ -204,7 +224,7 @@ def legal_move(wire: Wire, state_wire: dict[str, Any], actions: list[int]) -> bo
         if not bool(state.legal_action_mask[a]):
             return False
         state = wire.env.step(state, jnp.int32(a))
-    return int(state._x.stage) == 0
+    return wire.between_moves(state)
 
 
 def test_it_plays_legal_moves(wire: Wire) -> None:
