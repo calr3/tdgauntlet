@@ -1,0 +1,80 @@
+# E21 against the Rust alpha-beta at three budgets each: ~0.1 s, ~1 s and ~10 s
+# a move. A full round robin over the six, so as well as model-vs-engine at each
+# budget it measures each engine's own strength-per-10x-of-thinking-time (az0.1
+# v az1 v az10, and the same for alphabeta) - the slope that says what buying
+# more compute is actually worth.
+#
+# SIZING. Summed over all 15 pairings, one opening is 2 games x ~46 moves a side
+# x 111 s of combined budget = ~10,200 s of sequential play. The model that
+# produced that figure underestimated the observed E18 gauntlet by ~30%, so with
+# that correction and `concurrency = 4` an opening costs ~55 min of wall clock.
+# `count = 10` therefore targets ~9-10 hours: 150 minimatches, 300 games.
+#
+# With ~48% of minimatches historically excluded as 1-1, expect ~5 counted
+# minimatches per pairing - far too few to rank two neighbouring budgets against
+# each other. The Elo fit pools all 15 pairings, so the overall ladder is much
+# better determined than any single cell of it. Read the fit, not the cells.
+#
+# The model's budget is a simulation count fixed at startup, not a clock, so the
+# counts were MEASURED, not predicted: 16 sims = 0.133 s a move, 128 = 1.22 s,
+# 896 = 14.24 s (batch 1, warm). Refitting on those gives t ~ 0.00497 * s^1.161,
+# so the top rung is 700 sims rather than 896 - the first estimate was 42% over,
+# which on the dominant rung is ~3 hours of tournament.
+#
+# The ENGINE's clocks are then set to the model's measured times (130 ms, 1200
+# ms, 10 s) rather than to round numbers, so each rung is a like-for-like
+# comparison. Batching in-tournament still shifts the model's times, so `think
+# ms` in the result is the ground truth - read it before the standings.
+#
+# Start the three model clients first, in the pgx environment. Three JAX
+# processes share one 16 GB GPU, so each is capped:
+#   cd ~/calr3gh/tdgauntlet/clients/jax
+#   CKPT=~/calr3gh/pgx/checkpoints/epaminondas_20260922180057/000405.ckpt
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.25 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9401 --sims 16  --max-batch 4 --checkpoint $CKPT
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.25 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9402 --sims 128 --max-batch 4 --checkpoint $CKPT
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.25 ~/.venv/bin/python3 -m tdg_jax \
+#       --port 9403 --sims 896 --max-batch 4 --checkpoint $CKPT
+game = "epaminondas/1"
+seed = 1909
+concurrency = 4
+out = "../results/e21_budget_ladder.json"
+
+[openings]
+kind = "random"
+plies = 1
+count = 10
+
+[[player]]
+name = "az-0.1s"
+url = "http://127.0.0.1:9401"
+budget_sims = 16
+timeout_ms = 600000
+
+[[player]]
+name = "az-1s"
+url = "http://127.0.0.1:9402"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "az-10s"
+url = "http://127.0.0.1:9403"
+budget_sims = 700
+timeout_ms = 600000
+
+[[player]]
+name = "ab-0.1s"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 130
+
+[[player]]
+name = "ab-1s"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 1200
+
+[[player]]
+name = "ab-10s"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 10000

@@ -1,0 +1,37 @@
+# One minimatch from the real starting position at ~30 seconds a move: two
+# games, the same opening with the colours swapped. No `count`, no randomised
+# opening - `kind = "start"` is the game's normal initial position, so this is
+# the pure head-to-head with nothing decided by a random first move.
+#
+# A minimatch split 1-1 is normally excluded as "the opening decided it"; here
+# there is only one opening, so a 1-1 simply means they are level on it.
+#
+# The two sides take different kinds of budget, which is unavoidable: the engine
+# takes milliseconds, the model a simulation count fixed at startup. The count
+# was calibrated by measurement, not extrapolation, because search time is NOT
+# linear in simulations: 512 sims took 5.53 s a move and 2816 took 41.2 s, a
+# power law of about s^1.18 (tree work grows with tree size; a move is three
+# searches, one per stage). Solving that for 30 s gives ~2150 sims.
+#
+# Start the client with `--max-batch 2`: warming batch shapes 4, 8 and 16 at
+# this simulation count takes many minutes and this match never uses them.
+#
+# The reported `think ms` is what actually happened - read it before the result.
+game = "epaminondas/1"
+seed = 1909
+concurrency = 2          # both games at once; there are only two
+out = "../results/e18_v_alphabeta_30s_start.json"
+
+[openings]
+kind = "start"
+
+[[player]]
+name = "e18"
+url = "http://127.0.0.1:9373"
+budget_sims = 2150
+timeout_ms = 600000
+
+[[player]]
+name = "alphabeta"
+cmd = "../target/release/tdg-alphabeta --port {port} --threads 8 --hash-mb 256"
+budget_ms = 30000
