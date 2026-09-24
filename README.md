@@ -9,8 +9,8 @@ asked about many games at once, in any order. That is what lets a client keep so
 in memory (a compiled JAX model, a transposition table) without the tournament having to care.
 
 Positions and moves are opaque JSON tagged with a game id, so the tournament layer knows nothing
-about any particular game. [Epaminondas](games/epaminondas.md), [Gess](games/gess.md) and
-[One More Tri](games/one-more-tri.md) are the three so far.
+about any particular game. [Epaminondas](games/epaminondas.md), [Gess](games/gess.md),
+[One More Tri](games/one-more-tri.md) and [Go](games/go-19x19.md) (19 x 19) are the four so far.
 
 - [`PROTOCOL.md`](PROTOCOL.md) — the wire contract; start here to write a client.
 - [`schema/`](schema/) — JSON Schema for every message.
@@ -35,6 +35,9 @@ cargo build --release
 
 # One More Tri, pgx's g_hex: 21 triangles, ten tiles a side.
 ./target/release/tdgauntlet run examples/one_more_tri_random.toml
+
+# Go on 19 x 19, pgx's go_19x19: area scoring, komi 7.5, and a repeated position loses.
+./target/release/tdgauntlet run examples/go_random.toml
 
 # Check a client you have written before entering it.
 ./target/release/tdgauntlet check http://127.0.0.1:9001
@@ -131,10 +134,12 @@ and what the server did about it, and the standings.
 ## The rules, and pgx
 
 `epaminondas/1` is pgx's Epaminondas at env version **v6** (100-move quiet clock, advancement
-tiebreak, no draws), `gess/1` is pgx's Gess at **v1**, and `one-more-tri/1` is pgx's `g_hex` at
-**v1** (see [its rules](games/one-more-tri.md)). The Rust
+tiebreak, no draws), `gess/1` is pgx's Gess at **v1**, `one-more-tri/1` is pgx's `g_hex` at
+**v1** (see [its rules](games/one-more-tri.md)), and `go-19x19/1` is pgx's `go_19x19` at **v1**
+(see [its rules](games/go-19x19.md): superko loses rather than being barred). The Rust
 engines in `crates/games` are independent implementations, held to pgx by `cargo test -p
-tdg-games --test conformance`, `--test gess_conformance` and `--test one_more_tri_conformance`:
+tdg-games --test conformance`, `--test gess_conformance`, `--test one_more_tri_conformance` and
+`--test go_conformance`:
 hundreds to thousands of positions each, every legal move from each,
 every successor state and outcome, and perft counts, all dumped from pgx.
 
@@ -145,6 +150,7 @@ JAX_PLATFORMS=cpu python conformance/dump_pgx.py      # Epaminondas positions an
 JAX_PLATFORMS=cpu python conformance/dump_eval.py     # evaluator reference for clients/alphabeta
 JAX_PLATFORMS=cpu python conformance/dump_gess.py     # Gess positions and perft
 JAX_PLATFORMS=cpu python conformance/dump_one_more_tri.py   # One More Tri (g_hex), ~20 s
+JAX_PLATFORMS=cpu python conformance/dump_go.py       # Go (go_19x19), ~15 min
 ```
 
 ## Development

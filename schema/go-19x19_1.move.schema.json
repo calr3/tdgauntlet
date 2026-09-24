@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/go-19x19_1.move.schema.json",
+  "title": "go-19x19/1 move",
+  "description": "A stone on a point, or a pass.",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["point"],
+      "properties": {
+        "point": {
+          "type": "integer", "minimum": 0, "maximum": 360,
+          "description": "The empty point to play on, row * 19 + col; 0 is A1."
+        },
+        "pass": { "const": false },
+        "san": { "type": "string", "description": "Optional, ignored on input." }
+      }
+    },
+    {
+      "type": "object",
+      "required": ["pass"],
+      "properties": {
+        "pass": { "const": true },
+        "san": { "type": "string", "description": "Optional, ignored on input." }
+      },
+      "not": { "required": ["point"] }
+    }
+  ]
+}

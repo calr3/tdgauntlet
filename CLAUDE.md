@@ -8,9 +8,10 @@ have already been made once.
 A tournament server for board-game agents. The Rust server owns the rules, clock, adjudication
 and score; clients answer "what is your move in this position?" over HTTP and keep **no per-game
 state**. Read `README.md` for the overview and `PROTOCOL.md` for the wire contract. The games are
-Epaminondas, Gess and One More Tri (pgx's `g_hex`). Gess and One More Tri are played by the
-game-agnostic clients (`random`, `keyboard`, `web`, the Python SDK) and by `clients/jax`, whose
-checkpoint decides its game; `alphabeta` and `mcts` are Epaminondas only.
+Epaminondas, Gess, One More Tri (pgx's `g_hex`) and Go 19 x 19 (pgx's `go_19x19`). Gess and One
+More Tri are played by the game-agnostic clients (`random`, `keyboard`, `web`, the Python SDK) and
+by `clients/jax`, whose checkpoint decides its game; Go by the game-agnostic clients only (there
+is no 19 x 19 checkpoint yet); `alphabeta` and `mcts` are Epaminondas only.
 
 It sits next to `~/calr3gh/pgx` (JAX training, the reference rules, checkpoints) and replaces
 pgx's `examples/alphazero/interactive_tournament.py`. Nothing here should ever edit pgx.
@@ -78,6 +79,15 @@ ruff format, mypy and pytest. Run the same before committing.
   regenerates in ~20 s, and half its games keep 4 and 10 empty to the end so that edge stays
   covered. pgx randomises which seat plays
   colour 0; tdgauntlet does not need to, since minimatches swap colours.
+- `go-19x19/1` is pgx's **`go_19x19` at v1**. Its rules are not a human ruleset: a move that
+  repeats any earlier position is *legal* and loses on the spot, the game stops at move 722
+  whatever the position, and an empty area touching neither colour counts for both. The wire
+  state carries the whole move history, since superko needs it; the server replays it and
+  checks `board`, `to_move` and `ko` against it. `dump_go.py` takes ~15 minutes (a random 19 x 19
+  game is ~1 minute of pgx) and stores each game as its actions plus per-position digests, since
+  361 successors a position would not fit otherwise. Random play reaches superko only now and
+  then (twice in the committed vectors, both times a white win), so two scripted double-ko games
+  make sure a repeat by each side is covered; keep them.
 - Anything that walks a random game to a fixed depth has to cope with a game that ends first.
   `check.rs` used to retry the same depth for ever and hung on Gess.
 - pgx's `EpaminondasCli` labels board row 0 as rank 12, contradicting its own docstring. Here,

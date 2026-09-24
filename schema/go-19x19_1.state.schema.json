@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/go-19x19_1.state.schema.json",
+  "title": "go-19x19/1 state",
+  "description": "pgx go_19x19 env v1. The history is the state; the server replays it and checks the other fields against it, which the schema cannot.",
+  "type": "object",
+  "required": ["board", "to_move", "ko", "history"],
+  "properties": {
+    "board": {
+      "type": "array",
+      "description": "The 361 points, row * 19 + col, rank 1 first: 1 black, -1 white, 0 empty.",
+      "items": { "enum": [-1, 0, 1] },
+      "minItems": 361,
+      "maxItems": 361
+    },
+    "to_move": { "enum": [0, 1], "description": "0 black, 1 white." },
+    "ko": {
+      "type": ["integer", "null"], "minimum": 0, "maximum": 360,
+      "description": "The point the side to move may not play on, having just lost a ko there."
+    },
+    "history": {
+      "type": "array",
+      "description": "Every move since the empty board, as pgx actions: a point 0-360, or 361 for a pass.",
+      "items": { "type": "integer", "minimum": 0, "maximum": 361 },
+      "maxItems": 722
+    }
+  }
+}

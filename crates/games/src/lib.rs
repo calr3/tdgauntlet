@@ -7,6 +7,7 @@
 
 pub mod epaminondas;
 pub mod gess;
+pub mod go;
 pub mod one_more_tri;
 
 use serde_json::Value;
@@ -152,11 +153,12 @@ pub fn by_id(id: &str) -> Option<Arc<dyn DynGame>> {
         epaminondas::ID => Some(Arc::new(epaminondas::Epaminondas)),
         gess::ID => Some(Arc::new(gess::Gess)),
         one_more_tri::ID => Some(Arc::new(one_more_tri::OneMoreTri)),
+        go::ID => Some(Arc::new(go::Go)),
         _ => None,
     }
 }
 
 /// Every game this build knows.
 pub fn all_ids() -> &'static [&'static str] {
-    &[epaminondas::ID, gess::ID, one_more_tri::ID]
+    &[epaminondas::ID, gess::ID, one_more_tri::ID, go::ID]
 }

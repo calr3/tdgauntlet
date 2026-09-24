@@ -2,7 +2,7 @@
 //! the start of any game this build knows. The game defaults to `epaminondas/1`.
 
 use std::time::Instant;
-use tdg_games::{epaminondas::Epaminondas, gess::Gess, one_more_tri::OneMoreTri, Game};
+use tdg_games::{epaminondas::Epaminondas, gess::Gess, go::Go, one_more_tri::OneMoreTri, Game};
 
 fn perft<G: Game>(g: &G, pos: &G::State, depth: u32) -> u64 {
     if depth == 0 {
@@ -39,6 +39,7 @@ fn main() {
         id if id == Epaminondas.id() => run(&Epaminondas, max),
         id if id == Gess.id() => run(&Gess, max),
         id if id == OneMoreTri.id() => run(&OneMoreTri, max),
+        id if id == Go.id() => run(&Go, max),
         other => eprintln!("unknown game {other:?}; try {:?}", tdg_games::all_ids()),
     }
 }

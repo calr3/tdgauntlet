@@ -250,6 +250,54 @@ fn one_more_tri_doc_examples_match_their_schemas() {
 }
 
 #[test]
+fn go_doc_examples_match_their_schemas() {
+    let doc = std::fs::read_to_string(repo_root().join("games/go-19x19.md")).unwrap();
+    let (state, mv) = (
+        compile("go-19x19_1.state.schema.json"),
+        compile("go-19x19_1.move.schema.json"),
+    );
+    let mut seen = (false, 0);
+    for value in json_blocks(&doc) {
+        if value.get("board").is_some() {
+            assert_valid(&state, &value, "go state example");
+            seen.0 = true;
+        } else {
+            assert_valid(&mv, &value, "go move example");
+            seen.1 += 1;
+        }
+    }
+    assert_eq!(seen, (true, 2), "a state, a stone and a pass");
+    let start = serde_json::json!({"board": vec![0; 361], "to_move": 0, "ko": null, "history": []});
+    assert_valid(&state, &start, "the empty board");
+    for (edit, why) in [
+        (serde_json::json!({"board": vec![0; 360]}), "360 points"),
+        (
+            serde_json::json!({"board": vec![2; 361]}),
+            "a 2 on the board",
+        ),
+        (serde_json::json!({"history": [362]}), "action 362"),
+        (serde_json::json!({"ko": 361}), "a ko off the board"),
+    ] {
+        let mut bad = start.clone();
+        for (k, v) in edit.as_object().unwrap() {
+            bad[k] = v.clone();
+        }
+        assert_invalid(&state, &bad, why);
+    }
+    for (value, why) in [
+        (serde_json::json!({"point": 361}), "point 361"),
+        (
+            serde_json::json!({"pass": true, "point": 3}),
+            "a point and a pass",
+        ),
+        (serde_json::json!({"pass": false}), "neither"),
+        (serde_json::json!({}), "nothing"),
+    ] {
+        assert_invalid(&mv, &value, why);
+    }
+}
+
+#[test]
 fn schemas_reject_what_the_rust_types_reject() {
     let request = compile("move_request.schema.json");
     let base = serde_json::json!({

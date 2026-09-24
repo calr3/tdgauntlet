@@ -1,0 +1,23 @@
+# Two random clients playing Go on 19 x 19 (pgx's go_19x19), both started by the server.
+#
+# Random play fills its own eyes, so groups die in droves and the board empties and refills.
+# Games run to the 722-move cap, or end early on two passes or a repeated position (which loses).
+game = "go-19x19/1"
+seed = 19
+concurrency = 8
+out = "../results/go_random.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 10
+
+[[player]]
+name = "random-a"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100
+
+[[player]]
+name = "random-b"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100
