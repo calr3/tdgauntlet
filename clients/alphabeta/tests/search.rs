@@ -65,6 +65,26 @@ fn it_takes_free_material() {
 #[test]
 fn it_respects_the_deadline() {
     let tt = Table::new(16);
+    // The clock is only read every 1024 nodes, so the overshoot to allow is however long this
+    // machine takes to search 1024 nodes - a property of the machine, not a constant. An
+    // unoptimised build on a loaded CI runner needs well over 100ms for that, which a fixed
+    // slack calls a failure. Measure it instead.
+    let started = Instant::now();
+    let cal = search(
+        &Position::start(),
+        &tt,
+        &Weights::default(),
+        Limits {
+            deadline: None,
+            nodes: Some(4096),
+            depth: 64,
+            seed: None,
+        },
+    )
+    .unwrap();
+    let per_1024 = started.elapsed() / (cal.nodes / 1024).max(1) as u32;
+    let slack = 2 * per_1024 + Duration::from_millis(100);
+
     for ms in [20u64, 150] {
         let started = Instant::now();
         let limits = Limits {
@@ -76,8 +96,8 @@ fn it_respects_the_deadline() {
         let r = search(&Position::start(), &tt, &Weights::default(), limits).unwrap();
         let took = started.elapsed();
         assert!(
-            took < Duration::from_millis(ms + 100),
-            "{ms}ms budget took {took:?}"
+            took < Duration::from_millis(ms) + slack,
+            "{ms}ms budget took {took:?}, allowing {slack:?} over"
         );
         assert!(r.depth >= 1, "always completes at least one iteration");
         assert!(Position::start().legal_moves().contains(&r.best));

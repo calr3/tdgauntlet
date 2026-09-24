@@ -79,7 +79,10 @@ pub fn search(pos: &Position, limits: Limits, config: MctsConfig) -> Option<Sear
                 break;
             }
         }
-        if total_sims > 0 && total_sims % 128 == 0 {
+        // Every simulation, not every 128th: one simulation is a descent plus a full random
+        // playout, so reading the clock costs nothing beside it, and a stride of 128 meant
+        // the overshoot was 128 playouts - over half a second in an unoptimised build.
+        if total_sims > 0 {
             if let Some(dl) = limits.deadline {
                 if Instant::now() >= dl {
                     break;

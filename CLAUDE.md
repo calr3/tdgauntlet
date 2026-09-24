@@ -90,6 +90,16 @@ ruff format, mypy and pytest. Run the same before committing.
 - When a test fails, check the test before the engine. In this repo's history most first failures
   were wrong test setups: a black piece left on white's home rank, a square index miscounted, a
   hand-computed move count off at the board edge.
+- **A timing test must measure the machine, not assume it.** CI builds without optimisation on a
+  shared runner, where the searches are 10-30x slower than a local release build, so both
+  deadline tests failed there for months while passing here (`cargo test --release` above is
+  why nobody saw it). A fixed "budget + 100ms" slack encodes a speed. Calibrate instead: time
+  the unit of work the deadline is only checked between - 1024 nodes for the alpha-beta, one
+  simulation for the MCTS - and allow a small multiple of that plus a constant for scheduling.
+- The stride between clock reads is what bounds the overshoot, so keep it small enough that the
+  work between reads is short. The MCTS read the clock every 128 simulations; one simulation is
+  a descent plus a full random playout, so a read per simulation costs nothing measurable and
+  cut the worst overshoot from half a second to one playout.
 - The tournament layer must stay game-agnostic: it sees only `DynGame`, opaque JSON, `Side` and
   `Outcome`. Game-specific code belongs in `crates/games/src/<game>/`.
 - Protocol changes touch `PROTOCOL.md`, `schema/` and `crates/proto` together. The markdown

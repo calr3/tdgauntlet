@@ -44,6 +44,23 @@ fn it_answers_an_incursion_it_can_capture() {
 
 #[test]
 fn it_respects_the_deadline() {
+    // At least one simulation always runs to the end, and the clock is read between them, so
+    // the overshoot is one simulation plus scheduling noise. How long a simulation takes is a
+    // property of the machine - an unoptimised build on a loaded CI runner is far slower than
+    // this one - so measure it rather than assuming a constant.
+    let started = Instant::now();
+    let sample = search(
+        &Position::start(),
+        Limits {
+            deadline: None,
+            sims: Some(64),
+        },
+        MctsConfig::default(),
+    )
+    .unwrap();
+    let per_sim = started.elapsed() / sample.sims as u32;
+    let slack = 4 * per_sim + Duration::from_millis(100);
+
     for ms in [20u64, 100] {
         let started = Instant::now();
         let limits = Limits {
@@ -53,8 +70,8 @@ fn it_respects_the_deadline() {
         let r = search(&Position::start(), limits, MctsConfig::default()).unwrap();
         let took = started.elapsed();
         assert!(
-            took < Duration::from_millis(ms + 100),
-            "{ms}ms budget took {took:?}"
+            took < Duration::from_millis(ms) + slack,
+            "{ms}ms budget took {took:?}, allowing {slack:?} over"
         );
         assert!(r.sims >= 1, "runs at least one simulation");
     }

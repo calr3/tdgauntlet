@@ -466,6 +466,13 @@ pub fn search_with(
     };
 
     for depth in 1..=limits.depth.max(1) {
+        // Don't open an iteration there is no time for. Inside one the clock is only read every
+        // 1024 nodes, so starting a doomed depth costs that much work past the deadline for
+        // nothing. The first iteration is exempt: the search must return a move it has actually
+        // looked at.
+        if depth > 1 && limits.deadline.is_some_and(|d| Instant::now() >= d) {
+            break;
+        }
         let found = if features.aspiration && depth > 1 && result.score.abs() < WIN / 2 {
             // Search a narrow window around the last score, widening on failure.
             let mut width = ASPIRATION;
