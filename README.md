@@ -132,7 +132,7 @@ and what the server did about it, and the standings.
 
 `epaminondas/1` is pgx's Epaminondas at env version **v6** (100-move quiet clock, advancement
 tiebreak, no draws), `gess/1` is pgx's Gess at **v1**, and `one-more-tri/1` is pgx's `g_hex` at
-**v0**, one-sided 4-10 adjacency included (see [its rules](games/one-more-tri.md)). The Rust
+**v1** (see [its rules](games/one-more-tri.md)). The Rust
 engines in `crates/games` are independent implementations, held to pgx by `cargo test -p
 tdg-games --test conformance`, `--test gess_conformance` and `--test one_more_tri_conformance`:
 hundreds to thousands of positions each, every legal move from each,

@@ -206,7 +206,7 @@ class _Gess(Wire):
 class _OneMoreTri(Wire):
     game_id = "one-more-tri/1"
     env_id = "g_hex"
-    rules_versions = ("v0",)
+    rules_versions = ("v1",)
     glyphs = ""
     move_fields = ("tri", "tile")
     triangles = 21

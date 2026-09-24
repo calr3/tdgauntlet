@@ -1,7 +1,7 @@
 //! One More Tri: two players place numbered tiles on a board of 21 triangles, and the one
 //! triangle left empty at the end decides the game.
 //!
-//! A scalar port of pgx's `pgx/_src/games/g_hex.py` (env id `g_hex`, version v0), which is the
+//! A scalar port of pgx's `pgx/_src/games/g_hex.py` (env id `g_hex`, version v1), which is the
 //! specification. The two implementations are held together by the conformance suite in
 //! `tests/one_more_tri_conformance.rs`, which replays positions dumped from pgx; any rule change
 //! there must regenerate those vectors.
@@ -27,12 +27,7 @@ pub const TILES: usize = 10;
 
 /// Each triangle's neighbours: the triangles whose tiles count when it is the one left empty.
 /// From pgx's `_ADJ`, whose padding index 21 (an always-empty triangle standing in for "no
-/// neighbour") is left out.
-///
-/// **Not quite symmetric, on purpose**: 4 lists 10, but 10 does not list 4, although the two
-/// share an edge (pgx's `g_hex2` has 10 -> [4, 9, 11]). So with 4 empty the tile on 10 counts,
-/// and with 10 empty the tile on 4 does not. That is pgx's rule, the one its checkpoints were
-/// trained under, and this game id keeps it; correcting it would be a new version.
+/// neighbour") is left out. Symmetric: pgx v0 left 4 out of 10's list, and v1 put it back.
 pub const ADJ: [&[usize]; N] = [
     &[1, 6],       //  0
     &[0, 2],       //  1
@@ -44,7 +39,7 @@ pub const ADJ: [&[usize]; N] = [
     &[6, 8, 14],   //  7
     &[2, 7, 9],    //  8
     &[8, 10],      //  9
-    &[9, 11],      // 10
+    &[4, 9, 11],   // 10
     &[10],         // 11
     &[5, 13],      // 12
     &[12, 14, 16], // 13

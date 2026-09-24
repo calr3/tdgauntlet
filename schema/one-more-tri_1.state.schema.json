@@ -27,5 +27,5 @@
       "description": "0 black, 1 white. Black moves first and nobody passes, so this must agree with the tile counts."
     }
   },
-  "description": "pgx g_hex env v0."
+  "description": "pgx g_hex env v1."
 }

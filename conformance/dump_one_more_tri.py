@@ -16,10 +16,10 @@ A move is one pgx action, `triangle * 10 + tile - 1`, so the moves of a position
 mask read off directly.
 
 Every game lasts exactly 20 moves, so random play reaches the end every time. What it rarely
-reaches is the end where triangle 4 or 10 is the one left empty, and those two are where pgx's
-adjacency is one-sided (4 counts 10's tile, 10 does not count 4's). So half the games are played
-by a policy that fills everything else first, which leaves 4 and 10 as the last two empties: the
-final move then decides between the two cases.
+reaches is the end where triangle 4 or 10 is the one left empty, and that edge is the one pgx got
+wrong in g_hex v0 (4 counted 10's tile, 10 did not count 4's). So half the games are played by a
+policy that fills everything else first, which leaves 4 and 10 as the last two empties: the final
+move then decides between the two cases.
 
 Regenerate whenever pgx's g_hex rules change, and commit the result.
 """
@@ -48,8 +48,8 @@ GAME = Game()
 HERE = Path(__file__).resolve().parent
 TRIANGLES = 21
 TILES = 10
-#: The two triangles whose adjacency is one-sided in pgx.
-LOPSIDED = (4, 10)
+#: The two triangles whose shared edge g_hex v0 counted one way only.
+LAST = (4, 10)
 
 _mask = jax.jit(jax.vmap(GAME.legal_action_mask))
 _step = jax.jit(jax.vmap(GAME.step))
@@ -118,14 +118,14 @@ def outcome_of(state: GameState) -> str:
     return outcome_code(bool(_terminal(one)[0]), np.asarray(_rewards(one)[0]))
 
 
-POLICIES = ("uniform", "lopsided")
+POLICIES = ("uniform", "last_4_10")
 
 
 def pick(policy: str, rng: random.Random, moves: list[tuple[int, int]]) -> int:
     """Index of the move to play: anything at all, or anything that keeps 4 and 10 empty while
     another triangle is free."""
-    if policy == "lopsided":
-        elsewhere = [i for i, (tri, _) in enumerate(moves) if tri not in LOPSIDED]
+    if policy == "last_4_10":
+        elsewhere = [i for i, (tri, _) in enumerate(moves) if tri not in LAST]
         if elsewhere:
             return rng.choice(elsewhere)
     return rng.randrange(len(moves))

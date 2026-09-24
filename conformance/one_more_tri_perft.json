@@ -1,7 +1,7 @@
 {
  "kind": "perft",
- "pgx_env_version": "v0",
- "pgx_commit": "5b880f85028b1deabeb7e9d1b17cde53e1881cf4",
+ "pgx_env_version": "v1",
+ "pgx_commit": "b838c2e879aa32595df3afa51d946687916dddc0",
  "pgx_rules_dirty": false,
  "seed": 20262,
  "games": 40,

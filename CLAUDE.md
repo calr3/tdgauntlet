@@ -72,11 +72,11 @@ ruff format, mypy and pytest. Run the same before committing.
   what makes a game long enough to reach a capture or the 20-move quiet clock.
 - Gess regenerates in about a minute: `JAX_PLATFORMS=cpu ~/.venv/bin/python3
   conformance/dump_gess.py`. Its `moves` counter is tdgauntlet's own; pgx's state has none.
-- `one-more-tri/1` is pgx's **`g_hex` at v0**, and keeps its one quirk: `_ADJ` lists 10 as a
-  neighbour of 4 but not 4 of 10. The user chose to match pgx (the checkpoints were trained on
-  it); don't "fix" it here, since the conformance gate would rightly fail. A correction is a new
-  version, after pgx changes. `dump_one_more_tri.py` regenerates in ~20 s, and half its games
-  keep 4 and 10 empty to the end so that quirk stays covered. pgx randomises which seat plays
+- `one-more-tri/1` is pgx's **`g_hex` at v1**. v0 listed 10 as a neighbour of 4 but not 4 of
+  10; v1 fixed that in both codebases. Every g_hex checkpoint so far is v0, trained on the old
+  rule, so the JAX client needs `--allow-rules-mismatch` to play one. `dump_one_more_tri.py`
+  regenerates in ~20 s, and half its games keep 4 and 10 empty to the end so that edge stays
+  covered. pgx randomises which seat plays
   colour 0; tdgauntlet does not need to, since minimatches swap colours.
 - Anything that walks a random game to a fixed depth has to cope with a game that ends first.
   `check.rs` used to retry the same depth for ever and hung on Gess.

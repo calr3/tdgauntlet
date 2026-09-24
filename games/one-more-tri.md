@@ -2,7 +2,7 @@
 
 One More Tri: two players take turns placing numbered tiles on a board of 21 triangles. When
 every tile is down, one triangle is left empty, and the tiles around it decide the game. The rules
-are those implemented by `pgx/_src/games/g_hex.py`, pgx's `g_hex` env at version **v0**.
+are those implemented by `pgx/_src/games/g_hex.py`, pgx's `g_hex` env at version **v1**.
 
 ## Triangles
 
@@ -32,15 +32,13 @@ A triangle's **neighbours** are the ones it shares an edge with:
 | 0 | 1, 6 | 7 | 6, 8, 14 | 14 | 7, 13, 15 |
 | 1 | 0, 2 | 8 | 2, 7, 9 | 15 | 14, 18 |
 | 2 | 1, 3, 8 | 9 | 8, 10 | 16 | 13, 17 |
-| 3 | 2, 4 | 10 | 9, 11 | 17 | 16, 18 |
+| 3 | 2, 4 | 10 | 4, 9, 11 | 17 | 16, 18 |
 | 4 | 3, 10 | 11 | 10 | 18 | 15, 17, 19 |
 | 5 | 6, 12 | 12 | 5, 13 | 19 | 18, 20 |
 | 6 | 0, 5, 7 | 13 | 12, 14, 16 | 20 | 19 |
 
-**One pair is one-sided, as in pgx:** 4 lists 10, but 10 does not list 4, although the two
-triangles share an edge. So with 4 left empty, the tile on 10 counts; with 10 left empty, the
-tile on 4 does not. This is pgx's `_ADJ` as written, and the rule its checkpoints were trained
-under. Correcting it would be a new game version.
+pgx's `g_hex` v0 left 4 out of 10's list, so with 10 left empty the tile on 4 did not count.
+v1 corrected that, and so does this game. Checkpoints trained on v0 learnt the old rule.
 
 **Black moves first**, so black is side `0`. pgx stores black's tiles as positive values and
 white's as negative ones, and so does the wire.

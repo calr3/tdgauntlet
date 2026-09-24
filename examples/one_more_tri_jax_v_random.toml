@@ -2,7 +2,11 @@
 #
 # Start the JAX client yourself, in the pgx environment, first:
 #   cd clients/jax && JAX_PLATFORMS=cpu python -m tdg_jax --port 9431 --sims 64 \
+#       --allow-rules-mismatch \
 #       --checkpoint ~/calr3gh/pgx/checkpoints/g_hex_20260504192940/001740.ckpt
+#
+# --allow-rules-mismatch: the checkpoint is g_hex v0, trained before triangle 10 counted the tile
+# on 4. It plays the v1 rules here, with a slightly wrong idea of that one edge.
 #
 # The checkpoint decides the game, so the client advertises one-more-tri/1 and nothing else.
 # A move is one search, and the game is always 20 moves, so this is quick even on the CPU.

@@ -36,24 +36,19 @@ fn finished(empty: usize, around: &[i8]) -> Position {
 }
 
 #[test]
-fn adjacency_is_pgxs_symmetric_but_for_4_and_10() {
-    let mut one_way = Vec::new();
+fn adjacency_is_symmetric() {
     for (t, ns) in ADJ.iter().enumerate() {
         for &n in *ns {
             assert_ne!(n, t);
-            if !ADJ[n].contains(&t) {
-                one_way.push((t, n));
-            }
+            assert!(
+                ADJ[n].contains(&t),
+                "{t} lists {n}, but {n} does not list {t}"
+            );
         }
     }
-    assert_eq!(
-        one_way,
-        [(4, 10)],
-        "pgx lists 10 as 4's neighbour, and not the reverse"
-    );
     let count = |k| (0..N).filter(|&t| ADJ[t].len() == k).collect::<Vec<_>>();
     assert_eq!(count(1), [11, 20]);
-    assert_eq!(count(3), [2, 6, 7, 8, 13, 14, 18]);
+    assert_eq!(count(3), [2, 6, 7, 8, 10, 13, 14, 18]);
 }
 
 #[test]
@@ -92,17 +87,13 @@ fn the_empty_triangles_neighbours_decide() {
     assert_eq!(white.outcome(), Some(Outcome::Win { side: Side::Second }));
     let draw = finished(7, &[4, -9, 5]);
     assert_eq!(draw.outcome(), Some(Outcome::Draw));
-    // 4 counts the tile on 10, but 10 does not count the tile on 4 (see ADJ).
+    // 4 and 10 count each other's tiles (pgx v0 had 10 ignore the tile on 4).
     let four = finished(4, &[-1, 3]);
     assert_eq!(four.board[10], 3);
     assert_eq!(four.score(), 2);
-    let ten = finished(10, &[-1, -2]);
-    assert!(
-        ten.board[4] > 0,
-        "a black tile on 4 that does not count: {:?}",
-        ten.board
-    );
-    assert_eq!(ten.score(), -3);
+    let ten = finished(10, &[10, -5, -4]);
+    assert_eq!(ten.score(), 1);
+    assert_eq!(ten.outcome(), Some(Outcome::Win { side: Side::First }));
     // Triangle 11 has a single neighbour, 10.
     assert_eq!(
         finished(11, &[-6]).outcome(),

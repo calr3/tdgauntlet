@@ -63,7 +63,7 @@ fn read_vectors() -> (Value, Vec<Value>) {
 fn vectors_come_from_the_rules_version_this_engine_implements() {
     let (meta, _) = read_vectors();
     assert_eq!(
-        meta["pgx_env_version"], "v0",
+        meta["pgx_env_version"], "v1",
         "regenerate the vectors, or port the new rules"
     );
     assert_eq!(
@@ -175,9 +175,9 @@ fn every_position_agrees_with_pgx() {
 }
 
 /// The vectors are only as good as what they cover. Every game reaches its end, so what matters
-/// is which ends: all three results, and games decided on triangle 4 and on triangle 10, the two
-/// where pgx's adjacency is one-sided. The dump's `lopsided` policy is what reaches those; keep
-/// it.
+/// is which ends: all three results, and games decided on triangle 4 and on triangle 10, where
+/// the two count each other (pgx v0 had 10 ignore 4). The dump's `last_4_10` policy is what
+/// reaches those; keep it.
 #[test]
 fn vectors_cover_the_rules_that_matter() {
     let g = OneMoreTri;
@@ -219,7 +219,7 @@ fn vectors_cover_the_rules_that_matter() {
     assert!(draws >= 1, "no draw is reached");
     assert!(
         empty_at(4) >= 5 && empty_at(10) >= 5,
-        "the one-sided 4-10 adjacency is barely exercised"
+        "the 4-10 adjacency is barely exercised"
     );
 }
 

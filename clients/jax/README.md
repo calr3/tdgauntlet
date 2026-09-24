@@ -24,7 +24,8 @@ requests from different games are searched together in one batch.
 
 - It refuses a checkpoint whose `env_version` is not the rules its game plays (`epaminondas/1`
   is pgx v6 through v11, which are one set of rules with a growing observation; `gess/1` is pgx
-  v1); `--allow-rules-mismatch` overrides that.
+  v1; `one-more-tri/1` is pgx g_hex v1); `--allow-rules-mismatch` overrides that. Every g_hex
+  checkpoint so far is v0, whose 10 ignored the tile on 4, so it needs the flag.
 - One More Tri's move is a single pgx action (`tri * 10 + tile - 1`), so a move is one search.
   The g_hex checkpoints predate the current training script: they pickled their config as
   `__main__.Config`, which `read_checkpoint` maps to pgx's `config.Config`. Their network, the older
