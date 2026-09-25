@@ -311,15 +311,26 @@ async fn answer(State(desk): State<Arc<Desk>>, Json(a): Json<AnswerRequest>) -> 
         let Some(mv) = &a.mv else {
             return error(StatusCode::BAD_REQUEST, "send a move or resign");
         };
-        let played = match w.game.play(&w.view.state, mv) {
+        let played = match w.game.play(&w.view.state, mv, &mut rand::rng()) {
             Ok(p) => p,
             Err(e) => return error(StatusCode::BAD_REQUEST, e.to_string()),
         };
-        let answered = Answered {
-            notation: played.notation,
-            text: w.game.render(&played.state).unwrap_or_default(),
-            outcome: w.game.outcome(&played.state).ok().flatten(),
-            state: played.state,
+        // Where a move of chance leads is up to the server's dice, not the ones rolled here, so
+        // the page is shown the position the move was played in until the next one arrives.
+        let answered = if w.game.has_chance() {
+            Answered {
+                notation: played.notation,
+                text: w.view.text.clone(),
+                outcome: None,
+                state: w.view.state.clone(),
+            }
+        } else {
+            Answered {
+                notation: played.notation,
+                text: w.game.render(&played.state).unwrap_or_default(),
+                outcome: w.game.outcome(&played.state).ok().flatten(),
+                state: played.state,
+            }
         };
         (Reply::Move(played.mv), Some(answered))
     };

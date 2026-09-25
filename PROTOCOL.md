@@ -32,7 +32,10 @@ does not need the server's agreement to think, but it cannot play a move the ser
 The envelope is fixed; `state` and `move` are arbitrary JSON defined by the game, identified by
 the `game` field (`"<name>/<version>"`). The tournament layer never interprets them. See
 [`games/`](games/) for each game's state and move encoding: `epaminondas/1`, `gess/1`,
-`one-more-tri/1` and `go-19x19/1` so far.
+`one-more-tri/1`, `go-19x19/1` and `pig/1` so far.
+
+A game may have chance in it (Pig's die). The server rolls it, as part of applying a move, and
+the client learns the result from the next position it is sent; a client never rolls.
 
 ## Endpoints
 

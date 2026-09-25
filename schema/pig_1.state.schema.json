@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/pig_1.state.schema.json",
+  "title": "pig/1 state",
+  "type": "object",
+  "required": [
+    "totals",
+    "turn_total",
+    "last_roll",
+    "to_move"
+  ],
+  "properties": {
+    "totals": {
+      "type": "array",
+      "description": "Points banked, indexed by side. Only the player who has just stopped can have 100 or more, and then the game is over; the schema cannot say that, the server checks it.",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 2147483647
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "turn_total": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647,
+      "description": "This turn's rolls so far, last_roll included: last_roll, or last_roll plus at least 2."
+    },
+    "last_roll": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 6,
+      "description": "The roll to_move is deciding on. After a 1 the only move is to stop."
+    },
+    "to_move": {
+      "enum": [
+        0,
+        1
+      ],
+      "description": "Side 0 starts."
+    }
+  },
+  "description": "pgx pig env v0."
+}

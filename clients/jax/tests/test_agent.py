@@ -168,7 +168,8 @@ def test_stem_inputs_reads_the_stem_and_narrow_drops_the_rest() -> None:
 
 
 #: Games whose checkpoints use pgx's older `az_net` ResNet, which has no `stem_conv` to measure.
-#: Their envs have only ever had one observation, so the planes pass through unchanged.
+#: Their envs have only ever had one observation, so the planes pass through unchanged. (Pig's
+#: MLP is measured by its first layer instead.)
 UNMEASURED = {"one-more-tri/1"}
 
 
@@ -201,18 +202,24 @@ def test_the_agent_is_fed_the_planes_its_checkpoint_was_trained_on(wire: Wire) -
     assert narrow(state.observation, channels).shape[-1] == channels
 
 
+def some_key(rng: np.random.Generator) -> jnp.ndarray:
+    """A key for `env.step`: Pig's roll comes from it, and the other games ignore it."""
+    return jax.random.PRNGKey(int(rng.integers(1 << 30)))
+
+
 def some_positions(wire: Wire, n: int) -> list[dict[str, Any]]:
-    """Wire states from random pgx games, at move boundaries."""
+    """Wire states from random pgx games, at move boundaries, with a choice to make: a forced
+    move (Pig's stop after a 1) is played without asking the model."""
     step = jax.jit(wire.env.step)
     rng = np.random.default_rng(1)
     out = []
     for game in range(100):
         state = wire.env.init(jax.random.PRNGKey(game))
         while len(out) < n and not bool(state.terminated):
-            if wire.between_moves(state):
-                out.append(wire.from_pgx(state))
             legal = np.flatnonzero(np.asarray(state.legal_action_mask))
-            state = step(state, jnp.int32(rng.choice(legal)))
+            if wire.between_moves(state) and len(legal) > 1:
+                out.append(wire.from_pgx(state))
+            state = step(state, jnp.int32(rng.choice(legal)), some_key(rng))
         if len(out) >= n:
             break
     return out
@@ -223,7 +230,7 @@ def legal_move(wire: Wire, state_wire: dict[str, Any], actions: list[int]) -> bo
     for a in actions:
         if not bool(state.legal_action_mask[a]):
             return False
-        state = wire.env.step(state, jnp.int32(a))
+        state = wire.env.step(state, jnp.int32(a), wire.chance_keys[0])
     return wire.between_moves(state)
 
 
@@ -258,23 +265,30 @@ def all_moves(wire: Wire, state: Any) -> list[list[int]]:
             moves.append(prefix)
             return
         for a in np.flatnonzero(np.asarray(state.legal_action_mask)):
-            walk(step(state, jnp.int32(a)), [*prefix, int(a)])
+            walk(step(state, jnp.int32(a), wire.chance_keys[0]), [*prefix, int(a)])
 
     walk(state, [])
     return moves
 
 
 def score(agent: Agent, state: Any, move: list[int]) -> float:
-    """What the value head makes of the position a move leaves, for the player who made it."""
+    """What the value head makes of the position a move leaves, for the player who made it: in
+    Pig, on average over the rolls of the die that come with it."""
     mover = int(state.current_player)
-    for a in move:
-        state = agent.wire.env.step(state, jnp.int32(a))
-    if bool(state.terminated):
-        return float(state.rewards[mover])
-    params, net_state = agent.model
-    obs = narrow(state.observation[None], agent.obs_channels)
-    (_, value), _ = agent.forward.apply(params, net_state, obs, is_eval=True)
-    return float(value[0]) * (1 if int(state.current_player) == mover else -1)
+    env, keys = agent.wire.env, agent.wire.chance_keys
+    for a in move[:-1]:
+        state = env.step(state, jnp.int32(a), keys[0])
+    scores = []
+    for key in keys:
+        after = env.step(state, jnp.int32(move[-1]), key)
+        if bool(after.terminated):
+            scores.append(float(after.rewards[mover]))
+            continue
+        params, net_state = agent.model
+        obs = narrow(after.observation[None], agent.obs_channels)
+        (_, value), _ = agent.forward.apply(params, net_state, obs, is_eval=True)
+        scores.append(float(value[0]) * (1 if int(after.current_player) == mover else -1))
+    return sum(scores) / len(scores)
 
 
 def test_value_only_plays_the_move_the_value_head_likes_best(wire: Wire) -> None:
@@ -343,3 +357,18 @@ def test_concurrent_requests_from_different_games_are_batched_and_kept_apart(wir
     for i, state in enumerate(positions):
         assert legal_move(wire, state, results[i]), f"request {i} got a move for another position"
     assert max(agent.batches) > 1, f"requests were never batched: {agent.batches}"
+
+
+V0_PIG = Path.home() / "calr3gh" / "pgx" / "checkpoints" / "pig_20260917054807" / "000060.ckpt"
+
+
+@pytest.mark.skipif(not V0_PIG.exists(), reason=f"no pig v0 checkpoint at {V0_PIG}")
+def test_a_pig_v0_mlp_is_fed_its_six_features() -> None:
+    """pgx pig v1 appended a seventh feature; a v0 network's first layer takes six, and that is
+    what it is given."""
+    wire = for_game_id("pig/1")
+    agent = Agent(V0_PIG, num_simulations=8, max_batch=1)
+    assert agent.obs_channels == 6 < int(wire.env.observation_shape[-1])
+    for state in some_positions(wire, 2):
+        actions, _ = agent.choose(wire.to_pgx(state))
+        assert legal_move(wire, state, actions), (state, actions)

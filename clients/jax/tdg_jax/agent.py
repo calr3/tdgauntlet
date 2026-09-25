@@ -15,7 +15,12 @@ logit, one network evaluation per decision. That is the network's own opinion, u
 
 With `value_only`, no search runs either, and the policy head is not consulted: every legal move
 is played out in full (all of its actions) and the value head scores the position it leaves. The
-move whose successor is best for the mover is played - a one-ply search over the value alone.
+move whose successor is best for the mover is played - a one-ply search over the value alone. In
+a game of chance (Pig) a move leads to one of several positions, one per roll of the die, and the
+score is their average: each roll is played, not sampled.
+
+The search does sample. Every step it takes draws its roll from its own key, as pgx's self-play
+did; mctx keeps one successor per edge, so an edge's value rests on that one roll.
 
 What differs is that requests arrive concurrently from many games. Each stage of each request is
 put on a queue; one worker thread takes whatever is waiting (up to `max_batch`), pads it to a
@@ -190,7 +195,10 @@ class Agent:
         value_only: bool = False,
     ) -> None:
         _use_alphazero_modules()
-        from network import make_forward  # type: ignore[import-not-found]
+        from network import (  # type: ignore[import-not-found]
+            make_forward,
+            mlp_input_features,
+        )
 
         if isinstance(checkpoint, Path):
             checkpoint = load_checkpoint(checkpoint, allow_rules_mismatch)
@@ -205,6 +213,10 @@ class Agent:
         # the append-only invariant holds: if a plane ever changes meaning, pgx bumps the rules
         # version and `wire.rules_versions` drops it.
         self.obs_channels = obs_channels(self.model, self.forward, self.env)
+        if self.obs_channels is None:
+            # An MLP (Pig's) takes a flat observation that grows at the end in the same way: v0
+            # had six features and v1 seven. Its first layer says how many it was built for.
+            self.obs_channels = mlp_input_features(self.model[0], self.config)
         env_channels = int(self.env.observation_shape[-1])
         if self.obs_channels is not None and self.obs_channels > env_channels:
             raise ValueError(
@@ -223,7 +235,7 @@ class Agent:
         self._key_lock = threading.Lock()
         self._search = jax.jit(self._run, static_argnames=("num_simulations",))
         self._step = jax.jit(self.env.step)
-        self._step_batch = jax.jit(jax.vmap(self.env.step))
+        self._step_batch = jax.jit(self._step_all)
         self._leaf_scores = jax.jit(self._scores)
         self._jobs: queue.Queue[_Job] = queue.Queue()
         self.batches: list[int] = []  # sizes of the batches run, for tests and diagnostics
@@ -232,10 +244,11 @@ class Agent:
     def _recurrent_fn(
         self, model: Model, rng_key: jnp.ndarray, action: jnp.ndarray, state: pgx.State
     ) -> tuple[mctx.RecurrentFnOutput, pgx.State]:
-        del rng_key
         params, net_state = model
         current_player = state.current_player
-        state = jax.vmap(self.env.step)(state, action)
+        # Each node draws its own chance outcome; a game without chance ignores the keys.
+        keys = jax.random.split(rng_key, action.shape[0])
+        state = jax.vmap(self.env.step)(state, action, keys)
         (logits, value), _ = self.forward.apply(
             params, net_state, narrow(state.observation, self.obs_channels), is_eval=True
         )
@@ -275,19 +288,31 @@ class Agent:
         )
         return out.action, value
 
+    def _step_all(self, parents: pgx.State, actions: jnp.ndarray) -> pgx.State:
+        """Step each parent by its action. Only a move's last action may involve chance (Pig's
+        only has one), so the earlier ones take the first outcome's key, whatever it is."""
+        return jax.vmap(self.env.step, in_axes=(0, 0, None))(
+            parents, actions, self.wire.chance_keys[0]
+        )
+
     def _scores(self, parents: pgx.State, actions: jnp.ndarray) -> jnp.ndarray:
         """Take each parent's last action of a move, and score the position it leaves from the
         point of view of the player who moved: the result if the game is over, and otherwise
-        the value head's opinion, negated when it is the opponent's turn."""
+        the value head's opinion, negated when it is the opponent's turn. Where chance decides
+        the position, the average over its equally likely outcomes."""
         params, net_state = self.model
         mover = parents.current_player
-        states = jax.vmap(self.env.step)(parents, actions)
-        (_, value), _ = self.forward.apply(
-            params, net_state, narrow(states.observation, self.obs_channels), is_eval=True
-        )
-        value = jnp.where(states.current_player == mover, value, -value)
-        reward = states.rewards[jnp.arange(mover.shape[0]), mover]
-        return jnp.where(states.terminated, reward, value)
+
+        def score(key: jnp.ndarray) -> jnp.ndarray:
+            states = jax.vmap(self.env.step, in_axes=(0, 0, None))(parents, actions, key)
+            (_, value), _ = self.forward.apply(
+                params, net_state, narrow(states.observation, self.obs_channels), is_eval=True
+            )
+            value = jnp.where(states.current_player == mover, value, -value)
+            reward = states.rewards[jnp.arange(mover.shape[0]), mover]
+            return jnp.where(states.terminated, reward, value)
+
+        return jax.vmap(score)(self.wire.chance_keys).mean(axis=0)
 
     def _in_chunks(self, fn: Any, states: Any, rows: np.ndarray, actions: np.ndarray) -> list[Any]:
         """`fn(states[rows], actions)`, in padded chunks of at most VALUE_CHUNK, each trimmed
@@ -402,8 +427,9 @@ class Agent:
             if report:
                 report(size)
             size *= 2
-        first_legal = int(np.flatnonzero(np.asarray(start.legal_action_mask))[0])
-        jax.block_until_ready(self._step(start, jnp.int32(first_legal)))
+        if self.wire.actions_per_move > 1:
+            first_legal = int(np.flatnonzero(np.asarray(start.legal_action_mask))[0])
+            jax.block_until_ready(self._step(start, jnp.int32(first_legal), self._next_key()))
 
     def _submit(self, state: pgx.State) -> _Job:
         job = _Job(state)
@@ -434,12 +460,13 @@ class Agent:
             }
         actions: list[int] = []
         value: float | None = None
-        for _ in range(self.wire.actions_per_move):
+        for stage in range(self.wire.actions_per_move):
             action, v = self._decide(state)
             if value is None:
                 value = v
             actions.append(action)
-            state = self._step(state, jnp.int32(action))
+            if stage < self.wire.actions_per_move - 1:
+                state = self._step(state, jnp.int32(action), self._next_key())
         info: dict[str, Any] = {
             "sims": self.num_simulations,
             "elapsed_ms": round(1000 * (time.monotonic() - started)),

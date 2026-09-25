@@ -7,7 +7,7 @@
 //! there must regenerate those vectors.
 //!
 //! Triangles are numbered 0..=20 exactly as in pgx's diagram (see [`render`](OneMoreTri)), and
-//! [`ADJ`] is pgx's `_ADJ` with its padding entry dropped, including its one asymmetry.
+//! [`ADJ`] is pgx's `_ADJ` with its padding entry dropped.
 //!
 //! **Black moves first**: black is [`Side::First`], and its tiles are stored as positive values,
 //! white's as negative ones, as pgx stores them.

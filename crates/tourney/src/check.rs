@@ -49,13 +49,13 @@ fn sample_positions(game: &dyn DynGame, n: usize, seed: u64) -> Vec<serde_json::
     let mut rng = ChaCha8Rng::seed_from_u64(seed);
     let mut out = Vec::new();
     while out.len() < n {
-        let mut state = game.initial();
+        let mut state = game.initial(&mut rng);
         for _ in 0..out.len() * 3 {
             let moves = game.legal_moves(&state).expect("own state");
             let Some(mv) = moves.choose(&mut rng) else {
                 break;
             };
-            let next = game.play(&state, mv).expect("legal").state;
+            let next = game.play(&state, mv, &mut rng).expect("legal").state;
             if game.outcome(&next).expect("own state").is_some() {
                 break;
             }
@@ -116,7 +116,8 @@ pub async fn run(url: &str, opts: &CheckOptions) -> Vec<Check> {
     };
 
     // Unsupported games should be refused, not answered.
-    let mut bogus = request(&opts.game, "check-bogus", game.initial(), opts, &*game);
+    let start = game.initial(&mut ChaCha8Rng::seed_from_u64(opts.seed));
+    let mut bogus = request(&opts.game, "check-bogus", start, opts, &*game);
     bogus.game = "no-such-game/1".into();
     record(
         "refuses an unknown game",
@@ -156,8 +157,9 @@ pub async fn run(url: &str, opts: &CheckOptions) -> Vec<Check> {
                     "answered {} with request_id {:?}",
                     req.request_id, r.request_id
                 )),
+                // Only whether the move is legal matters, not where any dice in it land.
                 Ok(r) => game
-                    .play(&req.state, &r.mv)
+                    .play(&req.state, &r.mv, &mut ChaCha8Rng::seed_from_u64(0))
                     .map(|p| p.notation)
                     .map_err(|e| format!("{}: {e}", req.request_id)),
             };

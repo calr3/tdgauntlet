@@ -1,0 +1,25 @@
+# Two random clients playing Pig (pgx's pig), both started by the server.
+#
+# The server rolls the dice, seeded by the minimatch, so the two games of a minimatch see the
+# same rolls in turn. A random player stops half the time, so games are short for Pig: ~60
+# decisions. Pig has no draws. Each opening is a minimatch with its own dice; two random plies
+# from the start (its first roll, then a decision or two) give twenty different ones.
+game = "pig/1"
+seed = 3
+concurrency = 8
+out = "../results/pig_random.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 20
+
+[[player]]
+name = "random-a"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100
+
+[[player]]
+name = "random-b"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100

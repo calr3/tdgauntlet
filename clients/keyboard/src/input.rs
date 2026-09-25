@@ -78,7 +78,9 @@ mod tests {
 
     fn start_moves() -> Vec<(Value, String)> {
         let g = tdg_games::epaminondas::Epaminondas;
-        g.described_moves(&g.initial()).unwrap()
+        use tdg_games::Game;
+        g.described_moves(&g.encode_state(&Game::initial(&g)))
+            .unwrap()
     }
 
     fn san(moves: &[(Value, String)], c: Choice) -> String {

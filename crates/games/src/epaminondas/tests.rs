@@ -528,12 +528,13 @@ fn malformed_moves_are_rejected_not_panicked_on() {
 #[test]
 fn dyn_game_plays_legal_moves_and_refuses_everything_else() {
     let g: &dyn DynGame = &Epaminondas;
-    let start = g.initial();
+    let start = g.initial(&mut rand::rng());
     // d1d2-d4: rear d1 (3), lead d2 (17), lead lands on d4 (45).
     let played = g
         .play(
             &start,
             &serde_json::json!({"lead": 17, "rear": 3, "dest": 45}),
+            &mut rand::rng(),
         )
         .unwrap();
     assert_eq!(played.notation, "d1d2-d4");
@@ -548,6 +549,7 @@ fn dyn_game_plays_legal_moves_and_refuses_everything_else() {
         .play(
             &start,
             &serde_json::json!({"lead": 17, "rear": 0, "dest": 31}),
+            &mut rand::rng(),
         )
         .unwrap_err();
     assert!(matches!(err, MoveError::Illegal(_)), "{err}");
@@ -555,17 +557,22 @@ fn dyn_game_plays_legal_moves_and_refuses_everything_else() {
     let black = g.play(
         &start,
         &serde_json::json!({"lead": 140, "rear": 140, "dest": 126}),
+        &mut rand::rng(),
     );
     assert!(matches!(black, Err(MoveError::Illegal(_))));
     // Not a move at all.
     let err = g
-        .play(&start, &serde_json::json!({"from": "d3"}))
+        .play(&start, &serde_json::json!({"from": "d3"}), &mut rand::rng())
         .unwrap_err();
     assert!(matches!(err, MoveError::Malformed(_)), "{err}");
     // A move in a finished game.
     let over = Epaminondas.encode_state(&pos(Side::First, "c12", "a5"));
     let err = g
-        .play(&over, &serde_json::json!({"lead": 0, "rear": 0, "dest": 1}))
+        .play(
+            &over,
+            &serde_json::json!({"lead": 0, "rear": 0, "dest": 1}),
+            &mut rand::rng(),
+        )
         .unwrap_err();
     assert_eq!(err, MoveError::GameOver);
 }
@@ -573,14 +580,19 @@ fn dyn_game_plays_legal_moves_and_refuses_everything_else() {
 #[test]
 fn described_moves_pair_each_move_with_its_notation() {
     let g: &dyn DynGame = &Epaminondas;
-    let described = g.described_moves(&g.initial()).unwrap();
+    let described = g.described_moves(&g.initial(&mut rand::rng())).unwrap();
     assert_eq!(described.len(), 114);
     assert!(
         described.windows(2).all(|w| w[0].1 <= w[1].1),
         "sorted by notation"
     );
     for (mv, san) in &described {
-        assert_eq!(g.play(&g.initial(), mv).unwrap().notation, *san);
+        assert_eq!(
+            g.play(&g.initial(&mut rand::rng()), mv, &mut rand::rng())
+                .unwrap()
+                .notation,
+            *san
+        );
     }
 }
 

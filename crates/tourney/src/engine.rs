@@ -32,7 +32,8 @@ pub struct GameSpec {
     /// Indexed by side: `seats[0]` moves first.
     pub seats: [Arc<Seat>; 2],
     pub max_plies: u32,
-    /// Seeds the server's own random moves under the `random` error policy.
+    /// Seeds the server's own random moves under the `random` error policy, and the dice of a
+    /// game of chance.
     pub seed: u64,
 }
 
@@ -118,6 +119,8 @@ fn fnv(text: &str) -> u64 {
 
 pub async fn play_game(game: Arc<dyn DynGame>, spec: GameSpec) -> GameRecord {
     let mut rng = ChaCha8Rng::seed_from_u64(spec.seed ^ fnv(&spec.id));
+    // Seeded by the minimatch, not the game, so both of its games roll the same dice in turn.
+    let mut dice = ChaCha8Rng::seed_from_u64(spec.seed ^ fnv(&spec.match_id));
     let mut state = spec.opening.state.clone();
     let mut moves: Vec<MoveRecord> = Vec::new();
     let mut incidents: Vec<Incident> = Vec::new();
@@ -174,11 +177,13 @@ pub async fn play_game(game: Arc<dyn DynGame>, spec: GameSpec) -> GameRecord {
                 if resp.request_id != req.request_id {
                     return Err(IncidentKind::WrongRequestId(resp.request_id));
                 }
-                let played = game.play(&state, &resp.mv).map_err(|e| match e {
-                    MoveError::Malformed(d) => IncidentKind::MalformedMove(d.to_string()),
-                    MoveError::Illegal(m) => IncidentKind::IllegalMove(m),
-                    MoveError::GameOver => unreachable!("checked before asking"),
-                })?;
+                let played = game
+                    .play(&state, &resp.mv, &mut dice)
+                    .map_err(|e| match e {
+                        MoveError::Malformed(d) => IncidentKind::MalformedMove(d.to_string()),
+                        MoveError::Illegal(m) => IncidentKind::IllegalMove(m),
+                        MoveError::GameOver => unreachable!("checked before asking"),
+                    })?;
                 Ok((played, resp.info))
             });
 
@@ -216,7 +221,9 @@ pub async fn play_game(game: Arc<dyn DynGame>, spec: GameSpec) -> GameRecord {
                     incident("played a random move instead");
                     let legal = game.legal_moves(&state).expect("decodes");
                     let mv = legal.choose(&mut rng).expect("an undecided game has moves");
-                    let played = game.play(&state, mv).expect("a generated move is legal");
+                    let played = game
+                        .play(&state, mv, &mut dice)
+                        .expect("a generated move is legal");
                     moves.push(MoveRecord {
                         side,
                         san: played.notation,

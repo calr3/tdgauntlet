@@ -20,6 +20,10 @@ One More Tri (pgx's `g_hex`) is the exception on both counts. Its board is a lis
 values rather than a string, and its move `{tri, tile}` is a single pgx action, `tri * 10 + tile -
 1`; it has no stages, so every state is between moves. pgx also draws which seat plays colour 0
 at random; here the seat is always the colour, as it is in the other two games.
+
+Pig is the one game of chance. Its state is a handful of counters, its move `{action}` is one
+pgx action (0 `stop`, 1 `roll`), and every step rolls a die - drawn from the key `env.step` is
+given. [`Wire.chance_keys`] is how the agent reaches every roll rather than a sample of one.
 """
 
 from __future__ import annotations
@@ -33,9 +37,11 @@ import pgx
 import pgx.epaminondas
 import pgx.g_hex
 import pgx.gess
+import pgx.pig
 from pgx._src.games import epaminondas as epaminondas_game
 from pgx._src.games import g_hex as g_hex_game
 from pgx._src.games import gess as gess_game
+from pgx._src.games import pig as pig_game
 
 
 class Wire:
@@ -71,6 +77,12 @@ class Wire:
     def actions_per_move(self) -> int:
         return len(self.move_fields)
 
+    @property
+    def chance_keys(self) -> jnp.ndarray:
+        """Keys for `env.step`, one per equally likely outcome of the chance in a step. A game
+        without chance ignores the key, so one does."""
+        return jax.random.PRNGKey(0)[None]
+
     def to_pgx(self, wire: dict[str, Any]) -> Any:
         """A pgx state for a wire state, ready for `env.step` and the network."""
         raise NotImplementedError
@@ -82,7 +94,7 @@ class Wire:
     def move_to_actions(self, move: dict[str, Any]) -> list[int]:
         return [int(move[f]) for f in self.move_fields]
 
-    def actions_to_move(self, actions: list[int]) -> dict[str, int]:
+    def actions_to_move(self, actions: list[int]) -> dict[str, Any]:
         if len(actions) != self.actions_per_move:
             raise ValueError(f"{self.game_id} takes {self.actions_per_move} actions a move")
         return {f: int(a) for f, a in zip(self.move_fields, actions, strict=True)}
@@ -228,7 +240,7 @@ class _OneMoreTri(Wire):
             raise ValueError(f"no triangle {tri} or no tile {tile}")
         return [tri * self.tiles + tile - 1]
 
-    def actions_to_move(self, actions: list[int]) -> dict[str, int]:
+    def actions_to_move(self, actions: list[int]) -> dict[str, Any]:
         if len(actions) != 1:
             raise ValueError(f"{self.game_id} takes 1 action a move")
         tri, tile = divmod(int(actions[0]), self.tiles)
@@ -268,10 +280,78 @@ class _OneMoreTri(Wire):
         }
 
 
+class _Pig(Wire):
+    game_id = "pig/1"
+    env_id = "pig"
+    # v1 only added a feature to the observation, the banked total if the mover held now.
+    rules_versions = ("v0", "v1")
+    glyphs = ""
+    move_fields = ("action",)
+    actions = ("stop", "roll")
+    faces = 6
+
+    def __init__(self) -> None:
+        super().__init__(pgx.pig.Pig(), pig_game.Game(), pgx.pig.State, 0)
+        # pgx rolls straight from the key it is given, so a key it turns into a face forces it.
+        keys: dict[int, jnp.ndarray] = {}
+        i = 0
+        while len(keys) < self.faces:
+            key = jax.random.PRNGKey(i)
+            keys.setdefault(int(pig_game._roll(key)), key)
+            i += 1
+        self._face_keys = jnp.stack([keys[face] for face in range(1, self.faces + 1)])
+
+    @property
+    def chance_keys(self) -> jnp.ndarray:
+        """`chance_keys[r - 1]` makes pgx roll `r`."""
+        return self._face_keys
+
+    def between_moves(self, state: Any) -> bool:
+        return True
+
+    def move_to_actions(self, move: dict[str, Any]) -> list[int]:
+        action = move["action"]
+        if action not in self.actions:
+            raise ValueError(f"action must be 'stop' or 'roll', not {action!r}")
+        return [self.actions.index(action)]
+
+    def actions_to_move(self, actions: list[int]) -> dict[str, Any]:
+        if len(actions) != 1:
+            raise ValueError(f"{self.game_id} takes 1 action a move")
+        return {"action": self.actions[int(actions[0])]}
+
+    def to_pgx(self, wire: dict[str, Any]) -> Any:
+        totals = [int(t) for t in wire["totals"]]
+        turn_total, last_roll = int(wire["turn_total"]), int(wire["last_roll"])
+        if len(totals) != 2 or min(totals) < 0:
+            raise ValueError("totals must be two counts")
+        if not 1 <= last_roll <= self.faces or turn_total < last_roll:
+            raise ValueError(f"no turn total {turn_total} with a last roll of {last_roll}")
+        to_move = self._to_move(wire)
+        x = pig_game.GameState(
+            color=jnp.int32(to_move),
+            totals=jnp.asarray(totals, dtype=jnp.int32),
+            turn_total=jnp.int32(turn_total),
+            last_roll=jnp.int32(last_roll),
+            winner=jnp.int32(-1),
+        )
+        return self._state(x, to_move, 0)
+
+    def from_pgx(self, state: Any) -> dict[str, Any]:
+        x = state._x
+        return {
+            "totals": [int(t) for t in np.asarray(x.totals)],
+            "turn_total": int(x.turn_total),
+            "last_roll": int(x.last_roll),
+            "to_move": int(x.color),
+        }
+
+
 EPAMINONDAS = _Epaminondas()
 GESS = _Gess()
 ONE_MORE_TRI = _OneMoreTri()
-WIRES: tuple[Wire, ...] = (EPAMINONDAS, GESS, ONE_MORE_TRI)
+PIG = _Pig()
+WIRES: tuple[Wire, ...] = (EPAMINONDAS, GESS, ONE_MORE_TRI, PIG)
 
 
 def for_env_id(env_id: str) -> Wire:

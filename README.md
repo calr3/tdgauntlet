@@ -10,7 +10,8 @@ in memory (a compiled JAX model, a transposition table) without the tournament h
 
 Positions and moves are opaque JSON tagged with a game id, so the tournament layer knows nothing
 about any particular game. [Epaminondas](games/epaminondas.md), [Gess](games/gess.md),
-[One More Tri](games/one-more-tri.md) and [Go](games/go-19x19.md) (19 x 19) are the four so far.
+[One More Tri](games/one-more-tri.md), [Go](games/go-19x19.md) (19 x 19) and [Pig](games/pig.md)
+are the five so far. Pig has dice in it, which the server rolls.
 
 - [`PROTOCOL.md`](PROTOCOL.md) — the wire contract; start here to write a client.
 - [`schema/`](schema/) — JSON Schema for every message.
@@ -38,6 +39,9 @@ cargo build --release
 
 # Go on 19 x 19, pgx's go_19x19: area scoring, komi 7.5, and a repeated position loses.
 ./target/release/tdgauntlet run examples/go_random.toml
+
+# Pig, pgx's pig: roll or stop, first to bank 100. The server rolls the dice.
+./target/release/tdgauntlet run examples/pig_random.toml
 
 # Check a client you have written before entering it.
 ./target/release/tdgauntlet check http://127.0.0.1:9001
@@ -67,7 +71,7 @@ to the config file, so a config means the same thing wherever it is run from.
 | path | what |
 |---|---|
 | `crates/proto` | wire types |
-| `crates/games` | the `Game` trait, the registry, and the rules of each game (Epaminondas, Gess) |
+| `crates/games` | the `Game` trait, the registry, and the rules of each game |
 | `crates/tourney` | the `tdgauntlet` binary: openings, scheduling, adjudication, scoring, reporting |
 | `crates/client-kit` | serve a Rust engine as a client |
 | `clients/random` | uniformly random legal moves, in any game; the reference client |
@@ -136,12 +140,13 @@ and what the server did about it, and the standings.
 `epaminondas/1` is pgx's Epaminondas at env version **v6** (100-move quiet clock, advancement
 tiebreak, no draws), `gess/1` is pgx's Gess at **v1**, `one-more-tri/1` is pgx's `g_hex` at
 **v1** (see [its rules](games/one-more-tri.md)), and `go-19x19/1` is pgx's `go_19x19` at **v1**
-(see [its rules](games/go-19x19.md): superko loses rather than being barred). The Rust
-engines in `crates/games` are independent implementations, held to pgx by `cargo test -p
-tdg-games --test conformance`, `--test gess_conformance`, `--test one_more_tri_conformance` and
-`--test go_conformance`:
-hundreds to thousands of positions each, every legal move from each,
-every successor state and outcome, and perft counts, all dumped from pgx.
+(see [its rules](games/go-19x19.md): superko loses rather than being barred), and `pig/1` is
+pgx's `pig` at **v0** (see [its rules](games/pig.md)). The Rust engines in `crates/games` are
+independent implementations, held to pgx by `cargo test -p tdg-games --test conformance`,
+`--test gess_conformance`, `--test one_more_tri_conformance`, `--test go_conformance` and
+`--test pig_conformance`: hundreds to thousands of positions each, every legal move from each,
+every successor state and outcome (in Pig, after every roll of the die), and perft counts where
+a game has no dice, all dumped from pgx.
 
 When pgx's rules change, regenerate the vectors in the pgx environment and commit them:
 
@@ -151,6 +156,7 @@ JAX_PLATFORMS=cpu python conformance/dump_eval.py     # evaluator reference for 
 JAX_PLATFORMS=cpu python conformance/dump_gess.py     # Gess positions and perft
 JAX_PLATFORMS=cpu python conformance/dump_one_more_tri.py   # One More Tri (g_hex), ~20 s
 JAX_PLATFORMS=cpu python conformance/dump_go.py       # Go (go_19x19), ~15 min
+JAX_PLATFORMS=cpu python conformance/dump_pig.py      # Pig, ~5 s
 ```
 
 ## Development

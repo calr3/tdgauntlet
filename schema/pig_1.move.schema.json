@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/calr3/tdgauntlet/schema/pig_1.move.schema.json",
+  "title": "pig/1 move",
+  "type": "object",
+  "required": ["action"],
+  "properties": {
+    "action": {
+      "enum": ["roll", "stop"],
+      "description": "Roll again, or bank the turn total and pass the die. Only stop is legal after a 1."
+    },
+    "san": { "type": "string", "description": "Optional, ignored on input." }
+  }
+}

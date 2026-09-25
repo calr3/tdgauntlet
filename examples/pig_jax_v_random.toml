@@ -1,0 +1,29 @@
+# A trained Pig network against random play.
+#
+# Start the JAX client yourself, in the pgx environment, first:
+#   cd clients/jax && JAX_PLATFORMS=cpu python -m tdg_jax --port 9432 --sims 32 \
+#       --checkpoint ~/calr3gh/pgx/checkpoints/pig_20260917054807/000060.ckpt
+#
+# The checkpoint decides the game, so the client advertises pig/1 and nothing else. The server
+# rolls the dice; the search samples its own rolls, one per edge, as pgx's self-play did. Random
+# play stops half the time and banks little, so expect the network to win nearly everything.
+game = "pig/1"
+seed = 31
+concurrency = 8
+out = "../results/pig_jax_v_random.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 20
+
+[[player]]
+name = "jax"
+url = "http://127.0.0.1:9432"
+budget_sims = 32
+timeout_ms = 120000
+
+[[player]]
+name = "random"
+cmd = "../target/release/tdg-random --port {port}"
+budget_ms = 100

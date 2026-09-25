@@ -250,6 +250,44 @@ fn one_more_tri_doc_examples_match_their_schemas() {
 }
 
 #[test]
+fn pig_doc_examples_match_their_schemas() {
+    let doc = std::fs::read_to_string(repo_root().join("games/pig.md")).unwrap();
+    let (state, mv) = (
+        compile("pig_1.state.schema.json"),
+        compile("pig_1.move.schema.json"),
+    );
+    let mut seen = (false, false);
+    for value in json_blocks(&doc) {
+        if value.get("totals").is_some() {
+            assert_valid(&state, &value, "pig state example");
+            seen.0 = true;
+        } else {
+            assert_valid(&mv, &value, "pig move example");
+            seen.1 = true;
+        }
+    }
+    assert_eq!(seen, (true, true));
+    let state_of = |totals: serde_json::Value, roll: i64| serde_json::json!({"totals": totals, "turn_total": 4, "last_roll": roll, "to_move": 0});
+    assert_valid(&state, &state_of(serde_json::json!([0, 0]), 4), "a start");
+    for (value, why) in [
+        (state_of(serde_json::json!([0]), 4), "one total"),
+        (state_of(serde_json::json!([-3, 0]), 4), "a negative total"),
+        (state_of(serde_json::json!([0, 0]), 7), "a 7"),
+        (state_of(serde_json::json!([0, 0]), 0), "a 0"),
+    ] {
+        assert_invalid(&state, &value, why);
+    }
+    assert_valid(&mv, &serde_json::json!({"action": "stop"}), "stop");
+    for (value, why) in [
+        (serde_json::json!({"action": "hold"}), "hold"),
+        (serde_json::json!({"action": 1}), "an action number"),
+        (serde_json::json!({}), "no action"),
+    ] {
+        assert_invalid(&mv, &value, why);
+    }
+}
+
+#[test]
 fn go_doc_examples_match_their_schemas() {
     let doc = std::fs::read_to_string(repo_root().join("games/go-19x19.md")).unwrap();
     let (state, mv) = (

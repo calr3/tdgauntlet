@@ -8,9 +8,9 @@ have already been made once.
 A tournament server for board-game agents. The Rust server owns the rules, clock, adjudication
 and score; clients answer "what is your move in this position?" over HTTP and keep **no per-game
 state**. Read `README.md` for the overview and `PROTOCOL.md` for the wire contract. The games are
-Epaminondas, Gess, One More Tri (pgx's `g_hex`) and Go 19 x 19 (pgx's `go_19x19`). Gess and One
-More Tri are played by the game-agnostic clients (`random`, `keyboard`, `web`, the Python SDK) and
-by `clients/jax`, whose checkpoint decides its game; Go by the game-agnostic clients only (there
+Epaminondas, Gess, One More Tri (pgx's `g_hex`), Go 19 x 19 (pgx's `go_19x19`) and Pig. Gess, One
+More Tri and Pig are played by the game-agnostic clients (`random`, `keyboard`, `web`, the Python
+SDK) and by `clients/jax`, whose checkpoint decides its game; Go by the game-agnostic clients only (there
 is no 19 x 19 checkpoint yet); `alphabeta` and `mcts` are Epaminondas only.
 
 It sits next to `~/calr3gh/pgx` (JAX training, the reference rules, checkpoints) and replaces
@@ -88,6 +88,15 @@ ruff format, mypy and pytest. Run the same before committing.
   361 successors a position would not fit otherwise. Random play reaches superko only now and
   then (twice in the committed vectors, both times a white win), so two scripted double-ko games
   make sure a repeat by each side is covered; keep them.
+- `pig/1` is pgx's **`pig` at v0 and v1**, and the one game of chance. v1 only appended an
+  observation feature (the total holding now would bank); regenerating the vectors from v1
+  reproduces the committed v0 ones exactly, so they stay v0. The server rolls the die:
+  `Game::initial_with` / `apply_with` draw it, and `DynGame::initial` / `play` take the rng, so
+  everything that plays a move - the engine, openings, `check`, the web client's preview - has
+  to pass one. Pig's plain `Game::initial` / `apply` panic; `Position::play(mv, roll)` is the
+  deterministic form the tests and conformance use. The engine seeds the dice from the
+  minimatch, not the game, so both legs roll the same sequence. `dump_pig.py` (~5 s) forces each
+  face through a JAX key pgx turns into it, and records a successor per move per face.
 - Anything that walks a random game to a fixed depth has to cope with a game that ends first.
   `check.rs` used to retry the same depth for ever and hung on Gess.
 - pgx's `EpaminondasCli` labels board row 0 as rank 12, contradicting its own docstring. Here,

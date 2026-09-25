@@ -6,7 +6,7 @@
 use crate::config::OpeningSpec;
 use anyhow::{bail, Context as _, Result};
 use rand::seq::IndexedRandom;
-use rand::SeedableRng;
+use rand::{RngCore, SeedableRng};
 use rand_chacha::ChaCha8Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -23,17 +23,19 @@ pub struct Opening {
 }
 
 pub fn generate(game: &dyn DynGame, spec: &OpeningSpec, seed: u64) -> Result<Vec<Opening>> {
+    // Only a game of chance draws on it outside `random`: for the first roll of Pig, say.
+    let mut rng = ChaCha8Rng::seed_from_u64(seed);
     match spec {
         OpeningSpec::Start => Ok(vec![Opening {
             id: "start".into(),
-            state: game.initial(),
+            state: game.initial(&mut rng),
             moves: vec![],
         }]),
         OpeningSpec::Random { plies, count } => random(game, *plies, *count, seed),
         OpeningSpec::File { path } => {
             let text = std::fs::read_to_string(path)
                 .with_context(|| format!("reading openings from {}", path.display()))?;
-            from_book(game, &text)
+            from_book(game, &text, &mut rng)
         }
     }
 }
@@ -49,14 +51,16 @@ fn random(game: &dyn DynGame, plies: u32, count: usize, seed: u64) -> Result<Vec
         if out.len() == count {
             break;
         }
-        let mut state = game.initial();
+        let mut state = game.initial(&mut rng);
         let mut moves = Vec::new();
         for _ in 0..plies {
             let legal = game.legal_moves(&state)?;
             let Some(mv) = legal.choose(&mut rng) else {
                 break;
             };
-            let played = game.play(&state, mv).expect("a generated move is legal");
+            let played = game
+                .play(&state, mv, &mut rng)
+                .expect("a generated move is legal");
             moves.push(played.notation);
             state = played.state;
         }
@@ -94,8 +98,8 @@ struct BookLine {
 }
 
 /// A JSON-lines book: `{"state": ...}` or `{"moves": [...]}` per line. Blank lines and lines
-/// starting with `#` are skipped.
-pub fn from_book(game: &dyn DynGame, text: &str) -> Result<Vec<Opening>> {
+/// starting with `#` are skipped. In a game of chance, `rng` rolls the dice of a move list.
+pub fn from_book(game: &dyn DynGame, text: &str, rng: &mut dyn RngCore) -> Result<Vec<Opening>> {
     let mut out = Vec::new();
     for (n, line) in text.lines().enumerate() {
         let line = line.trim();
@@ -111,11 +115,11 @@ pub fn from_book(game: &dyn DynGame, text: &str) -> Result<Vec<Opening>> {
                 (state, vec![])
             }
             (None, Some(moves)) => {
-                let mut state = game.initial();
+                let mut state = game.initial(rng);
                 let mut notation = Vec::new();
                 for (i, mv) in moves.iter().enumerate() {
                     let played = game
-                        .play(&state, mv)
+                        .play(&state, mv, rng)
                         .with_context(|| format!("{}, move {}", where_(), i + 1))?;
                     notation.push(played.notation);
                     state = played.state;
@@ -148,7 +152,7 @@ mod tests {
     fn start_is_the_initial_position() {
         let o = generate(epam(), &OpeningSpec::Start, 1).unwrap();
         assert_eq!(o.len(), 1);
-        assert_eq!(o[0].state, epam().initial());
+        assert_eq!(o[0].state, epam().initial(&mut rand::rng()));
     }
 
     #[test]
@@ -163,7 +167,7 @@ mod tests {
         )
         .unwrap();
         assert_eq!(o.len(), 1, "there is only one position zero plies deep");
-        assert_eq!(o[0].state, epam().initial());
+        assert_eq!(o[0].state, epam().initial(&mut rand::rng()));
     }
 
     #[test]
@@ -195,7 +199,7 @@ mod tests {
             assert_eq!(x.moves.len(), 3);
             assert_eq!(epam().outcome(&x.state).unwrap(), None);
             // Replaying the recorded notation from the start reaches the recorded state.
-            let mut state = epam().initial();
+            let mut state = epam().initial(&mut rand::rng());
             for san in &x.moves {
                 let mv = epam()
                     .legal_moves(&state)
@@ -203,7 +207,7 @@ mod tests {
                     .into_iter()
                     .find(|m| m["san"] == san.as_str())
                     .unwrap();
-                state = epam().play(&state, &mv).unwrap().state;
+                state = epam().play(&state, &mv, &mut rand::rng()).unwrap().state;
             }
             assert_eq!(state, x.state);
         }
@@ -226,12 +230,12 @@ mod tests {
 
     #[test]
     fn books_accept_states_and_move_lists() {
-        let start = epam().initial();
+        let start = epam().initial(&mut rand::rng());
         let book = format!(
             "# a comment\n\n{{\"id\": \"quiet\", \"state\": {start}}}\n\
              {{\"moves\": [{{\"lead\": 17, \"rear\": 3, \"dest\": 45}}]}}\n"
         );
-        let o = from_book(epam(), &book).unwrap();
+        let o = from_book(epam(), &book, &mut rand::rng()).unwrap();
         assert_eq!(o.len(), 2);
         assert_eq!(o[0].id, "quiet");
         assert_eq!(o[1].id, "o1");
@@ -240,7 +244,7 @@ mod tests {
 
     #[test]
     fn bad_books_are_rejected_with_the_line_number() {
-        let start = epam().initial();
+        let start = epam().initial(&mut rand::rng());
         let illegal = "{\"moves\": [{\"lead\": 140, \"rear\": 140, \"dest\": 126}]}";
         let both = format!("{{\"state\": {start}, \"moves\": []}}");
         for (book, why) in [
@@ -250,7 +254,10 @@ mod tests {
             (both.as_str(), "exactly one"),
             ("{\"state\": {\"board\": \"...\"}}", "line 1"),
         ] {
-            let err = format!("{:#}", from_book(epam(), book).unwrap_err());
+            let err = format!(
+                "{:#}",
+                from_book(epam(), book, &mut rand::rng()).unwrap_err()
+            );
             assert!(err.contains(why), "{why}: {err}");
         }
     }

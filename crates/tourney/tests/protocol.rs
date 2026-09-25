@@ -94,7 +94,7 @@ async fn choose(State(c): State<Arc<Client>>, Json(req): Json<MoveRequest>) -> R
     let resp = match c.mode {
         Mode::Good | Mode::Jitter | Mode::Serial | Mode::Hang => reply(pick(&req.state)),
         Mode::Illegal => reply(json!({"lead": 0, "rear": 0, "dest": 100})),
-        Mode::StaleBoard => reply(pick(&c.game.initial())),
+        Mode::StaleBoard => reply(pick(&c.game.initial(&mut rand::rng()))),
         Mode::Stateful => {
             let remembered = c.last_state.lock().unwrap().clone().unwrap();
             reply(pick(&remembered))
@@ -231,7 +231,7 @@ async fn a_move_for_the_wrong_position_is_caught() {
             .clone();
         for m in &g.moves {
             state = game
-                .play(&state, &m.mv)
+                .play(&state, &m.mv, &mut rand::rng())
                 .expect("only legal moves are recorded")
                 .state;
         }

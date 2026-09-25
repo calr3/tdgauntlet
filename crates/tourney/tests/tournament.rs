@@ -199,7 +199,7 @@ async fn a_round_robin_plays_every_minimatch_both_ways() {
         for g in [g0, g1] {
             let mut state = opening.state.clone();
             for mv in &g.moves {
-                state = epam().play(&state, &mv.mv).unwrap().state;
+                state = epam().play(&state, &mv.mv, &mut rand::rng()).unwrap().state;
             }
             assert_eq!(state, g.final_state, "{}", g.id);
             assert_eq!(g.termination, Termination::Rules);
@@ -305,7 +305,7 @@ async fn one_game(
 ) -> tdg_tourney::engine::GameRecord {
     let opening = Arc::new(Opening {
         id: "start".into(),
-        state: epam().initial(),
+        state: epam().initial(&mut rand::rng()),
         moves: vec![],
     });
     play_game(
@@ -604,4 +604,78 @@ async fn think_time_excludes_waiting_for_a_busy_client() {
         })
         .collect();
     assert!(times.iter().all(|&t| (20..60).contains(&t)), "{times:?}");
+}
+
+/// Plays Pig by holding at 20: its move depends on the position alone.
+struct HoldAt20;
+
+#[async_trait]
+impl Player for HoldAt20 {
+    async fn identify(&self) -> Result<Identify, PlayerError> {
+        Ok(Identify {
+            protocol: ProtocolVersion::CURRENT,
+            name: "hold-at-20".into(),
+            version: "0".into(),
+            games: vec!["pig/1".into()],
+            max_concurrency: 1,
+        })
+    }
+
+    async fn choose(&self, req: &MoveRequest, _: Duration) -> Result<MoveResponse, PlayerError> {
+        let s = &req.state;
+        let roll = s["last_roll"] != 1 && s["turn_total"].as_u64().unwrap() < 20;
+        Ok(MoveResponse {
+            request_id: req.request_id.clone(),
+            mv: serde_json::json!({"action": if roll { "roll" } else { "stop" }}),
+            info: None,
+        })
+    }
+}
+
+#[tokio::test]
+async fn both_games_of_a_pig_minimatch_roll_the_same_dice() {
+    let pig = tdg_games::by_id("pig/1").unwrap();
+    let seat = |name: &str| {
+        Arc::new(Seat {
+            name: name.into(),
+            player: Arc::new(HoldAt20),
+            limit: Arc::new(Semaphore::new(1)),
+            budget: Budget::from_ms(10),
+            timeout: Duration::from_secs(5),
+            on_error: ErrorPolicy::Forfeit,
+        })
+    };
+    let (a, b) = (seat("a"), seat("b"));
+    let opening = Arc::new(Opening {
+        id: "start".into(),
+        state: serde_json::json!({"totals": [0, 0], "turn_total": 4, "last_roll": 4, "to_move": 0}),
+        moves: vec![],
+    });
+    let play = |id: &str, match_id: &str, seats: [Arc<Seat>; 2]| {
+        play_game(
+            pig.clone(),
+            GameSpec {
+                id: id.into(),
+                match_id: match_id.into(),
+                opening: opening.clone(),
+                seats,
+                max_plies: 12_000,
+                seed: 5,
+            },
+        )
+    };
+    let first = play("m-a", "m", [a.clone(), b.clone()]).await;
+    let second = play("m-b", "m", [b.clone(), a.clone()]).await;
+    let sans = |g: &tdg_tourney::engine::GameRecord| {
+        g.moves.iter().map(|m| m.san.clone()).collect::<Vec<_>>()
+    };
+    // The same dice and the same strategy on both sides: the same game, won by the same seat.
+    assert!(first.moves.len() > 20, "{} moves", first.moves.len());
+    assert_eq!(first.termination, Termination::Rules);
+    assert_eq!(sans(&first), sans(&second));
+    assert_eq!(first.final_state, second.final_state);
+    assert_eq!(first.outcome, second.outcome);
+    // Another minimatch rolls other dice.
+    let other = play("n-a", "n", [a, b]).await;
+    assert_ne!(first.final_state, other.final_state);
 }

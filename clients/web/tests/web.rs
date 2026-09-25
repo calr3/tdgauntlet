@@ -27,7 +27,7 @@ fn request(id: &str, state: Value) -> Value {
 }
 
 fn start_position() -> Value {
-    tdg_games::epaminondas::Epaminondas.initial()
+    tdg_games::epaminondas::Epaminondas.initial(&mut rand::rng())
 }
 
 /// Posts to `/move` in the background, as the tournament would.
@@ -281,4 +281,29 @@ async fn refuses_what_it_cannot_play() {
         .await
         .unwrap();
     assert_eq!(r.status(), 422);
+}
+
+#[tokio::test]
+async fn a_move_of_chance_shows_the_position_it_was_played_in() {
+    // The roll that comes with it is the server's to make, not the page's.
+    let state = json!({"totals": [42, 17], "turn_total": 9, "last_roll": 5, "to_move": 0});
+    let mut req = request("r-pig", state.clone());
+    req["game"] = json!("pig/1");
+    let base = start(1).await;
+    let reply = ask(&base, req);
+    let view = until_pending(&base, 1).await.pending[0].clone();
+    assert!(
+        view.text.contains("rolled 5, turn total 9"),
+        "{}",
+        view.text
+    );
+    let roll = view.moves.iter().find(|m| m.notation == "roll").unwrap();
+    let r = answer(&base, json!({"id": view.id, "move": roll.mv})).await;
+    let played: Answered = r.json().await.unwrap();
+    assert_eq!(played.notation, "roll");
+    assert_eq!(played.state, state);
+    assert_eq!(played.text, view.text);
+    assert!(played.outcome.is_none());
+    let body: MoveResponse = reply.await.unwrap().json().await.unwrap();
+    assert_eq!(body.mv["action"], "roll");
 }
