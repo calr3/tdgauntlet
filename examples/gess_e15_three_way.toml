@@ -1,0 +1,32 @@
+# pgx Gess E15 (the control: E13 warm-started for 24 iterations on v1's four planes, E14's
+# settings otherwise) against E14 (the same with v2's clock planes) and E13, round robin, all at
+# 128 Gumbel MCTS sims. E14 vs. E15 separates the planes from the extra training.
+#
+# pgx/run_e15_tournament.sh starts the three clients (ports 9441-9443) once training finishes.
+game = "gess/1"
+seed = 1414
+concurrency = 96
+out = "../results/gess_e15_three_way.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 200
+
+[[player]]
+name = "e15"
+url = "http://127.0.0.1:9441"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e14"
+url = "http://127.0.0.1:9442"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e13"
+url = "http://127.0.0.1:9443"
+budget_sims = 128
+timeout_ms = 600000

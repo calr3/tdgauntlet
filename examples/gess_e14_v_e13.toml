@@ -1,0 +1,31 @@
+# pgx Gess E14 (E13 warm-started with the v2 clock planes, 24 iterations) against E13 itself,
+# both under Gumbel MCTS at the same simulation count. E13 is a v1 (four-plane) checkpoint; the
+# JAX client shows it only the leading four planes, so both play the same v1 rules.
+#
+# Start the two clients first, in the pgx environment (see clients/jax/README.md), e.g.:
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.4 python -m tdg_jax --port 9431 --sims 128 --max-batch 32 \
+#       --name e14 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260926190427/000024.ckpt
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.4 python -m tdg_jax --port 9432 --sims 128 --max-batch 32 \
+#       --name e13 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260916200542/000072.ckpt
+# (pgx/run_e14_tournament.sh does all of this once training has finished.)
+game = "gess/1"
+seed = 1414
+concurrency = 64
+out = "../results/gess_e14_v_e13.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 200
+
+[[player]]
+name = "e14"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e13"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000

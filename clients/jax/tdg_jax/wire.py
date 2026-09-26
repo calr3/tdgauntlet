@@ -181,7 +181,9 @@ class _Epaminondas(Wire):
 class _Gess(Wire):
     game_id = "gess/1"
     env_id = "gess"
-    rules_versions = ("v1",)
+    # v2 appended two observation planes (the quiet clock, and the clock signed by who is ahead
+    # on stones) and left the rules as v1's.
+    rules_versions = ("v1", "v2")
     # pgx stores 1 for black, who moves first, and 2 for white: the other way round to Epaminondas.
     glyphs = ".BW"
     move_fields = ("from", "to")
