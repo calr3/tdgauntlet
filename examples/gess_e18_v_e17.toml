@@ -1,0 +1,31 @@
+# pgx Gess E18 (E17 continued to 298 iterations with 64-simulation full searches and the LR re-warmed to 2e-4) against E17 (iteration 266 of the same run),
+# both under Gumbel MCTS at the same simulation count. Both read only the leading four planes
+# (obs_planes=4).
+#
+# Start the two clients first, in the pgx environment (see clients/jax/README.md), e.g.:
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.4 python -m tdg_jax --port 9431 --sims 128 --max-batch 32 \
+#       --name e18 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260926222338/000298.ckpt
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.4 python -m tdg_jax --port 9432 --sims 128 --max-batch 32 \
+#       --name e17 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260926222338/000266.ckpt
+# (pgx/run_e18_tournament.sh does all of this once training has finished.)
+game = "gess/1"
+seed = 1818
+concurrency = 64
+out = "../results/gess_e18_v_e17.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 200
+
+[[player]]
+name = "e18"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e17"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
