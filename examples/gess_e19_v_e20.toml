@@ -1,0 +1,31 @@
+# pgx Gess E19 (E18 continued ~5 h reading v2's clock planes, obs_planes=6) against E20 (the same continuation without them),
+# both under Gumbel MCTS at the same simulation count. E19 reads all six observation planes, E20
+# the leading four.
+#
+# Start the two clients first, in the pgx environment (see clients/jax/README.md), e.g.:
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.4 python -m tdg_jax --port 9431 --sims 128 --max-batch 32 \
+#       --name e19 --checkpoint ~/calr3gh/pgx/checkpoints/<E19 run>/000332.ckpt
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.4 python -m tdg_jax --port 9432 --sims 128 --max-batch 32 \
+#       --name e20 --checkpoint ~/calr3gh/pgx/checkpoints/<E20 run>/000332.ckpt
+# (pgx/run_e19_e20.sh does all of this once training has finished.)
+game = "gess/1"
+seed = 1920
+concurrency = 64
+out = "../results/gess_e19_v_e20.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 200
+
+[[player]]
+name = "e19"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e20"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
