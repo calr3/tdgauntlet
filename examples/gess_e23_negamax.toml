@@ -1,0 +1,36 @@
+# pgx Gess E23 (E22 continued ~5 h with the auxiliary immediate-win target, aux_win_weight=1.0) and
+# E22 (it 400), each against the Gess web app's negamax engine at 2 s a move (single-threaded), and
+# against each other, on the same openings. All three pairings at 128 simulations a move.
+#
+# Players (pgx/run_e23_followup.sh starts them once training has finished):
+#   tdg_jax --port 9431 --sims 128 --max-batch 32 --name e23 --checkpoint ~/calr3gh/pgx/checkpoints/<E23 run>/000434.ckpt
+#   tdg_jax --port 9432 --sims 128 --max-batch 32 --name e22 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260930235206/000400.ckpt
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 12 --name negamax2s
+game = "gess/1"
+seed = 2323
+concurrency = 48
+out = "../results/gess_e23_negamax.json"
+pairs = [["e23", "negamax2s"], ["e22", "negamax2s"], ["e23", "e22"]]
+
+[openings]
+kind = "random"
+plies = 2
+count = 60
+
+[[player]]
+name = "e23"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e22"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "negamax2s"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 600000

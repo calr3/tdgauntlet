@@ -1,0 +1,41 @@
+# Does more search close the gap to negamax? pgx Gess E22 (it 400) at 128, 512 and 2048 MCTS
+# simulations a move, each against the Gess web app's negamax engine at 2 s a move
+# (single-threaded here; the app's "Normal" budget). Only those three pairings are played.
+#
+# Players (pgx/run_negamax_scaling.sh starts them, then refereeing the pilot's losses):
+#   tdg_jax --port 9431/9432/9433 --sims 128/512/2048 --max-batch 32 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260930235206/000400.ckpt
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 12 --name negamax2s
+game = "gess/1"
+seed = 4242
+concurrency = 36
+out = "../results/gess_e22_sims_v_negamax.json"
+pairs = [["e22_128", "negamax2s"], ["e22_512", "negamax2s"], ["e22_2048", "negamax2s"]]
+
+[openings]
+kind = "random"
+plies = 2
+count = 16
+
+[[player]]
+name = "e22_128"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 1800000
+
+[[player]]
+name = "e22_512"
+url = "http://127.0.0.1:9432"
+budget_sims = 512
+timeout_ms = 1800000
+
+[[player]]
+name = "e22_2048"
+url = "http://127.0.0.1:9433"
+budget_sims = 2048
+timeout_ms = 1800000
+
+[[player]]
+name = "negamax2s"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 600000

@@ -1,0 +1,35 @@
+# Pilot: pgx Gess E22 (it 400) and E18 (it 298, the model on gesstest) against the Gess web app's
+# negamax engine at 2 s a move (the app's "Normal" budget; here single-threaded, so weaker than the
+# app's multi-threaded search at the same budget). A round robin, so E22 vs E18 is played too.
+#
+# Players (pgx/run_negamax_pilot.sh starts them):
+#   tdg_jax --port 9431 --sims 128 --max-batch 32 --name e22 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260930235206/000400.ckpt
+#   tdg_jax --port 9432 --sims 128 --max-batch 32 --name e18 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260926222338/000298.ckpt
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 12
+game = "gess/1"
+seed = 3131
+concurrency = 48
+out = "../results/gess_negamax_pilot.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 40
+
+[[player]]
+name = "e22"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e18"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "negamax2s"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 600000

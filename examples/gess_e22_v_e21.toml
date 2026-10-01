@@ -1,0 +1,30 @@
+# pgx Gess E22 (E21 continued ~5 h with value_scale_by_stage=0.1,2.0 in self-play) against E21 (iteration 366),
+# both under Gumbel MCTS at the same simulation count. Both read all six observation planes.
+#
+# Start the two clients first, in the pgx environment (see clients/jax/README.md), e.g.:
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.4 python -m tdg_jax --port 9431 --sims 128 --max-batch 32 \
+#       --name e22 --checkpoint ~/calr3gh/pgx/checkpoints/<E22 run>/000400.ckpt
+#   XLA_PYTHON_CLIENT_MEM_FRACTION=0.4 python -m tdg_jax --port 9432 --sims 128 --max-batch 32 \
+#       --name e21 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20260930055738/000366.ckpt
+# (pgx/run_e22_followup.sh does all of this once training has finished.)
+game = "gess/1"
+seed = 2221
+concurrency = 64
+out = "../results/gess_e22_v_e21.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 200
+
+[[player]]
+name = "e22"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e21"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
