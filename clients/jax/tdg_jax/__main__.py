@@ -72,7 +72,7 @@ def main() -> None:
         # The simulation count is fixed at startup; a request's `sims` budget is honoured only
         # when it matches, since each distinct count is a separate compilation.
         actions, info = agent.choose(pgx_state)
-        return wire.actions_to_move(actions), info
+        return wire.actions_to_move(actions, pgx_state), info
 
     def load() -> None:
         try:

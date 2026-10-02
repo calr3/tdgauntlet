@@ -37,6 +37,7 @@ import pgx
 import pgx.epaminondas
 import pgx.g_hex
 import pgx.gess
+import pgx.gess_joint
 import pgx.pig
 from pgx._src.games import epaminondas as epaminondas_game
 from pgx._src.games import g_hex as g_hex_game
@@ -91,10 +92,13 @@ class Wire:
         """The wire state for a pgx state between moves (stage 0)."""
         raise NotImplementedError
 
-    def move_to_actions(self, move: dict[str, Any]) -> list[int]:
+    def move_to_actions(self, move: dict[str, Any], state: Any = None) -> list[int]:
+        """The pgx actions of a wire move. `state` (the pgx state the move is played from) is
+        needed only by wires whose actions depend on the position (gess_joint's list slots)."""
         return [int(move[f]) for f in self.move_fields]
 
-    def actions_to_move(self, actions: list[int]) -> dict[str, Any]:
+    def actions_to_move(self, actions: list[int], state: Any = None) -> dict[str, Any]:
+        """The wire move for pgx actions played from `state` (see move_to_actions)."""
         if len(actions) != self.actions_per_move:
             raise ValueError(f"{self.game_id} takes {self.actions_per_move} actions a move")
         return {f: int(a) for f, a in zip(self.move_fields, actions, strict=True)}
@@ -183,10 +187,10 @@ class _Gess(Wire):
     env_id = "gess"
     # v2 appended two observation planes (the quiet clock, and the clock signed by who is ahead
     # on stones) and left the rules as v1's.
-    rules_versions = ("v1", "v2")
+    rules_versions: tuple[str, ...] = ("v1", "v2")
     # pgx stores 1 for black, who moves first, and 2 for white: the other way round to Epaminondas.
     glyphs = ".BW"
-    move_fields = ("from", "to")
+    move_fields: tuple[str, ...] = ("from", "to")
 
     def __init__(self) -> None:
         super().__init__(pgx.gess.Gess(), gess_game.Game(), pgx.gess.State, gess_game.N)
@@ -236,13 +240,13 @@ class _OneMoreTri(Wire):
     def between_moves(self, state: Any) -> bool:
         return True
 
-    def move_to_actions(self, move: dict[str, Any]) -> list[int]:
+    def move_to_actions(self, move: dict[str, Any], state: Any = None) -> list[int]:
         tri, tile = int(move["tri"]), int(move["tile"])
         if not (0 <= tri < self.triangles and 1 <= tile <= self.tiles):
             raise ValueError(f"no triangle {tri} or no tile {tile}")
         return [tri * self.tiles + tile - 1]
 
-    def actions_to_move(self, actions: list[int]) -> dict[str, Any]:
+    def actions_to_move(self, actions: list[int], state: Any = None) -> dict[str, Any]:
         if len(actions) != 1:
             raise ValueError(f"{self.game_id} takes 1 action a move")
         tri, tile = divmod(int(actions[0]), self.tiles)
@@ -311,13 +315,13 @@ class _Pig(Wire):
     def between_moves(self, state: Any) -> bool:
         return True
 
-    def move_to_actions(self, move: dict[str, Any]) -> list[int]:
+    def move_to_actions(self, move: dict[str, Any], state: Any = None) -> list[int]:
         action = move["action"]
         if action not in self.actions:
             raise ValueError(f"action must be 'stop' or 'roll', not {action!r}")
         return [self.actions.index(action)]
 
-    def actions_to_move(self, actions: list[int]) -> dict[str, Any]:
+    def actions_to_move(self, actions: list[int], state: Any = None) -> dict[str, Any]:
         if len(actions) != 1:
             raise ValueError(f"{self.game_id} takes 1 action a move")
         return {"action": self.actions[int(actions[0])]}
@@ -349,11 +353,59 @@ class _Pig(Wire):
         }
 
 
+class _GessJoint(_Gess):
+    """Gess for a checkpoint trained on pgx's ``gess_joint``: the same game and wire format,
+    but one action per move. pgx's action is a slot in the position's move list
+    (``State._moves``, source * 400 + destination), so translating needs that position."""
+
+    env_id = "gess_joint"
+    rules_versions = ("v1",)
+    move_fields = ("move",)
+
+    def __init__(self) -> None:
+        Wire.__init__(
+            self, pgx.gess_joint.GessJoint(), gess_game.Game(), pgx.gess_joint.State, gess_game.N
+        )
+        self._legal_moves = jax.jit(pgx.gess_joint.legal_moves)
+
+    def _state(self, x: Any, to_move: int, moves: int) -> Any:
+        listed, overflow = self._legal_moves(x)
+        state = self.state_cls(
+            current_player=jnp.int32(to_move),
+            _x=x,
+            _moves=listed,
+            _overflow=overflow,
+            legal_action_mask=listed >= 0,
+            _step_count=jnp.int32(moves),
+        )
+        return state.replace(observation=self._observe(state))
+
+    def move_to_actions(self, move: dict[str, Any], state: Any = None) -> list[int]:
+        if state is None:
+            raise ValueError("gess_joint's actions are slots in a position's move list")
+        encoded = int(move["from"]) * gess_game.N + int(move["to"])
+        slots = np.flatnonzero(np.asarray(state._moves) == encoded)
+        if len(slots) == 0:
+            raise ValueError(f"{move} is not a legal move")
+        return [int(slots[0])]
+
+    def actions_to_move(self, actions: list[int], state: Any = None) -> dict[str, Any]:
+        if state is None:
+            raise ValueError("gess_joint's actions are slots in a position's move list")
+        if len(actions) != 1:
+            raise ValueError("gess_joint takes one action a move")
+        encoded = int(np.asarray(state._moves)[actions[0]])
+        if encoded < 0:
+            raise ValueError(f"slot {actions[0]} holds no move")
+        return {"from": encoded // gess_game.N, "to": encoded % gess_game.N}
+
+
 EPAMINONDAS = _Epaminondas()
 GESS = _Gess()
+GESS_JOINT = _GessJoint()
 ONE_MORE_TRI = _OneMoreTri()
 PIG = _Pig()
-WIRES: tuple[Wire, ...] = (EPAMINONDAS, GESS, ONE_MORE_TRI, PIG)
+WIRES: tuple[Wire, ...] = (EPAMINONDAS, GESS, GESS_JOINT, ONE_MORE_TRI, PIG)
 
 
 def for_env_id(env_id: str) -> Wire:

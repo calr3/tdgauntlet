@@ -36,7 +36,8 @@ VECTORS = {
     "one-more-tri/1": "one_more_tri.jsonl.gz",
     "pig/1": "pig.jsonl.gz",
 }
-GAME_IDS = [w.game_id for w in WIRES]
+# One wire per game id: gess_joint's shares gess/1 and is tested in test_wire_gess_joint.py.
+GAME_IDS = list(dict.fromkeys(w.game_id for w in WIRES))
 #: `_x` fields that mean nothing between moves, so the wire does not carry them. Gess leaves the
 #: last move's source in place; `test_a_stale_gess_source_is_invisible` is why that is harmless.
 SCRATCH = {"epaminondas/1": (), "gess/1": ("source",), "one-more-tri/1": (), "pig/1": ()}

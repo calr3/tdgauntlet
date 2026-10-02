@@ -51,7 +51,8 @@ def read_meta(path: Path) -> dict[str, Any]:
 
 
 def find_checkpoints() -> tuple[dict[str, Path], dict[str, str]]:
-    """The newest checkpoint for each game, if it was trained on the rules the server plays, and
+    """The newest checkpoint for each pgx env (one wire each; gess and gess_joint share a game
+    id), if it was trained on the rules the server plays, and
     why it was not usable otherwise.
 
     Only the newest run is considered. An older one that happens to carry the right rules label
@@ -60,7 +61,7 @@ def find_checkpoints() -> tuple[dict[str, Path], dict[str, str]]:
     if os.environ.get("TDG_JAX_CHECKPOINT"):
         path = Path(os.environ["TDG_JAX_CHECKPOINT"])
         wire = for_env_id(read_meta(path).get("env_id", "epaminondas"))
-        return {wire.game_id: path}, {}
+        return {wire.env_id: path}, {}
     found: dict[str, Path] = {}
     why: dict[str, str] = {}
     root = Path.home() / "calr3gh" / "pgx" / "checkpoints"
@@ -72,13 +73,13 @@ def find_checkpoints() -> tuple[dict[str, Path], dict[str, str]]:
         )
         newest = next((c for run in runs for c in sorted(run.glob("*.ckpt"), reverse=True)), None)
         if newest is None:
-            why[wire.game_id] = f"no {wire.env_id} checkpoint under {root}"
+            why[wire.env_id] = f"no {wire.env_id} checkpoint under {root}"
             continue
         version = read_meta(newest).get("env_version")
         if version in wire.rules_versions:
-            found[wire.game_id] = newest
+            found[wire.env_id] = newest
         else:
-            why[wire.game_id] = (
+            why[wire.env_id] = (
                 f"the newest {wire.env_id} run is pgx {version}, and {wire.game_id} plays "
                 f"{', '.join(wire.rules_versions)}"
             )
@@ -90,19 +91,19 @@ ALLOW_MISMATCH = bool(os.environ.get("TDG_JAX_CHECKPOINT"))
 _AGENTS: dict[tuple[str, bool, bool], Agent] = {}
 
 
-@pytest.fixture(params=[w.game_id for w in WIRES])
+@pytest.fixture(params=[w.env_id for w in WIRES])
 def wire(request: Any) -> Wire:
     if request.param not in CHECKPOINTS:
         pytest.skip(NO_CHECKPOINT.get(request.param, f"no checkpoint for {request.param}"))
-    return for_game_id(request.param)
+    return for_env_id(request.param)
 
 
 def agent_for(wire: Wire, policy_only: bool = False, value_only: bool = False) -> Agent:
     """One agent per game and mode, kept for the whole session: loading is the slow part."""
-    key = (wire.game_id, policy_only, value_only)
+    key = (wire.env_id, policy_only, value_only)
     if key not in _AGENTS:
         a = Agent(
-            CHECKPOINTS[wire.game_id],
+            CHECKPOINTS[wire.env_id],
             num_simulations=8,
             max_batch=8,
             policy_only=policy_only,
@@ -286,7 +287,10 @@ def score(agent: Agent, state: Any, move: list[int]) -> float:
             continue
         params, net_state = agent.model
         obs = narrow(after.observation[None], agent.obs_channels)
-        (_, value), _ = agent.forward.apply(params, net_state, obs, is_eval=True)
+        moves = getattr(after, "_moves", None)  # gess_joint's network also takes the move list
+        (_, value), _ = agent.forward.apply(
+            params, net_state, obs, is_eval=True, moves=None if moves is None else moves[None]
+        )
         scores.append(float(value[0]) * (1 if int(after.current_player) == mover else -1))
     return sum(scores) / len(scores)
 
@@ -331,7 +335,7 @@ def test_value_only_batches_concurrent_requests(wire: Wire) -> None:
 def test_policy_only_and_value_only_are_exclusive(wire: Wire) -> None:
     with pytest.raises(ValueError, match="choose one"):
         Agent(
-            CHECKPOINTS[wire.game_id],
+            CHECKPOINTS[wire.env_id],
             num_simulations=8,
             policy_only=True,
             value_only=True,

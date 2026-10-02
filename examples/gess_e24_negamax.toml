@@ -1,0 +1,36 @@
+# pgx Gess E24 (whole-move gess_joint, warm-started from E23 and trained ~6 h) and
+# E23 (it 434, two-step), each against the Gess web app's negamax engine at 2 s a move (single-threaded), and
+# against each other, on the same openings. All three pairings at 128 simulations a move.
+#
+# Players (pgx/run_e24_negamax.sh starts them once training has finished):
+#   tdg_jax --port 9431 --sims 128 --max-batch 32 --name e24 --checkpoint ~/calr3gh/pgx/checkpoints/gess_joint_20261002072552/000028.ckpt
+#   tdg_jax --port 9432 --sims 128 --max-batch 32 --name e23 --checkpoint ~/calr3gh/pgx/checkpoints/gess_20261001235654/000434.ckpt
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 12 --name negamax2s
+game = "gess/1"
+seed = 2424
+concurrency = 48
+out = "../results/gess_e24_negamax.json"
+pairs = [["e24", "negamax2s"], ["e23", "negamax2s"], ["e24", "e23"]]
+
+[openings]
+kind = "random"
+plies = 2
+count = 60
+
+[[player]]
+name = "e24"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e23"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "negamax2s"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 600000

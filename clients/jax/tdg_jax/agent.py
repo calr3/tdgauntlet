@@ -126,6 +126,14 @@ def stem_inputs(params: Any) -> int | None:
     return None
 
 
+def _moves(state: Any, batched: bool = True) -> Any:
+    """The move list a gess_joint network takes with the observation; None for other games."""
+    moves = getattr(state, "_moves", None)
+    if moves is None or batched:
+        return moves
+    return moves[None]
+
+
 def obs_channels(model: Model, forward: Any, env: Any) -> int | None:
     """Observation planes the checkpoint was trained on, or None when it cannot be told.
 
@@ -139,7 +147,12 @@ def obs_channels(model: Model, forward: Any, env: Any) -> int | None:
     if trained is None:
         return None
     start = env.init(jax.random.PRNGKey(0))
-    reference, _ = forward.init(jax.random.PRNGKey(0), start.observation[None], is_eval=True)
+    reference, _ = forward.init(
+        jax.random.PRNGKey(0),
+        start.observation[None],
+        is_eval=True,
+        moves=_moves(start, batched=False),
+    )
     provided = stem_inputs(reference)
     if provided is None:
         return None
@@ -250,7 +263,11 @@ class Agent:
         keys = jax.random.split(rng_key, action.shape[0])
         state = jax.vmap(self.env.step)(state, action, keys)
         (logits, value), _ = self.forward.apply(
-            params, net_state, narrow(state.observation, self.obs_channels), is_eval=True
+            params,
+            net_state,
+            narrow(state.observation, self.obs_channels),
+            is_eval=True,
+            moves=_moves(state),
         )
         logits = jnp.where(state.legal_action_mask, logits, jnp.finfo(logits.dtype).min)
         reward = state.rewards[jnp.arange(state.rewards.shape[0]), current_player]
@@ -270,7 +287,11 @@ class Agent:
     def _run(self, key: jnp.ndarray, states: pgx.State, num_simulations: int):
         params, net_state = self.model
         (logits, value), _ = self.forward.apply(
-            params, net_state, narrow(states.observation, self.obs_channels), is_eval=True
+            params,
+            net_state,
+            narrow(states.observation, self.obs_channels),
+            is_eval=True,
+            moves=_moves(states),
         )
         if self.policy_only:
             masked = jnp.where(states.legal_action_mask, logits, -jnp.inf)
@@ -306,7 +327,11 @@ class Agent:
         def score(key: jnp.ndarray) -> jnp.ndarray:
             states = jax.vmap(self.env.step, in_axes=(0, 0, None))(parents, actions, key)
             (_, value), _ = self.forward.apply(
-                params, net_state, narrow(states.observation, self.obs_channels), is_eval=True
+                params,
+                net_state,
+                narrow(states.observation, self.obs_channels),
+                is_eval=True,
+                moves=_moves(states),
             )
             value = jnp.where(states.current_player == mover, value, -value)
             reward = states.rewards[jnp.arange(mover.shape[0]), mover]
