@@ -1,0 +1,12 @@
+{
+  "stone": 100,
+  "ring": 238,
+  "ring_pair": -2,
+  "deep": 6,
+  "pressure": 108,
+  "threat": 0,
+  "defenders": 0,
+  "mobile": 0,
+  "edge": 0,
+  "quiet_stone": 21
+}

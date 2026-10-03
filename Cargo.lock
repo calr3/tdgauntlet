@@ -1637,6 +1637,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "tdg-gess-negamax"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "flate2",
+ "serde",
+ "serde_json",
+ "tdg-client-kit",
+ "tdg-games",
+ "tdg-proto",
+ "tdg-tourney",
+ "tokio",
+]
+
+[[package]]
 name = "tdg-keyboard"
 version = "0.1.0"
 dependencies = [

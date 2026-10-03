@@ -1,0 +1,29 @@
+[package]
+name = "tdg-gess-negamax"
+description = "A tdgauntlet client: the Gess web app's negamax search, ported to native Rust with tunable evaluation weights"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "tdg-gess-negamax"
+path = "src/main.rs"
+
+[dependencies]
+tdg-client-kit = { path = "../../crates/client-kit" }
+tdg-games = { path = "../../crates/games" }
+tdg-proto = { path = "../../crates/proto" }
+anyhow.workspace = true
+clap = { version = "4", features = ["derive"] }
+serde.workspace = true
+serde_json.workspace = true
+tokio = { version = "1", features = ["full"] }
+
+[dev-dependencies]
+flate2 = "1"
+tdg-tourney = { path = "../../crates/tourney" }
