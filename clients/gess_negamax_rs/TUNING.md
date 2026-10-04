@@ -7,11 +7,13 @@ when a result changes the recommendation, update the recommendation too.
 
 ## Current recommendation
 
-- **Use `weights/v1.json`** - the app's five evaluation terms with weights refitted to game
-  results: `stone 100, ring 195, ring_pair 2, deep 2, pressure 94` (v0: 100, 700, -210, 1, 10).
-  It beats v0 by **0.67 per game at depth 3 and 0.82 at depth 4** (400 games each).
-- Keep v0 (`--weights` omitted, or the app's `.wasm` through `clients/gess_negamax`) for
-  comparisons with results measured against it (pgx E22-E25).
+- **To measure pgx's networks, use v0** (the app's weights: `--weights` omitted, or the app's
+  `.wasm` through `clients/gess_negamax`). v1 beats v0 head to head but is the weaker opponent
+  for the networks (below), so it is not a better yardstick for them.
+- **For negamax against negamax, v1 is stronger:** `weights/v1.json`, the app's five terms
+  refitted to game results (`stone 100, ring 195, ring_pair 2, deep 2, pressure 94`; v0: 100,
+  700, -210, 1, 10), beats v0 0.67 per game at depth 3, 0.82 at depth 4 and **0.670 +/- 0.065
+  at 2 s a move** (native both, 100 openings x both colours, idle machine).
 - Tune and compare at **fixed depth or nodes**, not milliseconds, whenever the CPU is shared.
 
 ## The port
@@ -82,8 +84,56 @@ search; the match decides.
 to ring 244, ring_pair 17, deep 2, pressure 89, and **lost to v1 at depth 4, 0.434 +/- 0.048**.
 Not adopted; tuning at depth 3 does not carry to depth 4.
 
+## Second round (3-4 October 2026): nothing beats v1
+
+New data: 1,500 games of v1 self-play at depth 4 plus the recorded model games (474k positions,
+`dump --weights v1.json`), each position flagged `captured` if the move played from it captured.
+All matches are against v1 at depth 4, 200 openings x both colours, unless stated.
+
+| idea | held-out log-loss (five-term fit: 0.5009) | per game vs v1 |
+|---|---|---|
+| refit of the five terms on the new data | 0.5009 | 0.449 +/- 0.048 |
+| refit on quiet positions only (`--quiet-only`; their own baseline 0.4813) | 0.4813 | 0.468 +/- 0.048 |
+| `spare_ring` (a ring one stone short) | 0.5009 (no gain) | not played |
+| `material_ratio` (stone lead / stones on the board), `--anchor` | 0.4790 | 0.430 +/- 0.048 |
+| the same on quiet positions | 0.4487 | 0.468 +/- 0.049 |
+| 288 piece patterns (`--patterns --ridge 1e-4`) | 0.4822 | 0.485 +/- 0.049 |
+| the same on quiet positions | 0.4606 | 0.434 +/- 0.048 |
+
+The piece patterns (`engine::pattern_counts`): every legal piece of each side, keyed by its 3x3
+own-stone pattern read from its own side (forward up; white's flipped), merged with its left-right
+mirror only - the start is not symmetric under the other reflections - giving 288 classes, one
+weight each, off unless a weights file gives a `patterns` list. They also cost 1.6x the time per
+move at depth 4, so they would do worse still at equal time.
+
+Quiescence search (`Switches::quiescence`, `versus ... v1.json@q<n>`: at the last ply, follow
+captures for up to n more plies, with stand-pat), at **equal node budgets** against plain v1:
+
+| plies | 50k nodes, 100 openings | 200k nodes, 100 openings | 100k nodes, 300 openings |
+|---|---|---|---|
+| 2 | 0.427 +/- 0.068 | 0.425 +/- 0.069 | |
+| 4 | 0.555 +/- 0.069 | 0.550 +/- 0.069 | 0.482 +/- 0.040 |
+| 6 | | | 0.468 +/- 0.040 |
+| 8 | | | 0.377 +/- 0.039 |
+
+The early 4-ply lead was noise. A capture in Gess is rarely forced and replies are many, so the
+capture tree is wide, and the nodes it costs are taken from the main search.
+
+Every evaluation idea fitted better than v1 and none played better. With five terms the
+evaluation is not what limits this engine at depth 4; v1 stays the recommendation.
+
+## Timed results (4 October 2026, after pgx E25; machine otherwise idle)
+
+- Native v0 against the app's `.wasm` v0, 2 s a move, 100 openings x both colours
+  (`examples/gess_negamax_native_v_wasm.toml`): **55.6%** over 54 counted minimatches (+/- ~7).
+  The port's 1.7x speed is worth little at this time control: both search to depth ~5.
+- pgx models at 128 simulations against v0 and v1 at 2 s (`examples/gess_e25_negamax.toml`):
+  E25 it 183 / 120 / 60 and E24 scored 79.8 / 85.7 / 78.6 / 66.7% against v0 and 93.8 / 93.9 /
+  91.2 / 90.0% against v1. v1 and v0 reached the same depths (mean 5.21 and 5.17), so the gap is
+  the weights: v1's low ring weight (195 against 700) and high ring pressure presumably suit
+  negamax's own play and not the networks'. Strength here is not transitive.
+
 ## To do
 
-- Timed confirmation with the CPU otherwise idle (after pgx E25): v1 vs v0 natively at 2 s, and
-  native v0 vs the app's `.wasm` v0 at 2 s (the 1.7x speed).
-- Measure pgx's checkpoints against v1 as well as v0.
+- If the yardstick is to get stronger against the networks, tune against them: fit to the
+  model games only (`--source models`) or play SPSA against a network, rather than against v0.

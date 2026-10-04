@@ -123,8 +123,10 @@ pub const NAMES: [&str; NUM_FEATURES] = [
     "mobile",
     "edge",
     "quiet_stone",
+    "spare_ring",
+    "material_ratio",
 ];
-pub const NUM_FEATURES: usize = 10;
+pub const NUM_FEATURES: usize = 12;
 /// The app's terms: the rest are only computed when one of their weights is non-zero.
 const NUM_BASE: usize = 5;
 
@@ -146,6 +148,11 @@ pub struct Weights {
     pub mobile: i32,
     pub edge: i32,
     pub quiet_stone: i32,
+    pub spare_ring: i32,
+    pub material_ratio: i32,
+    /// One weight per piece pattern class (see [`pattern_counts`]); all 0 by default.
+    #[serde(skip_serializing_if = "Patterns::is_zero")]
+    pub patterns: Patterns,
 }
 
 impl Default for Weights {
@@ -161,6 +168,9 @@ impl Default for Weights {
             mobile: 0,
             edge: 0,
             quiet_stone: 0,
+            spare_ring: 0,
+            material_ratio: 0,
+            patterns: Patterns::default(),
         }
     }
 }
@@ -178,6 +188,8 @@ impl Weights {
             self.mobile,
             self.edge,
             self.quiet_stone,
+            self.spare_ring,
+            self.material_ratio,
         ]
     }
 
@@ -193,6 +205,9 @@ impl Weights {
             mobile: a[7],
             edge: a[8],
             quiet_stone: a[9],
+            spare_ring: a[10],
+            material_ratio: a[11],
+            patterns: Patterns::default(),
         }
     }
 
@@ -272,7 +287,10 @@ fn black_deepest(b: &[u32; 20]) -> i32 {
 ///   the 3x3), which can slide any distance, minus the opponent's;
 /// - `edge`: own stones on the outermost playing rows and columns, minus the opponent's;
 /// - `quiet_stone`: stone difference times the moves since the last capture (the game is
-///   decided on stones at 20).
+///   decided on stones at 20);
+/// - `spare_ring`: empty cells that would be a ring centre with one more own stone on an empty
+///   neighbour (a ring one move from being made), own minus the opponent's;
+/// - `material_ratio`: stone difference as a percentage of the stones on the board.
 ///
 /// The candidates (from `threat` on) are computed only when `extended`; otherwise they are 0.
 pub fn features_with(
@@ -325,7 +343,20 @@ pub fn features_with(
         r += 1;
     }
     let (wd, bd) = (white_deepest(w), black_deepest(b));
-    let mut f = [ws - bs, wn - bn, wp - bp, wd - bd, pb - pw, 0, 0, 0, 0, 0];
+    let mut f = [
+        ws - bs,
+        wn - bn,
+        wp - bp,
+        wd - bd,
+        pb - pw,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+    ];
     if extended {
         let mobile = |own: &[u32; 20], opp: &[u32; 20]| -> i32 {
             let mut n = 0;
@@ -357,12 +388,39 @@ pub fn features_with(
         f[7] = mobile(w, b) - mobile(b, w);
         f[8] = edge(w) - edge(b);
         f[9] = (ws - bs) * quiet.clamp(0, QUIET_LIMIT);
+        let spare = |own: &[u32; 20], opp: &[u32; 20]| -> i32 {
+            let mut n = 0;
+            for r in RING_LO..=RING_HI {
+                for c in RING_LO..=RING_HI {
+                    if (own[r as usize] | opp[r as usize]) >> c & 1 == 1 {
+                        continue;
+                    }
+                    let (mut mine, mut blocked) = (0, false);
+                    for (dr, dc) in DIRS {
+                        let (rr, cc) = ((r + dr) as usize, (c + dc) as u32);
+                        if own[rr] >> cc & 1 == 1 {
+                            mine += 1;
+                        } else if opp[rr] >> cc & 1 == 1 {
+                            blocked = true;
+                        }
+                    }
+                    if mine == 7 && !blocked {
+                        n += 1;
+                    }
+                }
+            }
+            n
+        };
+        f[10] = spare(w, b) - spare(b, w);
+        f[11] = (ws - bs) * 100 / (ws + bs).max(1);
         if !white {
             f[5] = -pb; // black's view: white stones round black's rings
             f[6] = -f[6];
             f[7] = -f[7];
             f[8] = -f[8];
             f[9] = -f[9];
+            f[10] = -f[10];
+            f[11] = -f[11];
             for x in f.iter_mut().take(NUM_BASE) {
                 *x = -*x;
             }
@@ -387,7 +445,128 @@ pub fn features(w: &[u32; 20], b: &[u32; 20], white: bool, quiet: i32) -> [i32; 
 pub fn evaluate(w: &[u32; 20], b: &[u32; 20], white: bool, quiet: i32, weights: &Weights) -> i32 {
     let f = features_with(w, b, white, quiet, weights.extended());
     let k = weights.as_array();
-    f.iter().zip(k.iter()).map(|(a, b)| a * b).sum()
+    let mut e: i32 = f.iter().zip(k.iter()).map(|(a, b)| a * b).sum();
+    if !weights.patterns.is_zero() {
+        let n = pattern_counts(w, b, white);
+        e += n
+            .iter()
+            .zip(weights.patterns.0.iter())
+            .map(|(a, b)| a * b)
+            .sum::<i32>();
+    }
+    e
+}
+
+// ─── Piece patterns ──────────────────────────────────────────────────────────
+
+/// Number of piece pattern classes: the 512 own-stone patterns of a 3x3 block, merged with their
+/// left-right mirrors.
+pub const NUM_PATTERNS: usize = 288;
+
+/// Weights for the piece pattern classes, serialised as a JSON list.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Patterns(pub [i32; NUM_PATTERNS]);
+
+impl Default for Patterns {
+    fn default() -> Self {
+        Patterns([0; NUM_PATTERNS])
+    }
+}
+
+impl Patterns {
+    pub fn is_zero(&self) -> bool {
+        self.0.iter().all(|&x| x == 0)
+    }
+}
+
+impl Serialize for Patterns {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        self.0.as_slice().serialize(s)
+    }
+}
+
+impl<'de> Deserialize<'de> for Patterns {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let v: Vec<i32> = Vec::deserialize(d)?;
+        let a: [i32; NUM_PATTERNS] = v.as_slice().try_into().map_err(|_| {
+            serde::de::Error::custom(format!(
+                "patterns: {} weights, expected {NUM_PATTERNS}",
+                v.len()
+            ))
+        })?;
+        Ok(Patterns(a))
+    }
+}
+
+/// A pattern's bits: `row * 3 + column`, row 0 the piece's forward row (towards the opponent),
+/// 1 its middle row, 2 its back row; column 0 left .. 2 right. Each class is a pattern and its
+/// left-right mirror, numbered in order of the smaller of the two.
+pub fn pattern_class() -> &'static [u16; 512] {
+    static T: OnceLock<[u16; 512]> = OnceLock::new();
+    T.get_or_init(|| {
+        let mirror = |p: u16| -> u16 {
+            let mut m = 0;
+            for row in 0..3 {
+                let bits = (p >> (row * 3)) & 7;
+                let rev = ((bits & 1) << 2) | (bits & 2) | ((bits & 4) >> 2);
+                m |= rev << (row * 3);
+            }
+            m
+        };
+        let mut canon: Vec<u16> = (0..512u16).map(|p| p.min(mirror(p))).collect();
+        let mut ids: Vec<u16> = canon.clone();
+        ids.sort_unstable();
+        ids.dedup();
+        assert_eq!(ids.len(), NUM_PATTERNS);
+        for c in canon.iter_mut() {
+            *c = ids.binary_search(c).unwrap() as u16;
+        }
+        canon.try_into().unwrap()
+    })
+}
+
+/// Add `sign` for each of `own`'s pieces (a centre in the 18x18 playing area with an own stone among its
+/// eight neighbours and no `opp` stone in its 3x3) to its pattern class. `forward_up`: the side's
+/// forward direction is towards row 0 (black's); white's patterns are read flipped.
+fn add_patterns(
+    own: &[u32; 20],
+    opp: &[u32; 20],
+    forward_up: bool,
+    out: &mut [i32; NUM_PATTERNS],
+    sign: i32,
+) {
+    let t = pattern_class();
+    // Rows as u64 shifted left one, so the window of centre column c is bits c..c+2.
+    let row = |a: &[u32; 20], r: i32| -> u64 {
+        if (0..SIZE).contains(&r) {
+            (a[r as usize] as u64) << 1
+        } else {
+            0
+        }
+    };
+    for r in MIN..=MAX {
+        let (u, m, d) = (row(own, r - 1), row(own, r), row(own, r + 1));
+        let o = row(opp, r - 1) | row(opp, r) | row(opp, r + 1);
+        let blocked = o | (o << 1) | (o >> 1);
+        let beside = u | d | (u << 1) | (u >> 1) | (d << 1) | (d >> 1) | (m << 1) | (m >> 1);
+        let (fwd, back) = if forward_up { (u, d) } else { (d, u) };
+        let mut centres = beside & !blocked & ((PLAY_MASK as u64) << 1);
+        while centres != 0 {
+            let s = centres.trailing_zeros() - 1; // = centre column c
+            centres &= centres - 1;
+            let idx = ((fwd >> s) & 7) | (((m >> s) & 7) << 3) | (((back >> s) & 7) << 6);
+            out[t[idx as usize] as usize] += sign;
+        }
+    }
+}
+
+/// Piece counts per pattern class, own minus the opponent's, for `white`'s side if `white`.
+pub fn pattern_counts(w: &[u32; 20], b: &[u32; 20], white: bool) -> [i32; NUM_PATTERNS] {
+    let mut out = [0i32; NUM_PATTERNS];
+    let sign = if white { 1 } else { -1 };
+    add_patterns(w, b, false, &mut out, sign);
+    add_patterns(b, w, true, &mut out, -sign);
+    out
 }
 
 // ─── Zobrist keys (as the app's: same seed, same order) ──────────────────────
@@ -666,6 +845,11 @@ impl Board {
         evaluate(&self.w, &self.b, self.white_to_move, self.quiet, weights)
     }
 
+    /// Piece counts per pattern class for the side to move (own minus the opponent's).
+    pub fn pattern_counts(&self) -> [i32; NUM_PATTERNS] {
+        pattern_counts(&self.w, &self.b, self.white_to_move)
+    }
+
     /// The evaluation's terms for the side to move.
     pub fn features(&self) -> [i32; NUM_FEATURES] {
         features(&self.w, &self.b, self.white_to_move, self.quiet)
@@ -701,13 +885,17 @@ pub struct SearchResult {
     pub nodes: u64,
 }
 
-/// Search switches, all on by default as in the app (null move and LMR are off only for the
-/// exact self-checks; `force_eager` routes a TT search through the eager path).
+/// Search switches, as in the app by default (null move and LMR are off only for the exact
+/// self-checks; `force_eager` routes a TT search through the eager path).
 #[derive(Debug, Clone, Copy)]
 pub struct Switches {
     pub null_move: bool,
     pub lmr: bool,
     pub force_eager: bool,
+    /// Not in the app: at the lazy search's last ply, follow moves that capture opponent stones
+    /// for up to this many more plies (a quiescence search, with stand-pat) instead of taking
+    /// the static evaluation mid-exchange. 0 = off, as the app.
+    pub quiescence: i32,
 }
 
 impl Default for Switches {
@@ -716,6 +904,7 @@ impl Default for Switches {
             null_move: true,
             lmr: true,
             force_eager: false,
+            quiescence: 0,
         }
     }
 }
@@ -1666,7 +1855,11 @@ impl<'a> Engine<'a> {
                 let (mine, theirs) = if white { (ws, bs) } else { (bs, ws) };
                 score = terminal_score(stone_outcome(mine, theirs), ply).unwrap();
             } else if depth == 1 {
-                score = self.eval_leaf(white);
+                score = if self.switches.quiescence > 0 {
+                    -self.qsearch(!white, -beta, -alpha, ply + 1, self.switches.quiescence)
+                } else {
+                    self.eval_leaf(white)
+                };
             } else {
                 let reduce = self.switches.lmr && depth >= 3 && i >= 3 && mv.key == 0;
                 if reduce {
@@ -1716,6 +1909,50 @@ impl<'a> Engine<'a> {
             };
             self.tt.store(key, depth, best, flag, best_mv);
         }
+        best
+    }
+
+    /// Quiescence search (not in the app): the side to move may stand on the static evaluation or
+    /// play a move that captures opponent stones, for up to `left` more plies. Fail-soft.
+    fn qsearch(&mut self, white: bool, mut alpha: i32, beta: i32, ply: i32, left: i32) -> i32 {
+        self.count_node();
+        if self.limited && self.check_stop() {
+            return 0;
+        }
+        let stand = self.eval_leaf(white);
+        if stand >= beta || left == 0 {
+            return stand;
+        }
+        alpha = alpha.max(stand);
+        let save_top = self.arena_top;
+        let (mstart, mcount) = self.gen_moves(white, true);
+        let mut best = stand;
+        // Lazy moves are sorted by opponent stones captured, so the captures come first.
+        for i in 0..mcount {
+            let mv = self.arena[mstart + i];
+            if mv.key == 0 {
+                break;
+            }
+            self.make_move(mv.from_r, mv.from_c, mv.to_r, mv.to_c, white, false);
+            let score = if !self.has_ring_wit(white) {
+                -(WIN_SCORE - (ply + 1))
+            } else if !self.has_ring_wit(!white) {
+                WIN_SCORE - (ply + 1)
+            } else {
+                -self.qsearch(!white, -beta, -alpha, ply + 1, left - 1)
+            };
+            self.unmake_move();
+            if self.timed_out {
+                self.arena_top = save_top;
+                return 0;
+            }
+            best = best.max(score);
+            alpha = alpha.max(best);
+            if alpha >= beta {
+                break;
+            }
+        }
+        self.arena_top = save_top;
         best
     }
 

@@ -4,6 +4,6 @@
 pub mod engine;
 
 pub use engine::{
-    evaluate, features, Board, Limits, SearchResult, Searcher, Switches, Weights, NAMES,
-    NUM_FEATURES,
+    evaluate, features, pattern_class, pattern_counts, Board, Limits, Patterns, SearchResult,
+    Searcher, Switches, Weights, NAMES, NUM_FEATURES, NUM_PATTERNS,
 };

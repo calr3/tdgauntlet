@@ -33,6 +33,8 @@ fn the_evaluation_is_the_weighted_sum_of_the_terms_from_either_side() {
         mobile: 5,
         edge: -7,
         quiet_stone: 11,
+        spare_ring: 13,
+        material_ratio: -17,
         ..Weights::default()
     };
     for _ in 0..12 {

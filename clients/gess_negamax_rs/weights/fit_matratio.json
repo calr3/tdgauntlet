@@ -1,0 +1,14 @@
+{
+  "stone": -2,
+  "ring": 191,
+  "ring_pair": 1,
+  "deep": 6,
+  "pressure": 97,
+  "threat": 0,
+  "defenders": 0,
+  "mobile": 0,
+  "edge": 0,
+  "quiet_stone": 0,
+  "spare_ring": 0,
+  "material_ratio": 55
+}

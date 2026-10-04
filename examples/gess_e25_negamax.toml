@@ -1,0 +1,60 @@
+# pgx Gess E25 (whole-move gess_joint, continued from E24 for ~34 h, 183 iterations): checkpoints
+# 60, 120 and 183, with E24 (it 28) for reference, each against two negamax yardsticks at 2 s a
+# move (single-threaded per game): v0, the Gess web app's engine (.wasm), and v1, the native port
+# with refitted weights (clients/gess_negamax_rs/weights/v1.json). All models at 128 simulations.
+#
+# Players (pgx/run_e25_negamax.sh starts them):
+#   tdg_jax --port 943x --sims 128 --max-batch 32 --name <model> --checkpoint <ckpt>
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 10 --name v0
+#   tdg-gess-negamax --port 9451 --threads 10 --name v1 --weights clients/gess_negamax_rs/weights/v1.json
+game = "gess/1"
+seed = 2525
+concurrency = 24
+out = "../results/gess_e25_negamax.json"
+pairs = [
+  ["e25_183", "v1"], ["e25_183", "v0"],
+  ["e25_120", "v1"], ["e25_120", "v0"],
+  ["e25_060", "v1"], ["e25_060", "v0"],
+  ["e24", "v1"], ["e24", "v0"],
+]
+
+[openings]
+kind = "random"
+plies = 2
+count = 50
+
+[[player]]
+name = "e25_183"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e25_120"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e25_060"
+url = "http://127.0.0.1:9433"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e24"
+url = "http://127.0.0.1:9434"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "v0"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 600000
+
+[[player]]
+name = "v1"
+url = "http://127.0.0.1:9451"
+budget_ms = 2000
+timeout_ms = 600000

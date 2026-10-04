@@ -1,6 +1,6 @@
 //! Positions, evaluation terms and game results, as JSON lines, for fitting the weights.
 //!
-//!   cargo run --release -p tdg-gess-negamax --example dump -- <out.jsonl> [--selfplay <games> <depth> <threads>] [results/*.json ...]
+//!   cargo run --release -p tdg-gess-negamax --example dump -- <out.jsonl> [--weights <w.json>] [--selfplay <games> <depth> <threads>] [results/*.json ...]
 //!
 //! Each line is one position: `{"game", "source", "ply", "quiet", "features": [...], "result"}`,
 //! with the features (see `NAMES`) and the result (1 win, 0.5 draw, 0 loss) both from the side to
@@ -27,14 +27,28 @@ fn score(outcome: Outcome, side: tdg_games::Side) -> f64 {
     }
 }
 
+/// Non-zero pattern counts as [class, count] pairs.
+fn sparse(counts: &[i32]) -> Vec<[i32; 2]> {
+    counts
+        .iter()
+        .enumerate()
+        .filter(|(_, &n)| n != 0)
+        .map(|(i, &n)| [i as i32, n])
+        .collect()
+}
+
 fn lines(game: &str, source: &str, positions: &[Position], outcome: Outcome) -> Vec<String> {
     positions
         .iter()
         .enumerate()
         .map(|(ply, p)| {
+            // The next position's quiet count resets iff the move from this one captured
+            // (counted as a capture for the last position, whose move ends the game).
+            let captured = positions.get(ply + 1).is_none_or(|n| n.quiet_moves == 0);
             json!({
-                "game": game, "source": source, "ply": ply, "quiet": p.quiet_moves,
+                "game": game, "source": source, "ply": ply, "quiet": p.quiet_moves, "captured": captured,
                 "features": Board::from_position(p).features(), "result": score(outcome, p.to_move),
+                "patterns": sparse(&Board::from_position(p).pattern_counts()),
             })
             .to_string()
         })
@@ -74,7 +88,7 @@ fn from_results(path: &str) -> Vec<String> {
     out
 }
 
-fn selfplay(games: usize, depth: i32, threads: usize) -> Vec<String> {
+fn selfplay(games: usize, depth: i32, threads: usize, weights: Weights) -> Vec<String> {
     let ops = arena::openings(games, 2, 7);
     let next = AtomicUsize::new(0);
     let out = Mutex::new(Vec::new());
@@ -83,7 +97,7 @@ fn selfplay(games: usize, depth: i32, threads: usize) -> Vec<String> {
             s.spawn(|| loop {
                 let i = next.fetch_add(1, Ordering::Relaxed);
                 let Some(opening) = ops.get(i) else { break };
-                let mut searcher = Searcher::new(Weights::default()).with_seed(1000 + i as u64);
+                let mut searcher = Searcher::new(weights).with_seed(1000 + i as u64);
                 let mut pos = opening.clone();
                 let mut seen = Vec::new();
                 while pos.outcome().is_none() && seen.len() < 4000 {
@@ -110,15 +124,19 @@ fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let out_path = &args[0];
     let mut rows = Vec::new();
+    let mut weights = Weights::default();
     let mut i = 1;
     while i < args.len() {
-        if args[i] == "--selfplay" {
+        if args[i] == "--weights" {
+            weights = Weights::load(std::path::Path::new(&args[i + 1])).expect("weights");
+            i += 2;
+        } else if args[i] == "--selfplay" {
             let (n, d, t) = (
                 args[i + 1].parse().unwrap(),
                 args[i + 2].parse().unwrap(),
                 args[i + 3].parse().unwrap(),
             );
-            let r = selfplay(n, d, t);
+            let r = selfplay(n, d, t, weights);
             eprintln!("self-play: {n} games at depth {d}, {} positions", r.len());
             rows.extend(r);
             i += 4;

@@ -51,6 +51,8 @@ impl Budget {
 pub struct Engine {
     pub weights: Weights,
     pub budget: Budget,
+    /// Quiescence plies (`Switches::quiescence`); 0 = off, as the app.
+    pub quiescence: i32,
 }
 
 /// Searchers for one thread, reused across its games (a searcher carries nothing between moves).
@@ -72,6 +74,7 @@ impl Seats {
 /// The move `engine` plays in `pos`.
 pub fn choose(searcher: &mut Searcher, engine: &Engine, pos: &Position) -> Move {
     searcher.weights = engine.weights;
+    searcher.switches.quiescence = engine.quiescence;
     let r = searcher
         .best_move(&Board::from_position(pos), engine.budget.limits())
         .expect("a legal move");

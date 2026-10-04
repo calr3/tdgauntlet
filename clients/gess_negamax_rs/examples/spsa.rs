@@ -19,7 +19,14 @@ use tdg_games::Outcome;
 use tdg_gess_negamax::{Weights, NAMES, NUM_FEATURES};
 
 /// Perturbation size per weight (stone fixed; candidate terms untouched).
-const C: [f64; NUM_FEATURES] = [0.0, 40.0, 30.0, 2.0, 15.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+const C: [f64; NUM_FEATURES] = {
+    let mut c = [0.0; NUM_FEATURES];
+    c[1] = 40.0; // ring
+    c[2] = 30.0; // ring_pair
+    c[3] = 2.0; // deep
+    c[4] = 15.0; // pressure
+    c
+};
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -51,10 +58,12 @@ fn main() {
         let a = Engine {
             weights: round(std::array::from_fn(|i| theta[i] + ck * C[i] * delta[i])),
             budget,
+            quiescence: 0,
         };
         let b = Engine {
             weights: round(std::array::from_fn(|i| theta[i] - ck * C[i] * delta[i])),
             budget,
+            quiescence: 0,
         };
         let ops = openings(per_iter, 2, 1000 + k as u64);
         let next = AtomicUsize::new(0);

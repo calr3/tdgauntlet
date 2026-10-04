@@ -1,0 +1,27 @@
+# The native port of the Gess app's negamax (clients/gess_negamax_rs, app weights) against the
+# app's own .wasm engine (clients/gess_negamax), both at 2 s a move, single-threaded per game.
+# Same weights and search, so any edge is the port's 1.7x speed.
+#   tdg-gess-negamax --port 9452 --threads 10 --name native_v0
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 10 --name wasm_v0
+game = "gess/1"
+seed = 2626
+concurrency = 20
+out = "../results/gess_negamax_native_v_wasm.json"
+pairs = [["native_v0", "wasm_v0"]]
+
+[openings]
+kind = "random"
+plies = 2
+count = 100
+
+[[player]]
+name = "native_v0"
+url = "http://127.0.0.1:9452"
+budget_ms = 2000
+timeout_ms = 600000
+
+[[player]]
+name = "wasm_v0"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 600000
