@@ -1,0 +1,45 @@
+# pgx Gess networks head to head, all at 128 simulations a move on the same openings: E25 (whole
+# move, it 183 and it 120), E24 (whole move, it 28), E23 (two-step, it 434) and E22 (two-step,
+# it 400). Does the latest whole-move network beat every earlier one directly?
+#
+# Players (pgx/run_neural_round_robin.sh starts them):
+#   tdg_jax --port 943x --sims 128 --max-batch 32 --name <model> --checkpoint <ckpt>
+game = "gess/1"
+seed = 2727
+concurrency = 64
+out = "../results/gess_neural_round_robin.json"
+
+[openings]
+kind = "random"
+plies = 2
+count = 50
+
+[[player]]
+name = "e25_183"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e25_120"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e24"
+url = "http://127.0.0.1:9433"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e23"
+url = "http://127.0.0.1:9434"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e22"
+url = "http://127.0.0.1:9435"
+budget_sims = 128
+timeout_ms = 600000
