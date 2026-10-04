@@ -1,0 +1,42 @@
+# Does more search make the whole-move network stronger? pgx Gess E25 (it 183) at 128, 512 and
+# 2048 MCTS simulations a move, each against the Gess web app's negamax (v0) at 2 s a move
+# (single-threaded per game). The two-step E22 did not improve with more search
+# (gess_e22_sims_v_negamax.toml: 0.50, 0.50, 0.38).
+#
+# Players (pgx/run_e25_sims_scaling.sh starts them):
+#   tdg_jax --port 9431/9432/9433 --sims 128/512/2048 --max-batch 32 --checkpoint ~/calr3gh/pgx/checkpoints/gess_joint_20261002213102/000183.ckpt
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 12 --name v0
+game = "gess/1"
+seed = 2828
+concurrency = 36
+out = "../results/gess_e25_sims_v_negamax.json"
+pairs = [["e25_128", "v0"], ["e25_512", "v0"], ["e25_2048", "v0"]]
+
+[openings]
+kind = "random"
+plies = 2
+count = 40
+
+[[player]]
+name = "e25_128"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 1800000
+
+[[player]]
+name = "e25_512"
+url = "http://127.0.0.1:9432"
+budget_sims = 512
+timeout_ms = 1800000
+
+[[player]]
+name = "e25_2048"
+url = "http://127.0.0.1:9433"
+budget_sims = 2048
+timeout_ms = 1800000
+
+[[player]]
+name = "v0"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 1800000
