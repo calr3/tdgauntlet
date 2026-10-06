@@ -1,0 +1,36 @@
+# pgx Gess E26 (E25 made two transformer layers deeper, 6 -> 8, trained 96 more iterations) and
+# E25 (it 183), each against the Gess web app's negamax (v0) at 2 s a move (single-threaded),
+# and against each other, on the same openings. All at 128 simulations a move.
+#
+# Players (pgx/run_e26_negamax.sh starts them once training has finished):
+#   tdg_jax --port 9431 --sims 128 --max-batch 32 --name e26 --checkpoint ~/calr3gh/pgx/checkpoints/gess_joint_20261005001759/000279.ckpt
+#   tdg_jax --port 9432 --sims 128 --max-batch 32 --name e25 --checkpoint ~/calr3gh/pgx/checkpoints/gess_joint_20261002213102/000183.ckpt
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 12 --name v0
+game = "gess/1"
+seed = 2626
+concurrency = 48
+out = "../results/gess_e26_negamax.json"
+pairs = [["e26", "e25"], ["e26", "v0"], ["e25", "v0"]]
+
+[openings]
+kind = "random"
+plies = 2
+count = 60
+
+[[player]]
+name = "e26"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e25"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "v0"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 600000
