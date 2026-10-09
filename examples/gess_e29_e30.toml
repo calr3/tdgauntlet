@@ -1,0 +1,36 @@
+# pgx Gess E29 (one token per cell) and E30 (2x2 patches), each ~24 h from scratch at equal time,
+# each against the Gess web app's negamax (v0) at 2 s a move (single-threaded),
+# and against each other, on the same openings. All at 128 simulations a move.
+#
+# Players (pgx/run_after_e29.sh starts them once training has finished):
+#   tdg_jax --port 9431 --sims 128 --max-batch 32 --name e29 --checkpoint <E29 final checkpoint>
+#   tdg_jax --port 9432 --sims 128 --max-batch 32 --name e30 --checkpoint <E30 final checkpoint>
+#   python clients/gess_negamax/gess_negamax.py --port 9441 --workers 12 --name v0
+game = "gess/1"
+seed = 2930
+concurrency = 48
+out = "../results/gess_e29_e30.json"
+pairs = [["e29", "e30"], ["e29", "v0"], ["e30", "v0"]]
+
+[openings]
+kind = "random"
+plies = 2
+count = 60
+
+[[player]]
+name = "e29"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e30"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "v0"
+url = "http://127.0.0.1:9441"
+budget_ms = 2000
+timeout_ms = 600000
