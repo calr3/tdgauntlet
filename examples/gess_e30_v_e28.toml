@@ -1,0 +1,29 @@
+# Is a 24 h from-scratch run (E30, the patched control of E29/E30) as strong as E28, the end of
+# the E14-E28 lineage (well over 100 h of training)? Both scored 0.65-0.68 against negamax v0.
+# Head to head at 128 simulations a move, 60 openings x both colours.
+#
+# Players (pgx/run_e30_v_e28.sh starts them):
+#   tdg_jax --port 9431 --sims 128 --max-batch 32 --name e30 --checkpoint ~/calr3gh/pgx/checkpoints/gess_joint_20261009075914/000180.ckpt
+#   tdg_jax --port 9432 --sims 128 --max-batch 32 --name e28 --checkpoint ~/calr3gh/pgx/checkpoints/gess_joint_20261008042104/000449.ckpt
+game = "gess/1"
+seed = 3028
+concurrency = 48
+out = "../results/gess_e30_v_e28.json"
+pairs = [["e30", "e28"]]
+
+[openings]
+kind = "random"
+plies = 2
+count = 60
+
+[[player]]
+name = "e30"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e28"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
