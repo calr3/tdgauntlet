@@ -1,0 +1,29 @@
+# pgx Gess E31 (opening fix) v E32 (control), matched ~12 h branches from E28, and each against
+# E28: from the starting position (60 copies x both colours), with Gumbel noise at the root (--gumbel-scale 1.0) so the games differ: the opening itself is played. 128 simulations a move. pgx/run_after_e32.sh starts the players.
+game = "gess/1"
+seed = 3132
+concurrency = 48
+out = "../results/gess_e31_e32_start.json"
+pairs = [["e31", "e32"], ["e31", "e28"], ["e32", "e28"]]
+
+[openings]
+kind = "file"
+path = "openings/gess_start_x60.jsonl"
+
+[[player]]
+name = "e31"
+url = "http://127.0.0.1:9431"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e32"
+url = "http://127.0.0.1:9432"
+budget_sims = 128
+timeout_ms = 600000
+
+[[player]]
+name = "e28"
+url = "http://127.0.0.1:9433"
+budget_sims = 128
+timeout_ms = 600000
