@@ -42,6 +42,12 @@ def main() -> None:
         help="no search: play the move whose successor the value head likes best (ignores --sims)",
     )
     ap.add_argument("--considered", type=int, default=16, help="max_num_considered_actions")
+    ap.add_argument(
+        "--gumbel-scale",
+        type=float,
+        default=0.0,
+        help="Gumbel noise at the root (0 = deterministic); > 0 varies games from a fixed start",
+    )
     ap.add_argument("--max-batch", type=int, default=16, help="requests searched together")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--allow-rules-mismatch", action="store_true")
@@ -82,6 +88,7 @@ def main() -> None:
                 checkpoint,
                 num_simulations=args.sims,
                 max_considered=args.considered,
+                gumbel_scale=args.gumbel_scale,
                 max_batch=args.max_batch,
                 seed=args.seed,
                 policy_only=args.policy_only,

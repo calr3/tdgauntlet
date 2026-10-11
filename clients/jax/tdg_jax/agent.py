@@ -201,6 +201,7 @@ class Agent:
         checkpoint: Path | Checkpoint,
         num_simulations: int,
         max_considered: int = 16,
+        gumbel_scale: float = 0.0,
         max_batch: int = 16,
         seed: int = 0,
         allow_rules_mismatch: bool = False,
@@ -243,6 +244,9 @@ class Agent:
         self.value_only = value_only
         self.num_simulations = 0 if policy_only or value_only else num_simulations
         self.max_considered = max_considered
+        # Gumbel noise at the root (0 = deterministic, the default): a little lets two
+        # deterministic networks play many different games from the same start position.
+        self.gumbel_scale = gumbel_scale
         self.max_batch = max_batch
         self._key = jax.random.PRNGKey(seed)
         self._key_lock = threading.Lock()
@@ -305,7 +309,7 @@ class Agent:
             recurrent_fn=self._recurrent_fn,
             num_simulations=num_simulations,
             max_num_considered_actions=self.max_considered,
-            gumbel_scale=0.0,
+            gumbel_scale=self.gumbel_scale,
         )
         return out.action, value
 
